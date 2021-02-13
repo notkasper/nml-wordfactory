@@ -11,7 +11,7 @@ const hpp = require("hpp");
 const cors = require("cors");
 dotenv.config({ path: "../.env" });
 
-const stocks = require("./routes/stocks");
+const test = require("./routes/test");
 const connectDb = require("./db");
 
 connectDb();
@@ -54,7 +54,7 @@ app.use(cors());
 // Set static folder
 app.use(express.static(path.join(__dirname, "./build")));
 
-app.use("/api/v1/stocks", stocks);
+app.use("/api/v1/test", test);
 
 app.use("/test", (req, res) => res.status(200).send({ data: "success" }));
 
