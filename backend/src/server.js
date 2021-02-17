@@ -58,7 +58,7 @@ const start = async () => {
   const server = app.listen(port, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`));
 
   process.on('unhandledRejection', (error, promise) => {
-    console.log(`Error: ${error.message}`);
+    console.error(error);
     server.close(() => {
       process.exit(1);
     });

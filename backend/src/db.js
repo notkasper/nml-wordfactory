@@ -39,7 +39,6 @@ const prepare = async () => {
     await migrate(sequelize);
   } catch (error) {
     console.error('Error preparing database:');
-    console.error(error);
     throw error; // If database does not connect, the server should shut down
   }
 };
