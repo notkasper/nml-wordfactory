@@ -4,11 +4,17 @@ const path = require('path');
 
 const connect = async () => {
   try {
-    const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-      host: process.env.DB_HOST || 'localhost',
-      port: process.env.DB_PORT,
-      dialect: 'postgres',
-    });
+    const sequelize = new Sequelize(
+      process.env.DB_NAME,
+      process.env.DB_USER,
+      process.env.DB_PASSWORD,
+      {
+        logging: false,
+        host: process.env.DB_HOST || 'localhost',
+        port: process.env.DB_PORT,
+        dialect: 'postgres',
+      }
+    );
     await sequelize.authenticate();
     console.info(`Connected to database`);
     return sequelize;
