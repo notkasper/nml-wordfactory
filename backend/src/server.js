@@ -8,16 +8,16 @@ const xssClean = require('xss-clean');
 const expressRateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const test = require('./routes/test');
 const db = require('./db');
 
 const start = async () => {
-  await db.prepare();
+  const sequelize = await db.connect();
+  await db.migrate(sequelize);
 
   const app = express();
-
   if (process.env.NODE_ENV == 'development') {
     app.use(morgan('dev'));
   }
