@@ -1,73 +1,68 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const morgan = require("morgan");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const helmet = require("helmet");
-const mongoSanitize = require("express-mongo-sanitize");
-const xssClean = require("xss-clean");
-const expressRateLimit = require("express-rate-limit");
-const hpp = require("hpp");
-const cors = require("cors");
-dotenv.config({ path: "../.env" });
+const express = require('express');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const xssClean = require('xss-clean');
+const expressRateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
-const test = require("./routes/test");
-const connectDb = require("./db");
+const test = require('./routes/test');
+const db = require('./db');
 
-connectDb();
+const start = async () => {
+  const sequelize = await db.connect();
+  await db.migrate(sequelize);
 
-const app = express();
+  const app = express();
+  if (process.env.NODE_ENV == 'development') {
+    app.use(morgan('dev'));
+  }
 
-if (process.env.NODE_ENV == "development") {
-  app.use(morgan("dev"));
-}
+  // Body parser
+  app.use(express.json());
 
-// Body parser
-app.use(express.json());
+  // Cookie parser
+  app.use(cookieParser());
 
-// Cookie parser
-app.use(cookieParser());
+  // Security headers
+  app.use(helmet());
 
-// Security headers
-app.use(helmet());
+  // Xss prevention
+  app.use(xssClean());
 
-// Xss prevention
-app.use(xssClean());
+  // Rate limiting
+  app.use(
+    expressRateLimit({
+      windowMs: 1000 * 60 * 5,
+      max: 100,
+    }),
+  );
 
-// Sanitize data
-app.use(mongoSanitize());
+  // Prevent http param pollution
+  app.use(hpp());
 
-// Rate limiting
-app.use(
-  expressRateLimit({
-    windowMs: 1000 * 60 * 5,
-    max: 100,
-  })
-);
+  // CORS
+  app.use(cors());
 
-// Prevent http param pollution
-app.use(hpp());
+  // Set static folder (build folder)
+  app.use(express.static(path.join(__dirname, './build')));
 
-// CORS
-app.use(cors());
+  app.use('/api/v1/test', test);
 
-// Set static folder
-app.use(express.static(path.join(__dirname, "./build")));
+  const port = process.env.SERVER_PORT || 5000;
 
-app.use("/api/v1/test", test);
+  const server = app.listen(port, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`));
 
-app.use("/test", (req, res) => res.status(200).send({ data: "success" }));
-
-const PORT = process.env.PORT || 5000;
-
-const server = app.listen(
-  PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-);
-
-process.on("unhandledRejection", (error, promise) => {
-  console.log(`Error: ${error.message}`);
-  server.close(() => {
-    process.exit(1);
+  process.on('unhandledRejection', (error, promise) => {
+    console.error(error);
+    server.close(() => {
+      process.exit(1);
+    });
   });
-});
+};
+
+start();
