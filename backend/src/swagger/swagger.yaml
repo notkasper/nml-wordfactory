@@ -1,0 +1,20 @@
+swagger: '2.0'
+info:
+  title: Wordfactory API
+  description: The API for the Wordfactory dashboard.
+  version: 1.0.0
+host: localhost:5000/api
+basePath: /v1
+schemes:
+  - http
+paths:
+  /test:
+    get:
+      tags:
+        - Test
+      summary: Tests the functionality of the application
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
