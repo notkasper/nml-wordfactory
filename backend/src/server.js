@@ -16,10 +16,6 @@ const db = require('./db');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
-const swaggerDocument = YAML.load(
-  path.join(__dirname, './swagger/swagger.yaml')
-);
-
 const start = async () => {
   const sequelize = await db.connect();
   await db.migrate(sequelize);
@@ -59,6 +55,10 @@ const start = async () => {
   app.use(express.static(path.join(__dirname, './build')));
 
   // Set API documentation path
+  const swaggerDocument = YAML.load(
+    path.join(__dirname, './swagger/swagger.yaml')
+  );
+
   app.use(
     '/api-docs',
     swaggerUI.serve,
