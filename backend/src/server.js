@@ -8,10 +8,13 @@ const xssClean = require('xss-clean');
 const expressRateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
 
 const test = require('./routes/test');
 const db = require('./db');
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const start = async () => {
   const sequelize = await db.connect();
@@ -39,7 +42,7 @@ const start = async () => {
     expressRateLimit({
       windowMs: 1000 * 60 * 5,
       max: 100,
-    }),
+    })
   );
 
   // Prevent http param pollution
@@ -51,11 +54,29 @@ const start = async () => {
   // Set static folder (build folder)
   app.use(express.static(path.join(__dirname, './build')));
 
-  app.use('/api/v1/test', test);
+  // Set API documentation path
+  const swaggerDocument = YAML.load(
+    path.join(__dirname, './swagger/swagger.yaml')
+  );
+
+  app.use(
+    '/api-docs',
+    swaggerUI.serve,
+    swaggerUI.setup(swaggerDocument, {
+      customCss: '.swagger-ui .topbar { display: none }',
+    })
+  );
+
+  app.use('/api/v1/', test);
 
   const port = process.env.SERVER_PORT || 5000;
 
-  const server = app.listen(port, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`));
+  const server = app.listen(
+    port,
+    console.log(
+      `Server running in ${process.env.NODE_ENV} mode on port ${port}`
+    )
+  );
 
   process.on('unhandledRejection', (error, promise) => {
     console.error(error);
