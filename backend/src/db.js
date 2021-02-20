@@ -67,7 +67,7 @@ db.setupModels = async () => {
   }
 };
 
-db.initiate = async () => {
+db.initialize = async () => {
   await db.connect();
   await db.migrate();
   await db.setupModels();

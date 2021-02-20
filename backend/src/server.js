@@ -17,7 +17,7 @@ const db = require('./db');
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const start = async () => {
-  await db.initiate();
+  await db.initialize();
 
   const app = express();
   if (process.env.NODE_ENV == 'development') {
