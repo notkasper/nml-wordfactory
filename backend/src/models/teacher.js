@@ -9,9 +9,26 @@ module.exports = (sequelize) =>
         primaryKey: true,
         type: DataTypes.UUID,
       },
-      name: DataTypes.STRING,
-      password_encrypted: DataTypes.STRING,
-      email: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      password_encrypted: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     },
     { underscored: true }
   );
