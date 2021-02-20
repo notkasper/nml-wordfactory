@@ -17,8 +17,7 @@ const db = require('./db');
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const start = async () => {
-  const sequelize = await db.connect();
-  await db.migrate(sequelize);
+  await db.initiate();
 
   const app = express();
   if (process.env.NODE_ENV == 'development') {
