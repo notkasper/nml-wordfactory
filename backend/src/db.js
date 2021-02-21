@@ -3,8 +3,28 @@ const Umzug = require('umzug');
 const path = require('path');
 /* ADD MODELS HERE */
 const Teacher = require('./models/teacher');
+const Student = require('./models/student');
+const Lesson = require('./models/lesson');
+const Question = require('./models/question');
 
 const db = {};
+
+db.setupModels = async () => {
+  try {
+    // initialize models
+    db.Teacher = Teacher(db.sequelize);
+    db.Student = Student(db.sequelize);
+    db.Lesson = Lesson(db.sequelize);
+    db.Question = Question(db.sequelize);
+
+    // define relationships
+    // TODO
+    console.log('All models created successfully');
+  } catch (error) {
+    console.error('Error setting up models');
+    throw error;
+  }
+};
 
 db.connect = async () => {
   try {
@@ -53,16 +73,6 @@ db.migrate = async () => {
     return umzug;
   } catch (error) {
     console.error('Error migrating database');
-    throw error;
-  }
-};
-
-db.setupModels = async () => {
-  try {
-    db.Teacher = Teacher(db.sequelize);
-    console.log('All models created successfully');
-  } catch (error) {
-    console.error('Error setting up models');
     throw error;
   }
 };
