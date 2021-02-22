@@ -6,6 +6,8 @@ const Teacher = require('./models/teacher');
 const Student = require('./models/student');
 const Lesson = require('./models/lesson');
 const Question = require('./models/question');
+const LessonAttempt = require('./models/lessonAttempt');
+const Answer = require('./models/answer');
 
 const db = {};
 
@@ -16,6 +18,8 @@ db.setupModels = async () => {
     db.Student = Student(db.sequelize);
     db.Lesson = Lesson(db.sequelize);
     db.Question = Question(db.sequelize);
+    db.LessonAttempt = LessonAttempt(db.sequelize);
+    db.Answer = Answer(db.sequelize);
 
     // define relationships
     // TODO
