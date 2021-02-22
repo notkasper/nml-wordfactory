@@ -22,7 +22,26 @@ db.setupModels = async () => {
     db.Answer = Answer(db.sequelize);
 
     // define relationships
-    // TODO
+    db.Teacher.belongsToMany(db.Student, { through: 'teacher_student' });
+    db.Teacher.belongsToMany(db.Lesson, { through: 'teacher_lesson' });
+
+    db.Student.belongsToMany(db.Teacher, { through: 'teacher_student' });
+    db.Student.belongsToMany(db.Lesson, { through: 'student_lesson' });
+    db.Student.hasMany(db.LessonAttempt);
+
+    db.Lesson.belongsToMany(db.Teacher, { through: 'teacher_lesson' });
+    db.Lesson.belongsToMany(db.Student, { through: 'student_lesson' });
+    db.Lesson.hasMany(db.Question);
+    db.Lesson.hasMany(db.LessonAttempt);
+
+    db.LessonAttempt.belongsTo(db.Lesson);
+    db.LessonAttempt.belongsTo(db.Student);
+
+    db.Question.belongsTo(db.Lesson);
+
+    db.Answer.belongsTo(db.LessonAttempt);
+    db.Answer.belongsTo(db.Question);
+
     console.log('All models created successfully');
   } catch (error) {
     console.error('Error setting up models');

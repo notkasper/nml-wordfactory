@@ -222,15 +222,105 @@ const up = async (query) => {
     },
     { underscored: true }
   );
+
+  // teacher student join table
+  await query.createTable(
+    'teacher_student',
+    {
+      id: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      student_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      teacher_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+    },
+    { underscored: true }
+  );
+
+  // teacher lesson join table
+  await query.createTable(
+    'teacher_lesson',
+    {
+      id: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      lesson_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      teacher_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+    },
+    { underscored: true }
+  );
+
+  // student lesson join table
+  await query.createTable(
+    'student_lesson',
+    {
+      id: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      lesson_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      student_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+    },
+    { underscored: true }
+  );
 };
 
 const down = async (query) => {
+  // regular tables
   await query.dropTable('teachers');
   await query.dropTable('students');
   await query.dropTable('lessons');
   await query.dropTable('questions');
   await query.dropTable('lesson_attempts');
   await query.dropTable('answers');
+
+  // join tables
+  await query.dropTable('teacher_student');
+  await query.dropTable('teacher_lesson');
+  await query.dropTable('student_lesson');
 };
 
 module.exports = { up, down };
