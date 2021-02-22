@@ -30,5 +30,5 @@ module.exports = (sequelize) =>
         allowNull: false,
       },
     },
-    { underscored: true }
+    { underscored: true, freezeTableName: true }
   );

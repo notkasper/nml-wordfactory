@@ -8,12 +8,16 @@ const Lesson = require('./models/lesson');
 const Question = require('./models/question');
 const LessonAttempt = require('./models/lessonAttempt');
 const Answer = require('./models/answer');
+const TeacherStudent = require('./models/teacherStudent');
+const StudentLesson = require('./models/studentLesson');
+const TeacherLesson = require('./models/teacherLesson');
 
 const db = {};
 
+// models and relationships can be found at this url: https://drawsql.app/radboud-university/diagrams/wordfactory-teacher-dashboard
 db.setupModels = async () => {
   try {
-    // initialize models
+    // models
     db.Teacher = Teacher(db.sequelize);
     db.Student = Student(db.sequelize);
     db.Lesson = Lesson(db.sequelize);
@@ -21,16 +25,21 @@ db.setupModels = async () => {
     db.LessonAttempt = LessonAttempt(db.sequelize);
     db.Answer = Answer(db.sequelize);
 
-    // define relationships
-    db.Teacher.belongsToMany(db.Student, { through: 'teacher_student' });
-    db.Teacher.belongsToMany(db.Lesson, { through: 'teacher_lesson' });
+    // join tables
+    db.TeacherStudent = TeacherStudent(db.sequelize);
+    db.StudentLesson = StudentLesson(db.sequelize);
+    db.TeacherLesson = TeacherLesson(db.sequelize);
 
-    db.Student.belongsToMany(db.Teacher, { through: 'teacher_student' });
-    db.Student.belongsToMany(db.Lesson, { through: 'student_lesson' });
+    // relationships
+    db.Teacher.belongsToMany(db.Student, { through: db.TeacherStudent });
+    db.Teacher.belongsToMany(db.Lesson, { through: db.TeacherLesson });
+
+    db.Student.belongsToMany(db.Teacher, { through: db.TeacherStudent });
+    db.Student.belongsToMany(db.Lesson, { through: db.StudentLesson });
     db.Student.hasMany(db.LessonAttempt);
 
-    db.Lesson.belongsToMany(db.Teacher, { through: 'teacher_lesson' });
-    db.Lesson.belongsToMany(db.Student, { through: 'student_lesson' });
+    db.Lesson.belongsToMany(db.Teacher, { through: db.TeacherLesson });
+    db.Lesson.belongsToMany(db.Student, { through: db.StudentLesson });
     db.Lesson.hasMany(db.Question);
     db.Lesson.hasMany(db.LessonAttempt);
 

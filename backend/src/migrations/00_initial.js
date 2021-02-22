@@ -4,7 +4,7 @@ const DataTypes = Sequelize.DataTypes;
 const up = async (query) => {
   // teacher table
   await query.createTable(
-    'teachers',
+    'teacher',
     {
       id: {
         primaryKey: true,
@@ -22,11 +22,11 @@ const up = async (query) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -36,7 +36,7 @@ const up = async (query) => {
 
   // student table
   await query.createTable(
-    'students',
+    'student',
     {
       id: {
         primaryKey: true,
@@ -50,11 +50,11 @@ const up = async (query) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -64,7 +64,7 @@ const up = async (query) => {
 
   // lesson table
   await query.createTable(
-    'lessons',
+    'lesson',
     {
       id: {
         primaryKey: true,
@@ -82,11 +82,11 @@ const up = async (query) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -96,7 +96,7 @@ const up = async (query) => {
 
   // question table
   await query.createTable(
-    'questions',
+    'question',
     {
       id: {
         primaryKey: true,
@@ -114,11 +114,11 @@ const up = async (query) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -128,7 +128,7 @@ const up = async (query) => {
 
   // lessonAttempt table
   await query.createTable(
-    'lesson_attempts',
+    'lesson_attempt',
     {
       id: {
         primaryKey: true,
@@ -160,11 +160,11 @@ const up = async (query) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -174,7 +174,7 @@ const up = async (query) => {
 
   // answers table
   await query.createTable(
-    'answers',
+    'answer',
     {
       id: {
         primaryKey: true,
@@ -211,11 +211,11 @@ const up = async (query) => {
       time_elapsed_seconds: {
         type: DataTypes.INTEGER,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -227,10 +227,6 @@ const up = async (query) => {
   await query.createTable(
     'teacher_student',
     {
-      id: {
-        primaryKey: true,
-        type: DataTypes.UUID,
-      },
       student_id: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -239,11 +235,11 @@ const up = async (query) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -267,11 +263,11 @@ const up = async (query) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -295,11 +291,11 @@ const up = async (query) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -310,12 +306,12 @@ const up = async (query) => {
 
 const down = async (query) => {
   // regular tables
-  await query.dropTable('teachers');
-  await query.dropTable('students');
-  await query.dropTable('lessons');
-  await query.dropTable('questions');
-  await query.dropTable('lesson_attempts');
-  await query.dropTable('answers');
+  await query.dropTable('teacher');
+  await query.dropTable('student');
+  await query.dropTable('lesson');
+  await query.dropTable('question');
+  await query.dropTable('lesson_attempt');
+  await query.dropTable('answer');
 
   // join tables
   await query.dropTable('teacher_student');
