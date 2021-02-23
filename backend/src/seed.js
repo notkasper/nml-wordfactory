@@ -6,6 +6,14 @@ const wordfactoryExport = require('../wordfactory-export.json');
 module.exports = async (db) => {
   const transaction = await db.sequelize.transaction();
 
+  // TODO: remove
+  await db.Teacher.destroy({ where: {} });
+  await db.Student.destroy({ where: {} });
+  await db.Lesson.destroy({ where: {} });
+  await db.Question.destroy({ where: {} });
+  await db.LessonAttempt.destroy({ where: {} });
+  await db.Answer.destroy({ where: {} });
+
   try {
     // Create a general 'superuser' teacher
     const superuser = await db.Teacher.create(
@@ -14,8 +22,8 @@ module.exports = async (db) => {
         name: 'superuser',
         password_encrypted: 'superuser',
         email: 'superuser@test.nl',
-      },
-      { transaction }
+      }
+      // { transaction }
     );
 
     // Retrieve all unique usernames from the export
@@ -32,8 +40,8 @@ module.exports = async (db) => {
             id: uuid.v4(),
             name: username,
             password_encrypted: username,
-          },
-          { transaction }
+          }
+          // { transaction }
         )
       );
     }
@@ -61,18 +69,61 @@ module.exports = async (db) => {
             lesson_prefix: lesson.lesson_prefix,
             lesson_title: lesson.lesson_title,
             lesson_instruction: lesson.lesson_instruction,
-          },
-          { transaction }
+          }
+          // { transaction }
         )
       );
     }
 
-    // Add all lessons to the superuser teacher
+    // Add all lessons to the superuser teacher and students
     await superuser.addLessons(lessons);
+    const dummy = await superuser.getStudents();
 
-    await transaction.commit();
+    for (const student of dummy) {
+      await student.addLessons(lessons);
+      const attempts = wordfactoryExport.filter(
+        (e) => e.user.name === student.name
+      );
+
+      for (const attempt of attempts) {
+        const studentLesson = await db.Lesson.findOne({
+          where: {
+            lesson_prefix: attempt.lesson.lessonPrefix,
+          },
+        });
+
+        await db.LessonAttempt.create(
+          {
+            id: uuid.v4(),
+            lessonId: studentLesson.id,
+            studentId: student.id,
+            stopped_time: attempt.lesson.stoppedTime,
+            started_time: attempt.lesson.startedTime,
+            is_stopped: attempt.lesson.isStopped,
+            is_started: attempt.lesson.isStarted,
+            is_completed: attempt.lesson.isCompleted,
+          }
+          // { transaction }
+        );
+      }
+    }
+
+    const formats = _.uniqBy(
+      _.flatten(wordfactoryExport.map((e) => e.lesson.formats)),
+      (e) => e.format
+    );
+
+    for (const format of formats) {
+      await db.Question.create({
+        id: uuid.v4(),
+        lesson_id: '',
+        data: {},
+      });
+    }
+
+    // await transaction.commit();
   } catch (error) {
     console.error(`ERROR: ${error.message}`);
-    await transaction.rollback();
+    // await transaction.rollback();
   }
 };
