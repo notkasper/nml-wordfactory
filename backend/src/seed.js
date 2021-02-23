@@ -71,8 +71,6 @@ module.exports = async (db) => {
     await superuser.addLessons(lessons);
 
     await transaction.commit();
-
-    console.log(await superuser.getLessons({ raw: true }));
   } catch (error) {
     console.error(`ERROR: ${error.message}`);
     await transaction.rollback();
