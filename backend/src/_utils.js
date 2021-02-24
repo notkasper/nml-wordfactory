@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const encryptPassword = (password) =>
   new Promise((resolve, reject) => {
@@ -26,4 +26,14 @@ const generateToken = (content) => {
   return jwt.sign(content, process.env.JWT_SECRET);
 };
 
-module.exports = { encryptPassword, checkPassword, generateToken };
+const verifyToken = (token) =>
+  new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(decoded);
+    });
+  });
+
+module.exports = { encryptPassword, checkPassword, generateToken, verifyToken };

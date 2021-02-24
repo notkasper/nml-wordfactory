@@ -31,4 +31,8 @@ const login = async (req, res) => {
   res.status(200).send({ token });
 };
 
-module.exports = { login };
+const teacherAuthCheck = (req, res) => {
+  res.status(200).send({ message: 'Hello Teacher!' });
+};
+
+module.exports = { login, teacherAuthCheck };
