@@ -76,51 +76,8 @@ module.exports = async (db) => {
       );
     }
 
-    // Add all lessons to the superuser teacher and students
+    // Add all lessons to the superuser teacher
     await superuser.addLessons(lessons);
-    const dummy = await superuser.getStudents();
-
-    for (const student of dummy) {
-      await student.addLessons(lessons);
-      const attempts = wordfactoryExport.filter(
-        (e) => e.user.name === student.name
-      );
-
-      for (const attempt of attempts) {
-        const studentLesson = await db.Lesson.findOne({
-          where: {
-            lesson_prefix: attempt.lesson.lessonPrefix,
-          },
-        });
-
-        await db.LessonAttempt.create(
-          {
-            id: uuid.v4(),
-            lessonId: studentLesson.id,
-            studentId: student.id,
-            stopped_time: attempt.lesson.stoppedTime,
-            started_time: attempt.lesson.startedTime,
-            is_stopped: attempt.lesson.isStopped,
-            is_started: attempt.lesson.isStarted,
-            is_completed: attempt.lesson.isCompleted,
-          },
-          { transaction }
-        );
-      }
-    }
-
-    const formats = _.uniqBy(
-      _.flatten(wordfactoryExport.map((e) => e.lesson.formats)),
-      (e) => e.format
-    );
-
-    for (const format of formats) {
-      await db.Question.create({
-        id: uuid.v4(),
-        lesson_id: '',
-        data: {},
-      });
-    }
 
     await transaction.commit();
   } catch (error) {
