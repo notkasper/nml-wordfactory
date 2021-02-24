@@ -7,14 +7,6 @@ const wordfactoryExport = require('../wordfactory-export.json');
 module.exports = async (db) => {
   const transaction = await db.sequelize.transaction();
 
-  // TODO: remove
-  await db.Teacher.destroy({ where: {} });
-  await db.Student.destroy({ where: {} });
-  await db.Lesson.destroy({ where: {} });
-  await db.Question.destroy({ where: {} });
-  await db.LessonAttempt.destroy({ where: {} });
-  await db.Answer.destroy({ where: {} });
-
   try {
     // Create a general 'superuser' teacher
     const superuser = await db.Teacher.create(
