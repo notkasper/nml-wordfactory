@@ -251,10 +251,6 @@ const up = async (query) => {
   await query.createTable(
     'teacher_lesson',
     {
-      id: {
-        primaryKey: true,
-        type: DataTypes.UUID,
-      },
       lesson_id: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -279,10 +275,6 @@ const up = async (query) => {
   await query.createTable(
     'student_lesson',
     {
-      id: {
-        primaryKey: true,
-        type: DataTypes.UUID,
-      },
       lesson_id: {
         type: DataTypes.UUID,
         allowNull: false,

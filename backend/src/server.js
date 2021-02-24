@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
 const expressRateLimit = require('express-rate-limit');
@@ -12,6 +13,7 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 
 const test = require('./routes/test');
+const auth = require('./routes/auth');
 const db = require('./db');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -25,7 +27,7 @@ const start = async () => {
   }
 
   // Body parser
-  app.use(express.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   // Cookie parser
   app.use(cookieParser());
@@ -67,6 +69,7 @@ const start = async () => {
   );
 
   app.use('/api/v1/', test);
+  app.use('/api/v1/auth', auth);
 
   const port = process.env.SERVER_PORT || 5000;
 

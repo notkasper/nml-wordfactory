@@ -34,6 +34,7 @@ DB_HOST= // default: localhost
 DB_PORT= // default: 5432  
 NODE_ENV= // development/production  
 SERVER_PORT=
+PASSWORD_PRIVATE_KEY= // for development, anything will do
 
 # test if it runs
 
