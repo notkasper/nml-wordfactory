@@ -23,8 +23,8 @@ module.exports = async (db) => {
         name: 'superuser',
         password_encrypted: await encryptPassword('superuser'),
         email: 'super@user.nl',
-      }
-      // { transaction }
+      },
+      { transaction }
     );
 
     // Retrieve all unique usernames from the export
@@ -41,8 +41,8 @@ module.exports = async (db) => {
             id: uuid.v4(),
             name: username,
             password_encrypted: username,
-          }
-          // { transaction }
+          },
+          { transaction }
         )
       );
     }
@@ -70,8 +70,8 @@ module.exports = async (db) => {
             lesson_prefix: lesson.lesson_prefix,
             lesson_title: lesson.lesson_title,
             lesson_instruction: lesson.lesson_instruction,
-          }
-          // { transaction }
+          },
+          { transaction }
         )
       );
     }
@@ -103,8 +103,8 @@ module.exports = async (db) => {
             is_stopped: attempt.lesson.isStopped,
             is_started: attempt.lesson.isStarted,
             is_completed: attempt.lesson.isCompleted,
-          }
-          // { transaction }
+          },
+          { transaction }
         );
       }
     }
@@ -122,9 +122,9 @@ module.exports = async (db) => {
       });
     }
 
-    // await transaction.commit();
+    await transaction.commit();
   } catch (error) {
     console.error(`ERROR: ${error.message}`);
-    // await transaction.rollback();
+    await transaction.rollback();
   }
 };
