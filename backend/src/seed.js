@@ -4,20 +4,27 @@ const { encryptPassword } = require('./_utils');
 
 const wordfactoryExport = require('../wordfactory-export.json');
 
+const filterAnswerFromFormat = (format) => {
+  return format.data;
+};
+
 module.exports = async (db) => {
-  const transaction = await db.sequelize.transaction();
+  // TODO: remove
+  await db.Teacher.destroy({ where: {} });
+  await db.Student.destroy({ where: {} });
+  await db.Lesson.destroy({ where: {} });
+  await db.Question.destroy({ where: {} });
+  await db.LessonAttempt.destroy({ where: {} });
+  await db.Answer.destroy({ where: {} });
 
   try {
     // Create a general 'superuser' teacher
-    const superuser = await db.Teacher.create(
-      {
-        id: uuid.v4(),
-        name: 'superuser',
-        password_encrypted: await encryptPassword('superuser'),
-        email: 'super@user.nl',
-      },
-      { transaction }
-    );
+    const superuser = await db.Teacher.create({
+      id: uuid.v4(),
+      name: 'superuser',
+      password_encrypted: await encryptPassword('superuser'),
+      email: 'super@user.nl',
+    });
 
     // Retrieve all unique usernames from the export
     const usernames = _.uniqBy(wordfactoryExport, (e) => e.user.name).map(
@@ -28,14 +35,11 @@ module.exports = async (db) => {
     const students = [];
     for (const username of usernames) {
       students.push(
-        await db.Student.create(
-          {
-            id: uuid.v4(),
-            name: username,
-            password_encrypted: username,
-          },
-          { transaction }
-        )
+        await db.Student.create({
+          id: uuid.v4(),
+          name: username,
+          password_encrypted: username,
+        })
       );
     }
 
@@ -55,25 +59,60 @@ module.exports = async (db) => {
     // convert all unique lessons into lessons
     const lessons = [];
     for (const lesson of uniqueLessons) {
+      const lesson_id = uuid.v4();
+      const questions = wordfactoryExport
+        .find((e) => e.lesson.lessonPrefix === lesson.lesson_prefix)
+        .lesson.formats.map((e) => ({
+          id: uuid.v4(),
+          lesson_id,
+          data: filterAnswerFromFormat(e),
+          format: e.format,
+        }));
+
       lessons.push(
         await db.Lesson.create(
           {
-            id: uuid.v4(),
+            id: lesson_id,
             lesson_prefix: lesson.lesson_prefix,
             lesson_title: lesson.lesson_title,
             lesson_instruction: lesson.lesson_instruction,
+            questions,
           },
-          { transaction }
+          { include: db.Question }
         )
       );
     }
 
-    // Add all lessons to the superuser teacher
+    // Add all lessons to the superuser teacher and students
     await superuser.addLessons(lessons);
+    const dummy = await superuser.getStudents();
 
-    await transaction.commit();
+    for (const student of dummy) {
+      await student.addLessons(lessons);
+      const attempts = wordfactoryExport.filter(
+        (e) => e.user.name === student.name
+      );
+
+      for (const attempt of attempts) {
+        const studentLesson = await db.Lesson.findOne({
+          where: {
+            lesson_prefix: attempt.lesson.lessonPrefix,
+          },
+        });
+
+        await db.LessonAttempt.create({
+          id: uuid.v4(),
+          lessonId: studentLesson.id,
+          studentId: student.id,
+          stopped_time: attempt.lesson.stoppedTime,
+          started_time: attempt.lesson.startedTime,
+          is_stopped: attempt.lesson.isStopped,
+          is_started: attempt.lesson.isStarted,
+          is_completed: attempt.lesson.isCompleted,
+        });
+      }
+    }
   } catch (error) {
     console.error(`ERROR: ${error.message}`);
-    await transaction.rollback();
   }
 };
