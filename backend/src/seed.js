@@ -3,9 +3,11 @@ const _ = require('lodash');
 
 const wordfactoryExport = require('../wordfactory-export.json');
 
-module.exports = async (db) => {
-  const transaction = await db.sequelize.transaction();
+const filterAnswerFromFormat = (format) => {
+  return format.data;
+};
 
+module.exports = async (db) => {
   // TODO: remove
   await db.Teacher.destroy({ where: {} });
   await db.Student.destroy({ where: {} });
@@ -16,15 +18,12 @@ module.exports = async (db) => {
 
   try {
     // Create a general 'superuser' teacher
-    const superuser = await db.Teacher.create(
-      {
-        id: uuid.v4(),
-        name: 'superuser',
-        password_encrypted: 'superuser',
-        email: 'superuser@test.nl',
-      }
-      // { transaction }
-    );
+    const superuser = await db.Teacher.create({
+      id: uuid.v4(),
+      name: 'superuser',
+      password_encrypted: 'superuser',
+      email: 'superuser@test.nl',
+    });
 
     // Retrieve all unique usernames from the export
     const usernames = _.uniqBy(wordfactoryExport, (e) => e.user.name).map(
@@ -35,14 +34,11 @@ module.exports = async (db) => {
     const students = [];
     for (const username of usernames) {
       students.push(
-        await db.Student.create(
-          {
-            id: uuid.v4(),
-            name: username,
-            password_encrypted: username,
-          }
-          // { transaction }
-        )
+        await db.Student.create({
+          id: uuid.v4(),
+          name: username,
+          password_encrypted: username,
+        })
       );
     }
 
@@ -62,15 +58,26 @@ module.exports = async (db) => {
     // convert all unique lessons into lessons
     const lessons = [];
     for (const lesson of uniqueLessons) {
+      const lesson_id = uuid.v4();
+      const questions = wordfactoryExport
+        .find((e) => e.lesson.lessonPrefix === lesson.lesson_prefix)
+        .lesson.formats.map((e) => ({
+          id: uuid.v4(),
+          lesson_id,
+          data: filterAnswerFromFormat(e),
+          format: e.format,
+        }));
+
       lessons.push(
         await db.Lesson.create(
           {
-            id: uuid.v4(),
+            id: lesson_id,
             lesson_prefix: lesson.lesson_prefix,
             lesson_title: lesson.lesson_title,
             lesson_instruction: lesson.lesson_instruction,
-          }
-          // { transaction }
+            questions,
+          },
+          { include: db.Question }
         )
       );
     }
@@ -92,38 +99,19 @@ module.exports = async (db) => {
           },
         });
 
-        await db.LessonAttempt.create(
-          {
-            id: uuid.v4(),
-            lessonId: studentLesson.id,
-            studentId: student.id,
-            stopped_time: attempt.lesson.stoppedTime,
-            started_time: attempt.lesson.startedTime,
-            is_stopped: attempt.lesson.isStopped,
-            is_started: attempt.lesson.isStarted,
-            is_completed: attempt.lesson.isCompleted,
-          }
-          // { transaction }
-        );
+        await db.LessonAttempt.create({
+          id: uuid.v4(),
+          lessonId: studentLesson.id,
+          studentId: student.id,
+          stopped_time: attempt.lesson.stoppedTime,
+          started_time: attempt.lesson.startedTime,
+          is_stopped: attempt.lesson.isStopped,
+          is_started: attempt.lesson.isStarted,
+          is_completed: attempt.lesson.isCompleted,
+        });
       }
     }
-
-    const formats = _.uniqBy(
-      _.flatten(wordfactoryExport.map((e) => e.lesson.formats)),
-      (e) => e.format
-    );
-
-    for (const format of formats) {
-      await db.Question.create({
-        id: uuid.v4(),
-        lesson_id: '',
-        data: {},
-      });
-    }
-
-    // await transaction.commit();
   } catch (error) {
     console.error(`ERROR: ${error.message}`);
-    // await transaction.rollback();
   }
 };
