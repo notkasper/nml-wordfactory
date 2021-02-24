@@ -1,6 +1,6 @@
 module.exports = (sequelize) =>
   sequelize.define(
-    'student_lesson',
+    'user_lesson',
     {},
     {
       freezeTableName: true,

@@ -5,15 +5,13 @@ const path = require('path');
 const seed = require('./seed');
 
 /* ADD MODELS HERE */
-const Teacher = require('./models/teacher');
-const Student = require('./models/student');
+const User = require('./models/user');
 const Lesson = require('./models/lesson');
 const Question = require('./models/question');
 const LessonAttempt = require('./models/lessonAttempt');
 const Answer = require('./models/answer');
 const TeacherStudent = require('./models/teacherStudent');
-const StudentLesson = require('./models/studentLesson');
-const TeacherLesson = require('./models/teacherLesson');
+const UserLesson = require('./models/userLesson');
 
 const db = {};
 
@@ -21,8 +19,7 @@ const db = {};
 db.setupModels = async () => {
   try {
     // models
-    db.Teacher = Teacher(db.sequelize);
-    db.Student = Student(db.sequelize);
+    db.User = User(db.sequelize);
     db.Lesson = Lesson(db.sequelize);
     db.Question = Question(db.sequelize);
     db.LessonAttempt = LessonAttempt(db.sequelize);
@@ -30,24 +27,26 @@ db.setupModels = async () => {
 
     // join tables
     db.TeacherStudent = TeacherStudent(db.sequelize);
-    db.StudentLesson = StudentLesson(db.sequelize);
-    db.TeacherLesson = TeacherLesson(db.sequelize);
+    db.UserLesson = UserLesson(db.sequelize);
 
     // relationships
-    db.Teacher.belongsToMany(db.Student, { through: db.TeacherStudent });
-    db.Teacher.belongsToMany(db.Lesson, { through: db.TeacherLesson });
+    db.User.belongsToMany(db.User, {
+      through: db.TeacherStudent,
+      as: 'teacher',
+    });
+    db.User.belongsToMany(db.User, {
+      through: db.TeacherStudent,
+      as: 'student',
+    });
+    db.User.belongsToMany(db.Lesson, { through: db.UserLesson });
+    db.User.hasMany(db.LessonAttempt);
 
-    db.Student.belongsToMany(db.Teacher, { through: db.TeacherStudent });
-    db.Student.belongsToMany(db.Lesson, { through: db.StudentLesson });
-    db.Student.hasMany(db.LessonAttempt);
-
-    db.Lesson.belongsToMany(db.Teacher, { through: db.TeacherLesson });
-    db.Lesson.belongsToMany(db.Student, { through: db.StudentLesson });
+    db.Lesson.belongsToMany(db.User, { through: db.UserLesson });
     db.Lesson.hasMany(db.Question);
     db.Lesson.hasMany(db.LessonAttempt);
 
     db.LessonAttempt.belongsTo(db.Lesson);
-    db.LessonAttempt.belongsTo(db.Student);
+    db.LessonAttempt.belongsTo(db.User);
 
     db.Question.belongsTo(db.Lesson);
 
