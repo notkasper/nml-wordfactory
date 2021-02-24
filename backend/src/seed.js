@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 const _ = require('lodash');
+const { encryptPassword } = require('./_utils');
 
 const wordfactoryExport = require('../wordfactory-export.json');
 
@@ -21,8 +22,8 @@ module.exports = async (db) => {
     const superuser = await db.Teacher.create({
       id: uuid.v4(),
       name: 'superuser',
-      password_encrypted: 'superuser',
-      email: 'superuser@test.nl',
+      password_encrypted: await encryptPassword('superuser'),
+      email: 'super@user.nl',
     });
 
     // Retrieve all unique usernames from the export
