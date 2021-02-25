@@ -35,33 +35,56 @@ db.setupModels = async () => {
       through: db.TeacherStudent,
       foreignKey: 'teacherId',
     });
+
     db.User.belongsToMany(db.User, {
       as: 'TeacherStudents',
       through: db.TeacherStudent,
       foreignKey: 'studentId',
     });
+
     db.User.belongsToMany(db.Lesson, {
-      as: 'TeacherLesson',
+      as: 'Lessons',
       through: db.UserLesson,
-      foreignKey: 'teacherId',
+      foreignKey: 'userId',
     });
-    db.User.belongsToMany(db.Lesson, {
-      as: 'StudentLessons',
+
+    db.User.hasMany(db.LessonAttempt, {
+      foreignKey: 'userId',
+    });
+
+    db.Lesson.hasMany(db.Question, {
+      foreignKey: 'lessonId',
+    });
+
+    db.Lesson.hasMany(db.LessonAttempt, {
+      foreignKey: 'lessonId',
+    });
+
+    db.Lesson.belongsToMany(db.User, {
+      as: 'Users',
       through: db.UserLesson,
-      foreignKey: 'studentId',
+      foreignKey: 'lessonId',
     });
-    db.User.hasMany(db.LessonAttempt);
 
-    db.Lesson.hasMany(db.Question);
-    db.Lesson.hasMany(db.LessonAttempt);
+    db.LessonAttempt.belongsTo(db.Lesson, {
+      foreignKey: 'lessonId',
+    });
 
-    db.LessonAttempt.belongsTo(db.Lesson);
-    db.LessonAttempt.belongsTo(db.User);
+    db.LessonAttempt.belongsTo(db.User, {
+      foreignKey: 'userId',
+    });
 
-    db.Question.belongsTo(db.Lesson);
+    db.Question.belongsTo(db.Lesson, {
+      foreignKey: 'lessonId',
+    });
 
-    db.Answer.belongsTo(db.LessonAttempt);
-    db.Answer.belongsTo(db.Question);
+    db.Answer.belongsTo(db.LessonAttempt, {
+      foreignKey: 'lessonAttemptId',
+    });
+
+    db.Answer.belongsTo(db.Question, {
+      foreignKey: 'questionId',
+    });
 
     console.log('All models created successfully');
   } catch (error) {
@@ -127,7 +150,7 @@ db.initialize = async () => {
   await db.setupModels();
 
   if (process.env.NODE_ENV === 'development') {
-    // await seed(db);
+    await seed(db);
   }
 };
 
