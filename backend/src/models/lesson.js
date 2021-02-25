@@ -21,14 +21,6 @@ module.exports = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
     },
     { underscored: true, freezeTableName: true }
   );

@@ -10,12 +10,64 @@ const filterAnswerFromFormat = (format) => {
 
 module.exports = async (db) => {
   // TODO: remove
-  await db.Teacher.destroy({ where: {} });
-  await db.Student.destroy({ where: {} });
+  await db.User.destroy({ where: {} });
   await db.Lesson.destroy({ where: {} });
   await db.Question.destroy({ where: {} });
   await db.LessonAttempt.destroy({ where: {} });
   await db.Answer.destroy({ where: {} });
+
+  // TESTING
+
+  // TEMP TESTING
+  const t = await db.sequelize.transaction();
+  try {
+    const dennis = await db.User.create(
+      {
+        id: uuid.v4(),
+        name: 'djennis',
+        password_encrypted: 'djonko',
+        email: 'djennis@djonko.nl',
+        role: 'teacher',
+      },
+      { transaction: t }
+    );
+    const kasper = await db.User.create(
+      {
+        id: uuid.v4(),
+        name: 'Kasper',
+        password_encrypted: 'kojonkeltjecool',
+        role: 'student',
+      },
+      { transaction: t }
+    );
+    const thijs = await db.User.create(
+      {
+        id: uuid.v4(),
+        name: 'thijs',
+        password_encrypted: 'marianna',
+        role: 'student',
+      },
+      { transaction: t }
+    );
+    await dennis.addTeacherStudent(kasper, {
+      transaction: t,
+      through: db.TeacherStudent,
+    });
+    await dennis.addTeacherStudent(thijs, {
+      transaction: t,
+      through: db.TeacherStudent,
+    });
+    await t.commit();
+
+    const students = await dennis.getTeacherStudents();
+    const teachers = await students[0].getStudentTeachers();
+    console.log(teachers);
+  } catch (error) {
+    console.error(error);
+    await t.rollback();
+  }
+
+  return;
 
   try {
     // Create a general 'superuser' teacher

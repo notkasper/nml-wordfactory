@@ -4,7 +4,7 @@ const DataTypes = Sequelize.DataTypes;
 const up = async (query) => {
   // teacher table
   await query.createTable(
-    'teacher',
+    'user',
     {
       id: {
         primaryKey: true,
@@ -15,40 +15,16 @@ const up = async (query) => {
         allowNull: false,
       },
       password_encrypted: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      role: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-    },
-    { underscored: true }
-  );
-
-  // student table
-  await query.createTable(
-    'student',
-    {
-      id: {
-        primaryKey: true,
-        type: DataTypes.UUID,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password_encrypted: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       created_at: {
         type: DataTypes.DATE,
@@ -138,7 +114,7 @@ const up = async (query) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      student_id: {
+      user_id: {
         type: DataTypes.UUID,
         allowNull: false,
       },
@@ -247,39 +223,15 @@ const up = async (query) => {
     { underscored: true }
   );
 
-  // teacher lesson join table
+  // user lesson join table
   await query.createTable(
-    'teacher_lesson',
+    'user_lesson',
     {
       lesson_id: {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      teacher_id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-    },
-    { underscored: true }
-  );
-
-  // student lesson join table
-  await query.createTable(
-    'student_lesson',
-    {
-      lesson_id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
-      student_id: {
+      user_id: {
         type: DataTypes.UUID,
         allowNull: false,
       },
@@ -307,8 +259,7 @@ const down = async (query) => {
 
   // join tables
   await query.dropTable('teacher_student');
-  await query.dropTable('teacher_lesson');
-  await query.dropTable('student_lesson');
+  await query.dropTable('user_lesson');
 };
 
 module.exports = { up, down };

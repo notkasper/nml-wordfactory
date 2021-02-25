@@ -32,14 +32,6 @@ module.exports = (sequelize) =>
       time_elapsed_seconds: {
         type: DataTypes.INTEGER,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
     },
     { underscored: true, freezeTableName: true }
   );

@@ -31,17 +31,27 @@ db.setupModels = async () => {
 
     // relationships
     db.User.belongsToMany(db.User, {
+      as: 'StudentTeachers',
       through: db.TeacherStudent,
-      as: 'teacher',
+      foreignKey: 'teacher_id',
     });
     db.User.belongsToMany(db.User, {
+      as: 'TeacherStudents',
       through: db.TeacherStudent,
-      as: 'student',
+      foreignKey: 'student_id',
     });
-    db.User.belongsToMany(db.Lesson, { through: db.UserLesson });
+    db.User.belongsToMany(db.Lesson, {
+      as: 'LessonTeachers',
+      through: db.UserLesson,
+      foreignKey: 'teacher_id',
+    });
+    db.User.belongsToMany(db.Lesson, {
+      as: 'LessonStudents',
+      through: db.UserLesson,
+      foreignKey: 'student_id',
+    });
     db.User.hasMany(db.LessonAttempt);
 
-    db.Lesson.belongsToMany(db.User, { through: db.UserLesson });
     db.Lesson.hasMany(db.Question);
     db.Lesson.hasMany(db.LessonAttempt);
 

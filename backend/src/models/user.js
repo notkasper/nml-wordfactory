@@ -3,7 +3,7 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = (sequelize) =>
   sequelize.define(
-    'teacher',
+    'user',
     {
       id: {
         primaryKey: true,
@@ -17,17 +17,13 @@ module.exports = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: false,
       },
-      email: {
+      role: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     { underscored: true, freezeTableName: true }

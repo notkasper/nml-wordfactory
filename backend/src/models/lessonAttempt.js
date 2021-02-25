@@ -27,14 +27,6 @@ module.exports = (sequelize) =>
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
     },
     { underscored: true, freezeTableName: true }
   );
