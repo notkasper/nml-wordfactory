@@ -10,11 +10,11 @@ module.exports = (sequelize) =>
     content: {
       type: DataTypes.JSON,
     },
-    is_completed: {
+    isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    show_feedback: {
+    showFeedback: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
@@ -27,7 +27,7 @@ module.exports = (sequelize) =>
     missed: {
       type: DataTypes.INTEGER,
     },
-    time_elapsed_seconds: {
+    timeElapsedSeconds: {
       type: DataTypes.INTEGER,
     },
   });
