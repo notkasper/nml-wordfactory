@@ -2,8 +2,6 @@ const { Sequelize } = require('sequelize');
 const Umzug = require('umzug');
 const path = require('path');
 
-const seed = require('./seed');
-
 /* ADD MODELS HERE */
 const User = require('./models/user');
 const Lesson = require('./models/lesson');
@@ -148,10 +146,10 @@ db.initialize = async () => {
   await db.connect();
   await db.migrate();
   await db.setupModels();
+};
 
-  if (process.env.NODE_ENV === 'development') {
-    await seed(db);
-  }
+db.close = () => {
+  db.sequelize.close();
 };
 
 module.exports = db;
