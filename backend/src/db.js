@@ -41,12 +41,12 @@ db.setupModels = async () => {
       foreignKey: 'studentId',
     });
     db.User.belongsToMany(db.Lesson, {
-      as: 'LessonTeachers',
+      as: 'TeacherLesson',
       through: db.UserLesson,
       foreignKey: 'teacherId',
     });
     db.User.belongsToMany(db.Lesson, {
-      as: 'LessonStudents',
+      as: 'StudentLessons',
       through: db.UserLesson,
       foreignKey: 'studentId',
     });
