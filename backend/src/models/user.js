@@ -2,21 +2,25 @@ const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = (sequelize) =>
-  sequelize.define('Lesson', {
+  sequelize.define('User', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lesson_prefix: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lesson_instruction: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    lesson_title: {
+    password_encrypted: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   });

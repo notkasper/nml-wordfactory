@@ -1,9 +1,1 @@
-module.exports = (sequelize) =>
-  sequelize.define(
-    'teacher_student',
-    {},
-    {
-      freezeTableName: true,
-      underscored: true,
-    }
-  );
+module.exports = (sequelize) => sequelize.define('TeacherStudent');

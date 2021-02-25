@@ -10,13 +10,13 @@ const filterAnswerFromFormat = (format) => {
 
 module.exports = async (db) => {
   // TODO: remove
-  await db.Teacher.destroy({ where: {} });
-  await db.Student.destroy({ where: {} });
+  await db.User.destroy({ where: {} });
   await db.Lesson.destroy({ where: {} });
   await db.Question.destroy({ where: {} });
   await db.LessonAttempt.destroy({ where: {} });
   await db.Answer.destroy({ where: {} });
 
+  // TESTING
   try {
     // Create a general 'superuser' teacher
     const superuser = await db.Teacher.create({
