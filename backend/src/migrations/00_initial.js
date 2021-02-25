@@ -12,7 +12,7 @@ const up = async (query) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password_encrypted: {
+    passwordEncrypted: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -40,15 +40,15 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lesson_prefix: {
+    lessonPrefix: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lesson_instruction: {
+    lessonInstruction: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    lesson_title: {
+    lessonTitle: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -68,7 +68,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lesson_id: {
+    lessonId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -96,29 +96,29 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lesson_id: {
+    lessonId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    user_id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    stopped_time: {
+    stoppedTime: {
       type: DataTypes.DATE,
     },
-    started_time: {
+    startedTime: {
       type: DataTypes.DATE,
     },
-    is_stopped: {
+    isStopped: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    is_started: {
+    isStarted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    is_completed: {
+    isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
@@ -138,22 +138,22 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lesson_attempt_id: {
+    lessonAttempt_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    question_id: {
+    questionId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
     content: {
       type: DataTypes.JSON,
     },
-    is_completed: {
+    isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    show_feedback: {
+    showFeedback: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
@@ -166,7 +166,7 @@ const up = async (query) => {
     missed: {
       type: DataTypes.INTEGER,
     },
-    time_elapsed_seconds: {
+    timeElapsedSeconds: {
       type: DataTypes.INTEGER,
     },
     createdAt: {
@@ -181,11 +181,11 @@ const up = async (query) => {
 
   // teacher student join table
   await query.createTable('TeacherStudents', {
-    student_id: {
+    studentId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    teacher_id: {
+    teacherId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -201,11 +201,11 @@ const up = async (query) => {
 
   // user lesson join table
   await query.createTable('UserLessons', {
-    lesson_id: {
+    lessonId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    user_id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
     },

@@ -7,15 +7,15 @@ module.exports = (sequelize) =>
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lesson_prefix: {
+    lessonPrefix: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lesson_instruction: {
+    lessonInstruction: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    lesson_title: {
+    lessonTitle: {
       type: DataTypes.STRING,
       allowNull: false,
     },

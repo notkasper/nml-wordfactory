@@ -33,22 +33,22 @@ db.setupModels = async () => {
     db.User.belongsToMany(db.User, {
       as: 'StudentTeachers',
       through: db.TeacherStudent,
-      foreignKey: 'teacher_id',
+      foreignKey: 'teacherId',
     });
     db.User.belongsToMany(db.User, {
       as: 'TeacherStudents',
       through: db.TeacherStudent,
-      foreignKey: 'student_id',
+      foreignKey: 'studentId',
     });
     db.User.belongsToMany(db.Lesson, {
       as: 'LessonTeachers',
       through: db.UserLesson,
-      foreignKey: 'teacher_id',
+      foreignKey: 'teacherId',
     });
     db.User.belongsToMany(db.Lesson, {
       as: 'LessonStudents',
       through: db.UserLesson,
-      foreignKey: 'student_id',
+      foreignKey: 'studentId',
     });
     db.User.hasMany(db.LessonAttempt);
 
@@ -127,7 +127,7 @@ db.initialize = async () => {
   await db.setupModels();
 
   if (process.env.NODE_ENV === 'development') {
-    await seed(db);
+    // await seed(db);
   }
 };
 

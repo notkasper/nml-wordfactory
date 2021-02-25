@@ -7,21 +7,21 @@ module.exports = (sequelize) =>
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    stopped_time: {
+    stoppedTime: {
       type: DataTypes.DATE,
     },
-    started_time: {
+    startedTime: {
       type: DataTypes.DATE,
     },
-    is_stopped: {
+    isStopped: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    is_started: {
+    isStarted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    is_completed: {
+    isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
