@@ -1,22 +1,29 @@
 const uuid = require('uuid');
 const _ = require('lodash');
+const dotenv = require('dotenv');
+const db = require('./db');
+const path = require('path');
 const { encryptPassword } = require('./_utils');
 
 const wordfactoryExport = require('../wordfactory-export.json');
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const filterAnswerFromFormat = (format) => {
   return format.data;
 };
 
-module.exports = async (db) => {
-  // TODO: remove
+const seed = async () => {
+  console.log('Seeding started...');
+  await db.initialize();
   await db.User.destroy({ where: {} });
   await db.Lesson.destroy({ where: {} });
   await db.Question.destroy({ where: {} });
   await db.LessonAttempt.destroy({ where: {} });
   await db.Answer.destroy({ where: {} });
+  await db.TeacherStudent.destroy({ where: {} });
+  await db.UserLesson.destroy({ where: {} });
 
-  // TESTING
   try {
     // Create a general 'superuser' teacher
     const superuser = await db.User.create({
@@ -110,7 +117,12 @@ module.exports = async (db) => {
         });
       }
     }
+    console.log('Seeding completed');
   } catch (error) {
     console.error(error);
+  } finally {
+    db.close();
   }
 };
+
+seed();
