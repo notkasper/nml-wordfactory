@@ -9,7 +9,7 @@ const login = async (req, res) => {
     return;
   }
 
-  const teacher = await db.Teacher.findOne({ where: { email } });
+  const teacher = await db.User.findOne({ where: { email, role: 'teacher' } });
   if (!teacher) {
     res.status(401).send({ message: invalidLoginMessage });
     return;
@@ -17,7 +17,7 @@ const login = async (req, res) => {
 
   const validCredentials = await checkPassword(
     password,
-    teacher.password_encrypted
+    teacher.passwordEncrypted
   );
   if (!validCredentials) {
     // invalid password
@@ -26,7 +26,7 @@ const login = async (req, res) => {
   }
 
   // correct password
-  const data = { teacher_id: teacher.id };
+  const data = { teacherId: teacher.id };
   const token = generateToken(data);
   res.status(200).send({ token });
 };
