@@ -17,7 +17,7 @@ const up = async (query) => {
       allowNull: false,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(['teacher', 'student']),
       allowNull: false,
     },
     email: {
