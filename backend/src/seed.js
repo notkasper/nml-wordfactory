@@ -19,10 +19,11 @@ module.exports = async (db) => {
   // TESTING
   try {
     // Create a general 'superuser' teacher
-    const superuser = await db.Teacher.create({
+    const superuser = await db.User.create({
       id: uuid.v4(),
+      role: 'teacher',
       name: 'superuser',
-      password_encrypted: await encryptPassword('superuser'),
+      passwordEncrypted: await encryptPassword('superuser'),
       email: 'super@user.nl',
     });
 
@@ -35,36 +36,33 @@ module.exports = async (db) => {
     const students = [];
     for (const username of usernames) {
       students.push(
-        await db.Student.create({
+        await db.User.create({
           id: uuid.v4(),
+          role: 'student',
           name: username,
-          password_encrypted: username,
+          passwordEncrypted: await encryptPassword(username),
         })
       );
     }
 
     // Add all students to the superuser teacher
-    await superuser.addStudents(students);
+    await superuser.addTeacherStudents(students);
 
     // Retrieve all unique lessons
     const uniqueLessons = _.uniqBy(
       wordfactoryExport,
       (e) => e.lesson.lesson_id
-    ).map((e) => ({
-      lesson_prefix: e.lesson.lessonPrefix,
-      lesson_title: e.lesson.lessonTitle,
-      lesson_instruction: e.lesson.lessonInstruction,
-    }));
+    ).map((e) => e.lesson);
 
     // convert all unique lessons into lessons
     const lessons = [];
     for (const lesson of uniqueLessons) {
-      const lesson_id = uuid.v4();
+      const lessonId = uuid.v4();
       const questions = wordfactoryExport
-        .find((e) => e.lesson.lessonPrefix === lesson.lesson_prefix)
+        .find((e) => e.lesson.lessonPrefix === lesson.lessonPrefix)
         .lesson.formats.map((e) => ({
           id: uuid.v4(),
-          lesson_id,
+          lessonId,
           data: filterAnswerFromFormat(e),
           format: e.format,
         }));
@@ -72,11 +70,11 @@ module.exports = async (db) => {
       lessons.push(
         await db.Lesson.create(
           {
-            id: lesson_id,
-            lesson_prefix: lesson.lesson_prefix,
-            lesson_title: lesson.lesson_title,
-            lesson_instruction: lesson.lesson_instruction,
-            questions,
+            id: lessonId,
+            lessonPrefix: lesson.lessonPrefix,
+            lessonTitle: lesson.lessonTitle,
+            lessonInstruction: lesson.lessonInstruction,
+            Questions: questions,
           },
           { include: db.Question }
         )
@@ -85,7 +83,7 @@ module.exports = async (db) => {
 
     // Add all lessons to the superuser teacher and students
     await superuser.addLessons(lessons);
-    const dummy = await superuser.getStudents();
+    const dummy = await superuser.getTeacherStudents();
 
     for (const student of dummy) {
       await student.addLessons(lessons);
@@ -96,23 +94,23 @@ module.exports = async (db) => {
       for (const attempt of attempts) {
         const studentLesson = await db.Lesson.findOne({
           where: {
-            lesson_prefix: attempt.lesson.lessonPrefix,
+            lessonPrefix: attempt.lesson.lessonPrefix,
           },
         });
 
         await db.LessonAttempt.create({
           id: uuid.v4(),
           lessonId: studentLesson.id,
-          studentId: student.id,
-          stopped_time: attempt.lesson.stoppedTime,
-          started_time: attempt.lesson.startedTime,
-          is_stopped: attempt.lesson.isStopped,
-          is_started: attempt.lesson.isStarted,
-          is_completed: attempt.lesson.isCompleted,
+          userId: student.id,
+          stoppedTime: attempt.lesson.stoppedTime,
+          startedTime: attempt.lesson.startedTime,
+          isStopped: attempt.lesson.isStopped,
+          isStarted: attempt.lesson.isStarted,
+          isCompleted: attempt.lesson.isCompleted,
         });
       }
     }
   } catch (error) {
-    console.error(`ERROR: ${error.message}`);
+    console.error(error);
   }
 };

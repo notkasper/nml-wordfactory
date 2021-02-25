@@ -138,7 +138,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lessonAttempt_id: {
+    lessonAttemptId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -222,8 +222,7 @@ const up = async (query) => {
 
 const down = async (query) => {
   // regular tables
-  await query.dropTable('Teachers');
-  await query.dropTable('Students');
+  await query.dropTable('Users');
   await query.dropTable('Lessons');
   await query.dropTable('Questions');
   await query.dropTable('LessonAttempts');
