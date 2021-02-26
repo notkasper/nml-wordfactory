@@ -7,12 +7,17 @@ module.exports = (sequelize) =>
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    data: {
-      type: DataTypes.JSON,
+    type: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    format: {
+    instruction: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    // For a description of the data, see: https://drive.google.com/drive/folders/1qd-xRHG27KmAmLOA47oETB5HDJ7UFTeL
+    data: {
+      type: DataTypes.JSON,
       allowNull: false,
     },
   });

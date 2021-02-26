@@ -72,12 +72,16 @@ const up = async (query) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    data: {
-      type: DataTypes.JSON,
+    type: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    format: {
+    instruction: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    data: {
+      type: DataTypes.JSON,
       allowNull: false,
     },
     createdAt: {
