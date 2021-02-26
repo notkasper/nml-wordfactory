@@ -1,10 +1,10 @@
 const express = require('express');
-const { login, teacherAuthCheck } = require('../controllers/auth');
-const { isTeacher } = require('../middleware/authenticate');
+const { login, teacherTest } = require('../controllers/auth');
+const { isAuthenticated, isTeacher } = require('../middleware/authenticate');
 
 const router = express.Router();
 
 router.route('/login').post(login);
-router.route('/teacherTest').get(isTeacher, teacherAuthCheck);
+router.route('/teacherTest').get(isAuthenticated, isTeacher, teacherTest);
 
 module.exports = router;
