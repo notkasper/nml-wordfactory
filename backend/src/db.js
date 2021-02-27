@@ -29,13 +29,13 @@ db.setupModels = async () => {
 
     // relationships
     db.User.belongsToMany(db.User, {
-      as: 'StudentTeachers',
+      as: 'Teachers',
       through: db.TeacherStudent,
       foreignKey: 'teacherId',
     });
 
     db.User.belongsToMany(db.User, {
-      as: 'TeacherStudents',
+      as: 'Students',
       through: db.TeacherStudent,
       foreignKey: 'studentId',
     });

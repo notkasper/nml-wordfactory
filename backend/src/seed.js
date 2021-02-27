@@ -53,7 +53,7 @@ const seed = async () => {
     }
 
     // Add all students to the superuser teacher
-    await superuser.addTeacherStudents(students);
+    await superuser.addStudents(students);
 
     // Retrieve all unique lessons
     const uniqueLessons = _.uniqBy(
@@ -90,7 +90,7 @@ const seed = async () => {
 
     // Add all lessons to the superuser teacher and students
     await superuser.addLessons(lessons);
-    const dummy = await superuser.getTeacherStudents();
+    const dummy = await superuser.getStudents();
 
     for (const student of dummy) {
       await student.addLessons(lessons);
@@ -125,4 +125,4 @@ const seed = async () => {
   }
 };
 
-seed();
+(async () => await seed())();
