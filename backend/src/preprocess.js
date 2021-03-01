@@ -4,6 +4,49 @@ const _ = require('lodash');
 
 const wordfactoryExport = require('../wordfactory-export.json');
 
+convertQuestionItemToAnswer = ({ lesson, format, question }) => {
+  if (['Format_F1', 'Format_F1b'].includes(format.format)) {
+    return Object.values(question.answers || []);
+  }
+
+  if (['Format_V1', 'Format_V1c'].includes(format.format)) {
+    return [question.answers.indexOf(question.answer)];
+  }
+
+  if (['Format_W1'].includes(format.format)) {
+    const reference = (format.data.items[0] || []).morphemes || [];
+    const answers = format.data.answers || [];
+    return answers.map((answer) => reference.indexOf(answer));
+  }
+
+  if (['Format_Z1', 'Format_Z1b'].includes(format.format)) {
+    return question.words.map((word) => question.selectedWords.includes(word));
+  }
+
+  if (format.format.includes('Format_UQ')) {
+    return question.answer || '';
+  }
+
+  if (['Format_K1'].includes(format.format)) {
+    return [3];
+  }
+
+  if (
+    [
+      'Format_H1',
+      'Format_B1',
+      'Format_B2',
+      'Format_B3',
+      'Format_W2',
+      'Format_WC',
+    ].includes(format.format)
+  ) {
+    return null;
+  }
+
+  return null;
+};
+
 const convertFormatToQuestions = ({ lesson, format, items }) => {
   if (['Format_F1b'].includes(format)) {
     return [
@@ -42,7 +85,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       instruction: item.question,
       data: {
         wordpart: item.wordpart,
-        options: item.morphemes.map((answer, index) => ({
+        options: item.morphemes.map((answer) => ({
           value: answer,
           isCorrect: item.answers.includes(answer),
         })),
@@ -150,6 +193,7 @@ const preprocess = async () => {
       id: uuid.v4(),
       role: 'student',
       name: e.user.name,
+      lessonAttempts: [],
     })),
   ];
 
@@ -165,6 +209,7 @@ const preprocess = async () => {
         .find((e) => e.lesson.lessonPrefix === lesson.lessonPrefix)
         .lesson.formats.map((questionGroup, index) => ({
           questionGroupId: uuid.v4(),
+          questionGroupFormat: questionGroup.format,
           questionGroupIndex: index,
           questionGroupTitle: questionGroup.data.formatTitle,
           questions: convertFormatToQuestions({
@@ -178,6 +223,62 @@ const preprocess = async () => {
     }));
 
   preprocessedData.lessons = uniqueLessons;
+
+  wordfactoryExport.forEach((lessonAttempt) => {
+    const {
+      user: { name },
+      lesson,
+    } = lessonAttempt;
+
+    const preprocessedLesson = preprocessedData.lessons.find(
+      (e) => e.lessonPrefix === lesson.lessonPrefix
+    );
+
+    const index = preprocessedData.users.findIndex((e) => e.name === name);
+    const lessonAttemptId = uuid.v4();
+    preprocessedData.users[index].lessonAttempts.push({
+      id: lessonAttemptId,
+      lessonId: preprocessedLesson.lessonId,
+      stoppedTime: lesson.stoppedTime,
+      startedTime: lesson.startedTime,
+      isStopped: lesson.isStopped,
+      isStarted: lesson.isStarted,
+      isCompleted: lesson.isCompleted,
+      questionGroups: preprocessedLesson.questionGroups
+        .map((questionGroup, questionGroupIndex) => {
+          const format = lessonAttempt.lesson.formats[questionGroupIndex];
+          if (format) {
+            return {
+              questionGroupId: questionGroup.questionGroupId,
+              isCompleted: format.data.isCompleted,
+              showFeedback: format.data.showFeedback,
+              correct: format.data.correct,
+              incorrect: format.data.incorrect,
+              missed: format.data.missed,
+              timeElapsedSeconds: format.data.timeElapsedSeconds,
+              answers: questionGroup.questions.map(
+                (question, questionIndex) => {
+                  const answer = format.data.items
+                    ? format.data.items[questionIndex]
+                    : format.data.item;
+                  return {
+                    id: uuid.v4(),
+                    questionId: question.questionId,
+                    content:
+                      convertQuestionItemToAnswer({
+                        lesson,
+                        format,
+                        question: answer,
+                      }) || {},
+                  };
+                }
+              ),
+            };
+          }
+        })
+        .filter((e) => e !== null && e !== undefined),
+    });
+  });
 
   fs.writeFileSync(
     'wordfactory-preprocessed.json',
