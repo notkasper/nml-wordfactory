@@ -173,7 +173,6 @@ db.migrate = async () => {
       },
     });
 
-    await umzug.down();
     await umzug.up();
     console.log('All migrations performed successfully');
     db.umzug = umzug;
