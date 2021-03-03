@@ -1,6 +1,7 @@
 const fs = require('fs');
 const uuid = require('uuid');
 const _ = require('lodash');
+const { encryptPassword } = require('./_utils');
 
 const wordfactoryExport = require('../wordfactory-export.json');
 
@@ -67,7 +68,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoice',
-      instruction: item.question,
+      instruction: item.question || '',
       data: {
         options: item.answers.map((answer, index) => ({
           value: answer,
@@ -82,7 +83,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoice',
-      instruction: item.question,
+      instruction: item.question || '',
       data: {
         wordpart: item.wordpart,
         options: item.morphemes.map((answer) => ({
@@ -172,7 +173,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionIndex: index,
       type: 'UNKNOWN',
       instruction: lesson.lessonInstruction,
-      data: null,
+      data: {},
     }));
   }
 
@@ -188,14 +189,19 @@ const preprocess = async () => {
       role: 'teacher',
       name: 'superuser',
       email: 'super@user.nl',
+      passwordEncrypted: await encryptPassword('superuser'),
     },
-    ...uniqueUsernames.map((e) => ({
+  ];
+
+  for (const uniqueUsername of uniqueUsernames) {
+    preprocessedData.users.push({
       id: uuid.v4(),
       role: 'student',
-      name: e.user.name,
+      name: uniqueUsername.user.name,
+      passwordEncrypted: await encryptPassword(uniqueUsername.user.name),
       lessonAttempts: [],
-    })),
-  ];
+    });
+  }
 
   const uniqueLessons = _.uniqBy(wordfactoryExport, (e) => e.lesson.lesson_id)
     .sort((a, b) => a.lesson.lesson_id - b.lesson.lesson_id)
@@ -247,8 +253,10 @@ const preprocess = async () => {
       questionGroups: preprocessedLesson.questionGroups
         .map((questionGroup, questionGroupIndex) => {
           const format = lessonAttempt.lesson.formats[questionGroupIndex];
+          const questionGroupAttemptId = uuid.v4();
           if (format) {
             return {
+              id: questionGroupAttemptId,
               questionGroupId: questionGroup.questionGroupId,
               isCompleted: format.data.isCompleted,
               showFeedback: format.data.showFeedback,
@@ -258,11 +266,12 @@ const preprocess = async () => {
               timeElapsedSeconds: format.data.timeElapsedSeconds,
               answers: questionGroup.questions.map(
                 (question, questionIndex) => {
+                  const questionAttemptId = uuid.v4();
                   const answer = format.data.items
                     ? format.data.items[questionIndex]
                     : format.data.item;
                   return {
-                    id: uuid.v4(),
+                    id: questionAttemptId,
                     questionId: question.questionId,
                     content:
                       convertQuestionItemToAnswer({

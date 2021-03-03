@@ -9,7 +9,7 @@ const LessonGroup = require('./models/lessonGroup');
 const Question = require('./models/question');
 const QuestionAttempt = require('./models/questionAttempt');
 const QuestionGroup = require('./models/questionGroup');
-const questionGroupAttempt = require('./models/questionGroupAttempt');
+const QuestionGroupAttempt = require('./models/questionGroupAttempt');
 const TeacherStudent = require('./models/teacherStudent');
 const User = require('./models/user');
 const UserLessonGroup = require('./models/UserLessonGroup');
@@ -26,7 +26,7 @@ db.setupModels = async () => {
     db.Question = Question(db.sequelize);
     db.QuestionAttempt = QuestionAttempt(db.sequelize);
     db.QuestionGroup = QuestionGroup(db.sequelize);
-    db.questionGroupAttempt = questionGroupAttempt(db.sequelize);
+    db.QuestionGroupAttempt = QuestionGroupAttempt(db.sequelize);
     db.User = User(db.sequelize);
 
     // join tables
@@ -76,12 +76,16 @@ db.setupModels = async () => {
       foreignKey: 'lessonId',
     });
 
+    db.Lesson.belongsTo(db.LessonGroup, {
+      foreignKey: 'groupId',
+    });
+
     // QuestionGroup relationships
     db.QuestionGroup.belongsTo(db.Lesson, {
       foreignKey: 'lessonId',
     });
 
-    db.QuestionGroup.hasMany(db.questionGroupAttempt, {
+    db.QuestionGroup.hasMany(db.QuestionGroupAttempt, {
       foreignKey: 'questionGroupId',
     });
 
@@ -99,25 +103,25 @@ db.setupModels = async () => {
       foreignKey: 'lessonId',
     });
 
-    db.LessonAttempt.hasMany(db.questionGroupAttempt, {
+    db.LessonAttempt.hasMany(db.QuestionGroupAttempt, {
       foreignKey: 'lessonAttemptId',
     });
 
     // QuestionGroupAttempt relationships
-    db.questionGroupAttempt.belongsTo(db.LessonAttempt, {
+    db.QuestionGroupAttempt.belongsTo(db.LessonAttempt, {
       foreignKey: 'lessonAttemptId',
     });
 
-    db.questionGroupAttempt.belongsTo(db.QuestionGroup, {
+    db.QuestionGroupAttempt.belongsTo(db.QuestionGroup, {
       foreignKey: 'questionGroupId',
     });
 
-    db.questionGroupAttempt.hasMany(db.QuestionAttempt, {
+    db.QuestionGroupAttempt.hasMany(db.QuestionAttempt, {
       foreignKey: 'groupAttemptId',
     });
 
     // QuestionAttempt relationships
-    db.QuestionAttempt.belongsTo(db.questionGroupAttempt, {
+    db.QuestionAttempt.belongsTo(db.QuestionGroupAttempt, {
       foreignKey: 'groupAttemptId',
     });
 
@@ -125,7 +129,7 @@ db.setupModels = async () => {
       foreignKey: 'questionId',
     });
 
-    console.log('All models created successfully');
+    console.log('[DATABASE]: All models created successfully');
   } catch (error) {
     console.error('Error setting up models');
     throw error;
@@ -147,7 +151,7 @@ db.connect = async () => {
     );
     await sequelize.authenticate();
     db.sequelize = sequelize;
-    console.log('Connected to database successfully');
+    console.log('[DATABASE]: Connected to database successfully');
     return sequelize;
   } catch (error) {
     console.error('Error connecting to database');
@@ -174,7 +178,7 @@ db.migrate = async () => {
     });
 
     await umzug.up();
-    console.log('All migrations performed successfully');
+    console.log('[DATABASE]: All migrations performed successfully');
     db.umzug = umzug;
     return umzug;
   } catch (error) {

@@ -12,7 +12,7 @@ module.exports = (sequelize) =>
       allowNull: false,
     },
     instruction: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     // For a description of the data, see: https://drive.google.com/drive/folders/1qd-xRHG27KmAmLOA47oETB5HDJ7UFTeL
