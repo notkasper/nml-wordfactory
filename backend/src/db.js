@@ -3,13 +3,16 @@ const Umzug = require('umzug');
 const path = require('path');
 
 /* ADD MODELS HERE */
-const User = require('./models/user');
 const Lesson = require('./models/lesson');
-const Question = require('./models/question');
 const LessonAttempt = require('./models/lessonAttempt');
-const Answer = require('./models/answer');
+const LessonGroup = require('./models/lessonGroup');
+const Question = require('./models/question');
+const QuestionAttempt = require('./models/questionAttempt');
+const QuestionGroup = require('./models/questionGroup');
+const questionGroupAttempt = require('./models/questionGroupAttempt');
 const TeacherStudent = require('./models/teacherStudent');
-const UserLesson = require('./models/userLesson');
+const User = require('./models/user');
+const UserLessonGroup = require('./models/UserLessonGroup');
 
 const db = {};
 
@@ -17,17 +20,20 @@ const db = {};
 db.setupModels = async () => {
   try {
     // models
-    db.User = User(db.sequelize);
     db.Lesson = Lesson(db.sequelize);
-    db.Question = Question(db.sequelize);
     db.LessonAttempt = LessonAttempt(db.sequelize);
-    db.Answer = Answer(db.sequelize);
+    db.LessonGroup = LessonGroup(db.sequelize);
+    db.Question = Question(db.sequelize);
+    db.QuestionAttempt = QuestionAttempt(db.sequelize);
+    db.QuestionGroup = QuestionGroup(db.sequelize);
+    db.questionGroupAttempt = questionGroupAttempt(db.sequelize);
+    db.User = User(db.sequelize);
 
     // join tables
     db.TeacherStudent = TeacherStudent(db.sequelize);
-    db.UserLesson = UserLesson(db.sequelize);
+    db.UserLessonGroup = UserLessonGroup(db.sequelize);
 
-    // relationships
+    // User relationships
     db.User.belongsToMany(db.User, {
       as: 'Teachers',
       through: db.TeacherStudent,
@@ -40,9 +46,9 @@ db.setupModels = async () => {
       foreignKey: 'studentId',
     });
 
-    db.User.belongsToMany(db.Lesson, {
-      as: 'Lessons',
-      through: db.UserLesson,
+    db.User.belongsToMany(db.LessonGroup, {
+      as: 'LessonGroups',
+      through: db.UserLessonGroup,
       foreignKey: 'userId',
     });
 
@@ -50,7 +56,19 @@ db.setupModels = async () => {
       foreignKey: 'userId',
     });
 
-    db.Lesson.hasMany(db.Question, {
+    // LessonGroup relationships
+    db.LessonGroup.hasMany(db.Lesson, {
+      foreignKey: 'groupId',
+    });
+
+    db.LessonGroup.belongsToMany(db.User, {
+      as: 'LessonGroups',
+      through: db.UserLessonGroup,
+      foreignKey: 'lessonGroupId',
+    });
+
+    // Lesson relationships
+    db.Lesson.hasMany(db.QuestionGroup, {
       foreignKey: 'lessonId',
     });
 
@@ -58,29 +76,52 @@ db.setupModels = async () => {
       foreignKey: 'lessonId',
     });
 
-    db.Lesson.belongsToMany(db.User, {
-      as: 'Users',
-      through: db.UserLesson,
+    // QuestionGroup relationships
+    db.QuestionGroup.belongsTo(db.Lesson, {
       foreignKey: 'lessonId',
+    });
+
+    db.QuestionGroup.hasMany(db.questionGroupAttempt, {
+      foreignKey: 'questionGroupId',
+    });
+
+    // Question relationships
+    db.Question.belongsTo(db.QuestionGroup, {
+      foreignKey: 'groupId',
+    });
+
+    // LessonAttempt relationships
+    db.LessonAttempt.belongsTo(db.User, {
+      foreignKey: 'userId',
     });
 
     db.LessonAttempt.belongsTo(db.Lesson, {
       foreignKey: 'lessonId',
     });
 
-    db.LessonAttempt.belongsTo(db.User, {
-      foreignKey: 'userId',
-    });
-
-    db.Question.belongsTo(db.Lesson, {
-      foreignKey: 'lessonId',
-    });
-
-    db.Answer.belongsTo(db.LessonAttempt, {
+    db.LessonAttempt.hasMany(db.questionGroupAttempt, {
       foreignKey: 'lessonAttemptId',
     });
 
-    db.Answer.belongsTo(db.Question, {
+    // QuestionGroupAttempt relationships
+    db.questionGroupAttempt.belongsTo(db.LessonAttempt, {
+      foreignKey: 'lessonAttemptId',
+    });
+
+    db.questionGroupAttempt.belongsTo(db.QuestionGroup, {
+      foreignKey: 'questionGroupId',
+    });
+
+    db.questionGroupAttempt.hasMany(db.QuestionAttempt, {
+      foreignKey: 'groupAttemptId',
+    });
+
+    // QuestionAttempt relationships
+    db.QuestionAttempt.belongsTo(db.questionGroupAttempt, {
+      foreignKey: 'groupAttemptId',
+    });
+
+    db.QuestionAttempt.belongsTo(db.Question, {
       foreignKey: 'questionId',
     });
 

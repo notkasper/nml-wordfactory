@@ -11,9 +11,11 @@ const hpp = require('hpp');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
+require('express-async-errors'); // catching async errors, that arent caught anywhere else, only needs to be required here
 
 const test = require('./routes/test');
 const auth = require('./routes/auth');
+const lesson = require('./routes/lesson');
 const db = require('./db');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -70,8 +72,15 @@ const start = async () => {
 
   app.use('/api/v1/', test);
   app.use('/api/v1/auth', auth);
+  app.use('/api/v1/lesson', lesson);
 
   const port = process.env.SERVER_PORT || 5000;
+
+  // MUST have all 4 of these parameters!
+  app.use((error, req, res, next) => {
+    console.error(error);
+    res.status(500).send({ message: 'Server error' });
+  });
 
   const server = app.listen(
     port,

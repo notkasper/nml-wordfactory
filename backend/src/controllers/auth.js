@@ -9,15 +9,15 @@ const login = async (req, res) => {
     return;
   }
 
-  const teacher = await db.User.findOne({ where: { email, role: 'teacher' } });
-  if (!teacher) {
+  const user = await db.User.findOne({ where: { email, role: 'teacher' } });
+  if (!user) {
     res.status(401).send({ message: invalidLoginMessage });
     return;
   }
 
   const validCredentials = await checkPassword(
     password,
-    teacher.passwordEncrypted
+    user.passwordEncrypted
   );
   if (!validCredentials) {
     // invalid password
@@ -26,13 +26,13 @@ const login = async (req, res) => {
   }
 
   // correct password
-  const data = { teacherId: teacher.id };
+  const data = { userId: user.id };
   const token = generateToken(data);
   res.status(200).send({ token });
 };
 
-const teacherAuthCheck = (req, res) => {
+const teacherTest = (req, res) => {
   res.status(200).send({ message: 'Hello Teacher!' });
 };
 
-module.exports = { login, teacherAuthCheck };
+module.exports = { login, teacherTest };

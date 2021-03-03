@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 const up = async (query) => {
-  // teacher table
+  // user table
   await query.createTable('Users', {
     id: {
       primaryKey: true,
@@ -34,21 +34,77 @@ const up = async (query) => {
     },
   });
 
+  // LessonGroup table
+  await query.createTable('LessonGroups', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
   // lesson table
   await query.createTable('Lessons', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lessonPrefix: {
+    groupId: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    prefix: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lessonInstruction: {
+    instruction: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    lessonTitle: {
+    index: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
+  // QuestionGroups table
+  await query.createTable('QuestionGroups', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    lessonId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    index: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -68,23 +124,31 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    lessonId: {
+    groupId: {
       type: DataTypes.UUID,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    instruction: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     data: {
       type: DataTypes.JSON,
       allowNull: false,
     },
-    format: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
+    index: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
     },
@@ -132,8 +196,8 @@ const up = async (query) => {
     },
   });
 
-  // answers table
-  await query.createTable('Answers', {
+  // QuestionGroupAttempts table
+  await query.createTable('QuestionGroupAttempts', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
@@ -142,12 +206,25 @@ const up = async (query) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    questionId: {
+    questionGroupId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    content: {
-      type: DataTypes.JSON,
+    timeElapsedSeconds: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    correct: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    incorrect: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    missed: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     isCompleted: {
       type: DataTypes.BOOLEAN,
@@ -157,17 +234,33 @@ const up = async (query) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    correct: {
-      type: DataTypes.INTEGER,
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
-    incorrect: {
-      type: DataTypes.INTEGER,
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
-    missed: {
-      type: DataTypes.INTEGER,
+  });
+
+  // QuestionAttemps table
+  await query.createTable('QuestionAttemps', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
     },
-    timeElapsedSeconds: {
-      type: DataTypes.INTEGER,
+    groupAttemptId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    questionId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    content: {
+      type: DataTypes.JSON,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -200,7 +293,7 @@ const up = async (query) => {
   });
 
   // user lesson join table
-  await query.createTable('UserLessons', {
+  await query.createTable('UserLessonGroups', {
     lessonId: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -227,10 +320,12 @@ const down = async (query) => {
   await query.dropTable('Questions');
   await query.dropTable('LessonAttempts');
   await query.dropTable('Answers');
+  await query.dropTable('QuestionGroups');
+  await query.dropTable('QuestionGroupAttempts');
 
   // join tables
   await query.dropTable('TeacherStudents');
-  await query.dropTable('UserLessons');
+  await query.dropTable('UserLessonGroups');
 };
 
 module.exports = { up, down };

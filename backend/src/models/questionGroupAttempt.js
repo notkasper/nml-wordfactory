@@ -2,13 +2,26 @@ const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = (sequelize) =>
-  sequelize.define('Answer', {
+  sequelize.define('QuestionGroupAttempt', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    content: {
-      type: DataTypes.JSON,
+    timeElapsedSeconds: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    correct: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    incorrect: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    missed: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     isCompleted: {
       type: DataTypes.BOOLEAN,
@@ -17,17 +30,5 @@ module.exports = (sequelize) =>
     showFeedback: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-    },
-    correct: {
-      type: DataTypes.INTEGER,
-    },
-    incorrect: {
-      type: DataTypes.INTEGER,
-    },
-    missed: {
-      type: DataTypes.INTEGER,
-    },
-    timeElapsedSeconds: {
-      type: DataTypes.INTEGER,
     },
   });
