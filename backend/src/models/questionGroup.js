@@ -2,18 +2,10 @@ const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = (sequelize) =>
-  sequelize.define('Lesson', {
+  sequelize.define('QuestionGroup', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
-    },
-    prefix: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    instruction: {
-      type: DataTypes.TEXT,
-      allowNull: false,
     },
     index: {
       type: DataTypes.INTEGER,

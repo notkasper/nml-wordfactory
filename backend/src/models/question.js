@@ -20,4 +20,8 @@ module.exports = (sequelize) =>
       type: DataTypes.JSON,
       allowNull: false,
     },
+    index: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
