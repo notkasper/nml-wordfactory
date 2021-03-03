@@ -1,123 +1,118 @@
 const uuid = require('uuid');
 const _ = require('lodash');
 const dotenv = require('dotenv');
-const db = require('./db');
 const path = require('path');
-const { encryptPassword } = require('./_utils');
 
-const wordfactoryExport = require('../wordfactory-export.json');
+const db = require('./db');
+const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
-const filterAnswerFromFormat = (format) => {
-  return format.data;
-};
-
 const seed = async () => {
-  console.log('Seeding started...');
+  console.log('[SEEDING]: Seeding initialized');
   await db.initialize();
+
   await db.User.destroy({ where: {} });
   await db.Lesson.destroy({ where: {} });
-  await db.Question.destroy({ where: {} });
   await db.LessonAttempt.destroy({ where: {} });
-  await db.Answer.destroy({ where: {} });
+  await db.LessonGroup.destroy({ where: {} });
+  await db.Question.destroy({ where: {} });
+  await db.QuestionAttempt.destroy({ where: {} });
+  await db.QuestionGroup.destroy({ where: {} });
+  await db.QuestionGroupAttempt.destroy({ where: {} });
   await db.TeacherStudent.destroy({ where: {} });
-  await db.UserLesson.destroy({ where: {} });
+  await db.UserLessonGroup.destroy({ where: {} });
 
   try {
-    // Create a general 'superuser' teacher
-    const superuser = await db.User.create({
+    const { users, lessons } = wordfactoryPreprocessed;
+    const [teacher, ...students] = await db.User.bulkCreate(users);
+    await teacher.addStudents(students);
+
+    const lessonGroup = await db.LessonGroup.create({
       id: uuid.v4(),
-      role: 'teacher',
-      name: 'superuser',
-      passwordEncrypted: await encryptPassword('superuser'),
-      email: 'super@user.nl',
+      title: 'Superuser course',
     });
 
-    // Retrieve all unique usernames from the export
-    const usernames = _.uniqBy(wordfactoryExport, (e) => e.user.name).map(
-      (e) => e.user.name
-    );
-
-    // Convert all usernames into students
-    const students = [];
-    for (const username of usernames) {
-      students.push(
-        await db.User.create({
-          id: uuid.v4(),
-          role: 'student',
-          name: username,
-          passwordEncrypted: await encryptPassword(username),
-        })
-      );
+    await teacher.addLessonGroups([lessonGroup]);
+    for (const student of students) {
+      await student.addLessonGroups([lessonGroup]);
     }
 
-    // Add all students to the superuser teacher
-    await superuser.addTeacherStudents(students);
+    for (const lesson of lessons) {
+      const createdLesson = await db.Lesson.create({
+        id: lesson.lessonId,
+        groupId: lessonGroup.id,
+        prefix: lesson.lessonPrefix,
+        instruction: lesson.lessonInstruction,
+        index: lesson.lessonIndex,
+        title: lesson.lessonTitle,
+      });
 
-    // Retrieve all unique lessons
-    const uniqueLessons = _.uniqBy(
-      wordfactoryExport,
-      (e) => e.lesson.lesson_id
-    ).map((e) => e.lesson);
-
-    // convert all unique lessons into lessons
-    const lessons = [];
-    for (const lesson of uniqueLessons) {
-      const lessonId = uuid.v4();
-      const questions = wordfactoryExport
-        .find((e) => e.lesson.lessonPrefix === lesson.lessonPrefix)
-        .lesson.formats.map((e) => ({
-          id: uuid.v4(),
-          lessonId,
-          data: filterAnswerFromFormat(e),
-          format: e.format,
-        }));
-
-      lessons.push(
-        await db.Lesson.create(
-          {
-            id: lessonId,
-            lessonPrefix: lesson.lessonPrefix,
-            lessonTitle: lesson.lessonTitle,
-            lessonInstruction: lesson.lessonInstruction,
-            Questions: questions,
-          },
-          { include: db.Question }
-        )
-      );
-    }
-
-    // Add all lessons to the superuser teacher and students
-    await superuser.addLessons(lessons);
-    const dummy = await superuser.getTeacherStudents();
-
-    for (const student of dummy) {
-      await student.addLessons(lessons);
-      const attempts = wordfactoryExport.filter(
-        (e) => e.user.name === student.name
-      );
-
-      for (const attempt of attempts) {
-        const studentLesson = await db.Lesson.findOne({
-          where: {
-            lessonPrefix: attempt.lesson.lessonPrefix,
-          },
+      for (const questionGroup of lesson.questionGroups) {
+        const createdQuestionGroup = await db.QuestionGroup.create({
+          id: questionGroup.questionGroupId,
+          lessonId: createdLesson.id,
+          index: questionGroup.questionGroupIndex,
+          title: questionGroup.questionGroupTitle,
         });
 
-        await db.LessonAttempt.create({
-          id: uuid.v4(),
-          lessonId: studentLesson.id,
-          userId: student.id,
-          stoppedTime: attempt.lesson.stoppedTime,
-          startedTime: attempt.lesson.startedTime,
-          isStopped: attempt.lesson.isStopped,
-          isStarted: attempt.lesson.isStarted,
-          isCompleted: attempt.lesson.isCompleted,
-        });
+        for (const question of questionGroup.questions) {
+          await db.Question.create({
+            id: question.questionId,
+            groupId: createdQuestionGroup.id,
+            data: question.data,
+            index: question.questionIndex,
+            type: question.type,
+            instruction: question.instruction,
+          });
+        }
       }
     }
-    console.log('Seeding completed');
+
+    for (const user of users.filter((e) => e.role === 'student')) {
+      const lessonAttempts = user.lessonAttempts;
+      for (const lessonAttempt of lessonAttempts) {
+        const createdLessonAttempt = await db.LessonAttempt.create({
+          id: lessonAttempt.id,
+          userId: user.id,
+          lessonId: lessonAttempt.lessonId,
+          stoppedTime: lessonAttempt.stoppedTime,
+          startedTime: lessonAttempt.startedTime,
+          isStopped: lessonAttempt.isStopped,
+          isStarted: lessonAttempt.isStarted,
+          isCompleted: lessonAttempt.isCompleted,
+        });
+
+        for (const questionGroupAttempt of lessonAttempt.questionGroups) {
+          const createdQuestionGroupAttempt = await db.QuestionGroupAttempt.create(
+            {
+              id: questionGroupAttempt.id,
+              lessonAttemptId: createdLessonAttempt.id,
+              questionGroupId: questionGroupAttempt.questionGroupId,
+              timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
+                ? Math.round(questionGroupAttempt.timeElapsedSeconds)
+                : 0,
+              correct: questionGroupAttempt.correct,
+              incorrect: questionGroupAttempt.incorrect,
+              missed: questionGroupAttempt.missed,
+              isCompleted: questionGroupAttempt.isCompleted || false,
+              showFeedback: questionGroupAttempt.showFeedback || false,
+            }
+          );
+
+          for (const questionAttempt of questionGroupAttempt.answers) {
+            await db.QuestionAttempt.create({
+              id: questionAttempt.id,
+              groupAttemptId: createdQuestionGroupAttempt.id,
+              questionId: questionAttempt.questionId,
+              content: questionAttempt.content,
+            });
+          }
+        }
+      }
+    }
+
+    console.log('[SEEDING]: Seeding completed');
   } catch (error) {
     console.error(error);
   } finally {

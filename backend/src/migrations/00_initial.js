@@ -133,7 +133,7 @@ const up = async (query) => {
       allowNull: false,
     },
     instruction: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     data: {
@@ -245,7 +245,7 @@ const up = async (query) => {
   });
 
   // QuestionAttemps table
-  await query.createTable('QuestionAttemps', {
+  await query.createTable('QuestionAttempts', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
@@ -294,7 +294,7 @@ const up = async (query) => {
 
   // user lesson join table
   await query.createTable('UserLessonGroups', {
-    lessonId: {
+    lessonGroupId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -316,12 +316,13 @@ const up = async (query) => {
 const down = async (query) => {
   // regular tables
   await query.dropTable('Users');
+  await query.dropTable('LessonGroups');
   await query.dropTable('Lessons');
-  await query.dropTable('Questions');
   await query.dropTable('LessonAttempts');
-  await query.dropTable('Answers');
   await query.dropTable('QuestionGroups');
   await query.dropTable('QuestionGroupAttempts');
+  await query.dropTable('Questions');
+  await query.dropTable('QuestionAttempts');
 
   // join tables
   await query.dropTable('TeacherStudents');
