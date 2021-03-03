@@ -27,7 +27,6 @@ const seed = async () => {
   const [teacher, ...students] = await db.User.bulkCreate(users);
   await teacher.addStudents(students);
 
-  // await students[0].addStudents(students.slice(1));
   const lessonGroup = await db.LessonGroup.create({
     id: uuid.v4(),
     title: 'Superuser course',
@@ -69,7 +68,7 @@ const seed = async () => {
     }
   }
 
-  for (const user of users.slice(1)) {
+  for (const user of users.filter((e) => e.role === 'student')) {
     const lessonAttempts = user.lessonAttempts;
     for (const lessonAttempt of lessonAttempts) {
       const createdLessonAttempt = await db.LessonAttempt.create({
@@ -121,4 +120,4 @@ const seed = async () => {
   }
 };
 
-(async () => await seed())();
+seed();
