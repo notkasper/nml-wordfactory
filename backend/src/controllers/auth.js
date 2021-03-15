@@ -28,7 +28,7 @@ const login = async (req, res) => {
   // correct password
   const data = { userId: user.id };
   const token = generateToken(data);
-  res.status(200).send({ token });
+  res.cookie('token', token).status(200).send({ message: 'OK' });
 };
 
 const teacherTest = (req, res) => {
