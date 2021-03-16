@@ -4,6 +4,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { orange } from '@material-ui/core/colors';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/login';
+import LessonView from './pages/home';
+import Profile from './pages/profile';
 import AuthStore from './stores/auth';
 
 const theme = createMuiTheme({
@@ -29,11 +31,12 @@ const App = () => {
           <Route
             path="/home"
             exact
-            render={(props) => (
-              <div>
-                <p>Logged in!</p>
-              </div>
-            )}
+            render={(props) => <LessonView {...props} authStore={authStore} />}
+          />
+          <Route
+            path="/profile"
+            exact
+            render={(props) => <Profile {...props} authStore={authStore} />}
           />
         </Switch>
       </Router>

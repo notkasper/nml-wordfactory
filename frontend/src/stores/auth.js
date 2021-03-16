@@ -1,11 +1,4 @@
-import {
-  action,
-  computed,
-  makeObservable,
-  observable,
-  autorun,
-  runInAction,
-} from 'mobx';
+import { action, makeObservable } from 'mobx';
 import request from 'superagent';
 import cookie from 'js-cookie';
 
@@ -14,6 +7,7 @@ class AuthStore {
   constructor() {
     makeObservable(this, {
       login: action,
+      logout: action,
     });
   }
 
@@ -22,22 +16,10 @@ class AuthStore {
       email,
       password,
     });
-    this.test();
   };
 
-  getToken = () => {
-    const token = cookie.get('token');
-    const bearer = `bearer ${token}`;
-    return bearer;
-  };
-
-  test = async () => {
-    // test if teacher auth works
-    const res = await request
-      .get('/api/v1/auth/teacherTest')
-      .set('Authorization', this.getToken());
-
-    console.log(res.body.message);
+  logout = () => {
+    cookie.remove('token');
   };
 }
 

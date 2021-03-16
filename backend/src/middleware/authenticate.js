@@ -2,14 +2,9 @@ const { verifyToken } = require('../_utils');
 const db = require('../db');
 
 const isAuthenticated = async (req, res, next) => {
-  const bearer = req.headers.authorization;
-  if (!bearer) {
-    return res.status(403).json({ message: 'No bearer token provided.' });
-  }
-
-  const [, token] = bearer.split(' ');
+  const { token } = req.cookies;
   if (!token) {
-    return res.status(403).json({ message: 'Invalid bearer token' });
+    return res.status(403).json({ message: 'No token provided.' });
   }
 
   const { userId } = await verifyToken(token);
