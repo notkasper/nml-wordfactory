@@ -5,8 +5,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import request from 'superagent';
-import AppBar from '../_shared/AppBar';
-import Drawer from '../_shared/Drawer';
 import Chart from './Chart';
 import Lesson from './Lesson';
 import Orders from './Orders';
@@ -119,33 +117,26 @@ const Dashboard = (props) => {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (
-    <div className={classes.root}>
-      <AppBar />
-      <Drawer authStore={authStore} />
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Recent Deposits */}
-            {lessons.map((lesson) => (
-              <LessonBox className={fixedHeightPaper} lesson={lesson} />
-            ))}
-            {/* Chart */}
-            <Grid item xs={12} md={12} lg={12}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </main>
-    </div>
+    <Container maxWidth="lg" className={classes.container}>
+      <Grid container spacing={3}>
+        {/* Recent Deposits */}
+        {lessons.map((lesson) => (
+          <LessonBox className={fixedHeightPaper} lesson={lesson} />
+        ))}
+        {/* Chart */}
+        <Grid item xs={12} md={12} lg={12}>
+          <Paper className={fixedHeightPaper}>
+            <Chart />
+          </Paper>
+        </Grid>
+        {/* Recent Orders */}
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Orders />
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

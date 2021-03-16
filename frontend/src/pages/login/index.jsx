@@ -73,7 +73,7 @@ const Login = (props) => {
   const login = async (e) => {
     e.preventDefault(); // Prevent reloading of page, due to "submit" role on button
     await authStore.login(email, password);
-    history.push('/home');
+    history.push('/dashboard/home');
   };
 
   return (

@@ -4,8 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import AppBar from '../_shared/AppBar';
-import Drawer from '../_shared/Drawer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,8 +36,6 @@ const Profile = (props) => {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (
     <div className={classes.root}>
-      <AppBar />
-      <Drawer authStore={authStore} />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
