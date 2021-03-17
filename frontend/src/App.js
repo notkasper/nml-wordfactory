@@ -119,7 +119,6 @@ const authStore = new AuthStore();
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const history = useHistory();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -128,118 +127,125 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  const goToProfile = () => history.push('/profile');
-  const goToLessons = () => history.push('/home');
-  const logout = () => {
-    authStore.logout();
-    history.push('/');
-  };
+  const Dashboard = () => {
+    const history = useHistory();
 
-  const Dashboard = () => (
-    <>
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListSubheader inset>Leraren dashboard</ListSubheader>
-          <ListItem button onClick={goToLessons}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Lessen" />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListSubheader inset>Persoonlijke instellingen</ListSubheader>
-          <ListItem button onClick={goToProfile}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="Profiel" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <AccountBalanceWalletIcon />
-            </ListItemIcon>
-            <ListItemText primary="Account" />
-          </ListItem>
-          <ListItem button onClick={logout}>
-            <ListItemIcon>
-              <MeetingRoomIcon />
-            </ListItemIcon>
-            <ListItemText primary="Uitloggen" />
-          </ListItem>
-        </List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          {/* ACTUAL INNTER COMPONENT */}
-          <Switch>
-            <Route
-              path="/dashboard/home"
-              render={(props) => (
-                <LessonView {...props} authStore={authStore} />
+    const goToProfile = () => history.push('profile');
+    const goToLessons = () => history.push('home');
+    const logout = () => {
+      authStore.logout();
+      history.push('/');
+    };
+
+    return (
+      <>
+        <AppBar
+          position="absolute"
+          className={clsx(classes.appBar, open && classes.appBarShift)}
+        >
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(
+                classes.menuButton,
+                open && classes.menuButtonHidden
               )}
-            />
-            <Route
-              path="/profile"
-              render={(props) => <Profile {...props} authStore={authStore} />}
-            />
-          </Switch>
-        </Container>
-      </main>
-    </>
-  );
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              className={classes.title}
+            >
+              Dashboard
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <ListSubheader inset>Leraren dashboard</ListSubheader>
+            <ListItem button onClick={goToLessons}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Lessen" />
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListSubheader inset>Persoonlijke instellingen</ListSubheader>
+            <ListItem button onClick={goToProfile}>
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="Profiel" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <AccountBalanceWalletIcon />
+              </ListItemIcon>
+              <ListItemText primary="Account" />
+            </ListItem>
+            <ListItem button onClick={logout}>
+              <ListItemIcon>
+                <MeetingRoomIcon />
+              </ListItemIcon>
+              <ListItemText primary="Uitloggen" />
+            </ListItem>
+          </List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            {/* ACTUAL INNTER COMPONENT */}
+            <Switch>
+              <Route
+                exact
+                path="/dashboard/home"
+                render={(props) => (
+                  <LessonView {...props} authStore={authStore} />
+                )}
+              />
+              <Route
+                exact
+                path="/dashboard/profile"
+                render={(props) => <Profile {...props} authStore={authStore} />}
+              />
+            </Switch>
+          </Container>
+        </main>
+      </>
+    );
+  };
 
   return (
     <div className={classes.root}>
       <Router>
         <CssBaseline />
+        {/* Two main 'routes', the login screen, and the actual dashboard. The dashboard has its own sub-routes */}
         <Switch>
           <Route
             path="/"

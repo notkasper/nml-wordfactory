@@ -14,46 +14,11 @@ function createData(id, date, name, shipTo, paymentMethod, amount) {
 }
 
 const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    'x'
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    'x'
-  ),
-  createData(
-    2,
-    '16 Mar, 2019',
-    'Tom Scholz',
-    'Boston, MA',
-    'MC ⠀•••• 1253',
-    'x'
-  ),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    '√'
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    '√'
-  ),
+  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Les 1', 'vraag 6', 'x'),
+  createData(1, '16 Mar, 2019', 'Paul McCartney', 'Les 1', 'vraag 6', 'x'),
+  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Les 1', 'vraag 6', 'x'),
+  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Les 1', 'vraag 6', '√'),
+  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Les 1', 'vraag 6', '√'),
 ];
 
 function preventDefault(event) {
