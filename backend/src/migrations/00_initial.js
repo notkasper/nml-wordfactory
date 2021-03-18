@@ -40,6 +40,10 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
+    userId: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -70,10 +74,6 @@ const up = async (query) => {
     },
     instruction: {
       type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    index: {
-      type: DataTypes.INTEGER,
       allowNull: false,
     },
     title: {

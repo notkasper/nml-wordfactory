@@ -12,7 +12,7 @@ const QuestionGroup = require('./models/questionGroup');
 const QuestionGroupAttempt = require('./models/questionGroupAttempt');
 const TeacherStudent = require('./models/teacherStudent');
 const User = require('./models/user');
-const UserLessonGroup = require('./models/UserLessonGroup');
+const UserLesson = require('./models/UserLesson');
 
 const db = {};
 
@@ -31,7 +31,7 @@ db.setupModels = async () => {
 
     // join tables
     db.TeacherStudent = TeacherStudent(db.sequelize);
-    db.UserLessonGroup = UserLessonGroup(db.sequelize);
+    db.UserLesson = UserLesson(db.sequelize);
 
     // User relationships
     db.User.belongsToMany(db.User, {
@@ -46,9 +46,13 @@ db.setupModels = async () => {
       foreignKey: 'studentId',
     });
 
-    db.User.belongsToMany(db.LessonGroup, {
-      as: 'LessonGroups',
-      through: db.UserLessonGroup,
+    db.User.belongsToMany(db.User, {
+      as: 'members',
+      through: db.UserLesson,
+      foreignKey: 'userId',
+    });
+
+    db.User.hasMany(db.LessonGroup, {
       foreignKey: 'userId',
     });
 
@@ -61,10 +65,9 @@ db.setupModels = async () => {
       foreignKey: 'groupId',
     });
 
-    db.LessonGroup.belongsToMany(db.User, {
-      as: 'members',
-      through: db.UserLessonGroup,
-      foreignKey: 'lessonGroupId',
+    db.LessonGroup.belongsTo(db.User, {
+      foreignKey: 'userId',
+      as: 'owner',
     });
 
     // Lesson relationships
@@ -78,6 +81,12 @@ db.setupModels = async () => {
 
     db.Lesson.belongsTo(db.LessonGroup, {
       foreignKey: 'groupId',
+    });
+
+    db.Lesson.belongsToMany(db.User, {
+      through: db.UserLesson,
+      as: 'lessons',
+      foreignKey: 'lessonId',
     });
 
     // QuestionGroup relationships

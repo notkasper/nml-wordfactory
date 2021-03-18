@@ -15,10 +15,6 @@ module.exports = (sequelize) =>
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    index: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
