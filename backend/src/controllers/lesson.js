@@ -2,14 +2,7 @@ const db = require('../db');
 
 const getLessons = async (req, res) => {
   const { user } = req;
-  const lessons = await db.Lesson.findAll({
-    through: {
-      model: db.UserLessonGroup,
-      where: {
-        teacherId: user.id,
-      },
-    },
-  });
+  const lessons = await user.getLessons();
   res.status(200).send({ data: lessons });
 };
 
@@ -53,7 +46,10 @@ const getLessonDetails = async (req, res) => {
         teacherId: user.id,
       },
     },
-    include: [{ model: db.QuestionGroup, include: [{ model: db.Question }] }],
+    include: [
+      { model: db.QuestionGroup, include: [{ model: db.Question }] },
+      { model: db.LessonGroup },
+    ],
   });
 
   res.status(200).send({ data });
@@ -64,7 +60,7 @@ const getStudents = async (req, res) => {
     params: { id },
   } = req;
 
-  const students = await req.requestedCourse.getMembers({
+  const students = await req.requestedLesson.getUsers({
     where: { role: 'student' },
     attributes: ['id', 'name', 'role', 'email'],
   });

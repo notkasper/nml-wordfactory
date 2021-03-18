@@ -1,9 +1,9 @@
 const express = require('express');
 const { getLessonGroups } = require('../controllers/lessonGroup');
-const { isAuthenticated } = require('../middleware/authenticate');
+const { isAuthenticated, isTeacher } = require('../middleware/authenticate');
 
 const router = express.Router();
 
-router.route('/').get(isAuthenticated, getLessonGroups);
+router.route('/').get(isAuthenticated, isTeacher, getLessonGroups);
 
 module.exports = router;

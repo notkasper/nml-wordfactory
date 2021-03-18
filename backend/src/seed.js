@@ -44,6 +44,7 @@ const seed = async () => {
       });
 
       lessonGroup.addLessons([createdLesson]);
+      teacher.addLessons([createdLesson]);
       for (const student of students) {
         await student.addLessons([createdLesson]);
       }
