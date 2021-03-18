@@ -37,4 +37,17 @@ const isStudent = (req, res, next) => {
   next();
 };
 
-module.exports = { isTeacher, isStudent, isAuthenticated };
+const isCourseTeacher = async (req, res, next) => {
+  const course = await db.LessonGroup.findByPk(req.params.id);
+  const teachers = await course.getMembers({ where: { role: 'teacher' } });
+  if (!teachers.find((teacher) => teacher.id === req.user.id)) {
+    return res
+      .status(401)
+      .send({ message: 'You are not a teacher of this course' });
+  }
+  req.requestedCourse = course;
+
+  next();
+};
+
+module.exports = { isTeacher, isStudent, isAuthenticated, isCourseTeacher };

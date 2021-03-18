@@ -47,7 +47,7 @@ db.setupModels = async () => {
     });
 
     db.User.belongsToMany(db.LessonGroup, {
-      as: 'LessonGroups',
+      as: 'LessonGroupStudents',
       through: db.UserLessonGroup,
       foreignKey: 'userId',
     });
@@ -62,7 +62,7 @@ db.setupModels = async () => {
     });
 
     db.LessonGroup.belongsToMany(db.User, {
-      as: 'LessonGroups',
+      as: 'members',
       through: db.UserLessonGroup,
       foreignKey: 'lessonGroupId',
     });

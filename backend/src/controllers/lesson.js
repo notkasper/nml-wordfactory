@@ -59,4 +59,22 @@ const getLessonDetails = async (req, res) => {
   res.status(200).send({ data });
 };
 
-module.exports = { getLessons, getLessonsInGroup, getLessonDetails };
+const getStudents = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  const students = await req.requestedCourse.getMembers({
+    where: { role: 'student' },
+    attributes: ['id', 'name', 'role', 'email'],
+  });
+
+  res.status(200).send({ data: students });
+};
+
+module.exports = {
+  getLessons,
+  getLessonsInGroup,
+  getLessonDetails,
+  getStudents,
+};
