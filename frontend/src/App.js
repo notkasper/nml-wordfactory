@@ -28,9 +28,12 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PersonIcon from '@material-ui/icons/Person';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+// PAGES
 import Login from './pages/login';
 import LessonView from './pages/home';
 import Profile from './pages/profile';
+import Lesson from './pages/lesson';
+// STORES
 import AuthStore from './stores/auth';
 
 const drawerWidth = 240;
@@ -130,8 +133,8 @@ export default function Dashboard() {
   const Dashboard = () => {
     const history = useHistory();
 
-    const goToProfile = () => history.push('profile');
-    const goToLessons = () => history.push('home');
+    const goToProfile = () => history.push('/dashboard/profile');
+    const goToLessons = () => history.push('/dashboard/home');
     const logout = () => {
       authStore.logout();
       history.push('/');
@@ -233,6 +236,11 @@ export default function Dashboard() {
                 exact
                 path="/dashboard/profile"
                 render={(props) => <Profile {...props} authStore={authStore} />}
+              />
+              <Route
+                exact
+                path="/dashboard/lesson/:id"
+                render={(props) => <Lesson {...props} authStore={authStore} />}
               />
             </Switch>
           </Container>

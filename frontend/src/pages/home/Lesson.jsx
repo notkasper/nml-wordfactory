@@ -4,10 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from './Title';
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 const useStyles = makeStyles({
   depositContext: {
     flex: 1,
@@ -15,7 +11,7 @@ const useStyles = makeStyles({
 });
 
 const Lesson = (props) => {
-  const { title, prefix, createdAt } = props;
+  const { title, prefix, createdAt, id } = props;
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -27,7 +23,7 @@ const Lesson = (props) => {
         {`gemaakt op: ${createdAt.substring(0, 10)}`}
       </Typography>
       <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
+        <Link color="primary" href={`lesson/${id}`}>
           Les bekijken
         </Link>
       </div>
