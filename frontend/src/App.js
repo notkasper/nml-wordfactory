@@ -239,7 +239,7 @@ export default function Dashboard() {
               />
               <Route
                 exact
-                path="/dashboard/lesson/:id"
+                path="/dashboard/course/:id"
                 render={(props) => <Lesson {...props} authStore={authStore} />}
               />
             </Switch>

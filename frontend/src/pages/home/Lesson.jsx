@@ -11,7 +11,7 @@ const useStyles = makeStyles({
 });
 
 const Lesson = (props) => {
-  const { title, prefix, createdAt, id } = props;
+  const { title, prefix, createdAt, groupId } = props;
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -23,7 +23,7 @@ const Lesson = (props) => {
         {`gemaakt op: ${createdAt.substring(0, 10)}`}
       </Typography>
       <div>
-        <Link color="primary" href={`lesson/${id}`}>
+        <Link color="primary" href={`course/${groupId}`}>
           Les bekijken
         </Link>
       </div>
