@@ -47,7 +47,7 @@ db.setupModels = async () => {
     });
 
     db.User.belongsToMany(db.LessonGroup, {
-      as: 'LessonGroupStudents',
+      as: 'LessonGroups',
       through: db.UserLessonGroup,
       foreignKey: 'userId',
     });
