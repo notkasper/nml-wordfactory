@@ -293,8 +293,8 @@ const up = async (query) => {
   });
 
   // user lesson join table
-  await query.createTable('UserLessonGroups', {
-    lessonGroupId: {
+  await query.createTable('UserLessons', {
+    lessonId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -326,7 +326,6 @@ const down = async (query) => {
 
   // join tables
   await query.dropTable('TeacherStudents');
-  await query.dropTable('UserLessonGroups');
 };
 
 module.exports = { up, down };

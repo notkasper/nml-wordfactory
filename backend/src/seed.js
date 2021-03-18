@@ -21,22 +21,18 @@ const seed = async () => {
   await db.QuestionGroup.destroy({ where: {} });
   await db.QuestionGroupAttempt.destroy({ where: {} });
   await db.TeacherStudent.destroy({ where: {} });
-  await db.UserLessonGroup.destroy({ where: {} });
+  await db.LessonGroup.destroy({ where: {} });
 
   try {
     const { users, lessons } = wordfactoryPreprocessed;
-    const [teacher, ...students] = await db.User.bulkCreate(users);
+    const [teacher, ...students] = await db.User.bulkCreate(users); // First user is a teacher in the seeding data file
     await teacher.addStudents(students);
 
     const lessonGroup = await db.LessonGroup.create({
       id: uuid.v4(),
       title: 'Superuser course',
+      userId: teacher.id,
     });
-
-    await teacher.addLessonGroups([lessonGroup]);
-    for (const student of students) {
-      await student.addLessonGroups([lessonGroup]);
-    }
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({
@@ -44,9 +40,13 @@ const seed = async () => {
         groupId: lessonGroup.id,
         prefix: lesson.lessonPrefix,
         instruction: lesson.lessonInstruction,
-        index: lesson.lessonIndex,
         title: lesson.lessonTitle,
       });
+
+      lessonGroup.addLessons([createdLesson]);
+      for (const student of students) {
+        await student.addLessons([createdLesson]);
+      }
 
       for (const questionGroup of lesson.questionGroups) {
         const createdQuestionGroup = await db.QuestionGroup.create({
