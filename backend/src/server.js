@@ -13,10 +13,10 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 require('express-async-errors'); // catching async errors, that arent caught anywhere else, only needs to be required here
 
-const test = require('./routes/test');
-const auth = require('./routes/auth');
-const lesson = require('./routes/lesson');
-const lessonGroup = require('./routes/lessonGroup');
+const authRouter = require('./routes/auth');
+const lessonRouter = require('./routes/lesson');
+const courseRouter = require('./routes/course');
+const classRouter = require('./routes/class');
 const db = require('./db');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -72,10 +72,10 @@ const start = async () => {
     })
   );
 
-  app.use('/api/v1/', test);
-  app.use('/api/v1/auth', auth);
-  app.use('/api/v1/lesson', lesson);
-  app.use('/api/v1/lessonGroup', lessonGroup);
+  app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/lessons', lessonRouter);
+  app.use('/api/v1/courses', courseRouter);
+  app.use('/api/v1/classes', classRouter);
 
   const port = process.env.SERVER_PORT || 5000;
 
