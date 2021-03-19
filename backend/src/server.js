@@ -17,6 +17,7 @@ const authRouter = require('./routes/auth');
 const lessonRouter = require('./routes/lesson');
 const courseRouter = require('./routes/course');
 const classRouter = require('./routes/class');
+const studentRouter = require('./routes/students');
 const db = require('./db');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -76,6 +77,7 @@ const start = async () => {
   app.use('/api/v1/lessons', lessonRouter);
   app.use('/api/v1/courses', courseRouter);
   app.use('/api/v1/classes', classRouter);
+  app.use('/api/v1/students', studentRouter);
 
   const port = process.env.SERVER_PORT || 5000;
 

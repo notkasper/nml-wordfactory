@@ -10,6 +10,8 @@ import request from 'superagent';
 import Student from './Student';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -23,32 +25,40 @@ const Lesson = (props) => {
   const history = useHistory();
   const params = useParams();
   const [students, setStudents] = useState([]);
-  const [lesson, setLesson] = useState([]);
+  const [theClass, setTheClass] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   const loadStudents = async () => {
-    const response = await request.get(`/api/v1/lesson/${params.id}/students`);
+    const response = await request
+      .get(`/api/v1/students`)
+      .query({ classId: params.id });
     setStudents(response.body.data);
   };
 
-  const loadLesson = async () => {
-    const response = await request.get(`/api/v1/lesson/${params.id}`);
-    setLesson(response.body.data);
+  const loadClass = async () => {
+    const response = await request.get(`/api/v1/classes/${params.id}`);
+    setTheClass(response.body.data);
+  };
+
+  const loadCourses = async () => {
+    const response = await request
+      .get(`/api/v1/courses`)
+      .query({ classId: params.id });
+    setCourses(response.body.data);
   };
 
   useEffect(() => {
     loadStudents();
-    loadLesson();
+    loadCourses();
+    loadClass();
   }, []);
 
-  console.log(lesson);
-  console.log(lesson);
-  console.log(lesson);
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h4" className={classes.marginBottom}>
-            {lesson.prefix}
+            {theClass.name}
           </Typography>
         </Grid>
         <Grid item xs={6}>
@@ -59,6 +69,20 @@ const Lesson = (props) => {
             <List className={classes.root}>
               {students.map((student) => (
                 <Student {...student} />
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant="h5" className={classes.marginBottom}>
+            Cursussen
+          </Typography>
+          <Paper>
+            <List className={classes.root}>
+              {courses.map((course) => (
+                <ListItem>
+                  <ListItemText>{course.name}</ListItemText>
+                </ListItem>
               ))}
             </List>
           </Paper>

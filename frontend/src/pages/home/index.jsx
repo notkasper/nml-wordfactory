@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import request from 'superagent';
 import Chart from './Chart';
-import Lesson from './Lesson';
+import Class from './Class';
 import Orders from './Orders';
 
 const drawerWidth = 240;
@@ -90,12 +90,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LessonBox = (props) => {
-  const { className, lesson } = props;
+const ClassBox = (props) => {
+  const { className, class: classData } = props;
   return (
     <Grid item xs={12} md={4} lg={3}>
       <Paper className={className}>
-        <Lesson {...lesson} />
+        <Class {...classData} />
       </Paper>
     </Grid>
   );
@@ -104,15 +104,15 @@ const LessonBox = (props) => {
 const Dashboard = (props) => {
   const { authStore } = props;
   const classes = useStyles();
-  const [lessons, setLessons] = useState([]);
+  const [classList, setClassList] = useState([]);
 
-  const loadLessons = async () => {
-    const response = await request.get('/api/v1/lesson');
-    setLessons(response.body.data);
+  const loadClassList = async () => {
+    const response = await request.get('/api/v1/classes');
+    setClassList(response.body.data);
   };
 
   useEffect(() => {
-    loadLessons();
+    loadClassList();
   }, []);
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -120,8 +120,8 @@ const Dashboard = (props) => {
     <Container maxWidth="lg" className={classes.container}>
       <Grid container spacing={3}>
         {/* Recent Deposits */}
-        {lessons.map((lesson) => (
-          <LessonBox className={fixedHeightPaper} lesson={lesson} />
+        {classList.map((aClass) => (
+          <ClassBox className={fixedHeightPaper} class={aClass} />
         ))}
         {/* Chart */}
         <Grid item xs={12} md={12} lg={12}>

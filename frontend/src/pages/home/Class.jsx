@@ -10,25 +10,22 @@ const useStyles = makeStyles({
   },
 });
 
-const Lesson = (props) => {
-  const { title, prefix, createdAt, groupId } = props;
+const Class = (props) => {
+  const { name, createdAt, id } = props;
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>{prefix}</Title>
-      <Typography component="p" variant="h4">
-        {title}
-      </Typography>
+      <Title>{name}</Title>
       <Typography color="textSecondary" className={classes.depositContext}>
         {`gemaakt op: ${createdAt.substring(0, 10)}`}
       </Typography>
       <div>
-        <Link color="primary" href={`course/${groupId}`}>
-          Les bekijken
+        <Link color="primary" href={`classes/${id}`}>
+          Klas bekijken
         </Link>
       </div>
     </React.Fragment>
   );
 };
 
-export default Lesson;
+export default Class;

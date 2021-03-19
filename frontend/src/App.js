@@ -32,7 +32,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Login from './pages/login';
 import LessonView from './pages/home';
 import Profile from './pages/profile';
-import Lesson from './pages/lesson';
+import Class from './pages/Class';
 // STORES
 import AuthStore from './stores/auth';
 
@@ -134,7 +134,7 @@ export default function Dashboard() {
     const history = useHistory();
 
     const goToProfile = () => history.push('/dashboard/profile');
-    const goToLessons = () => history.push('/dashboard/home');
+    const goToClasses = () => history.push('/dashboard/home');
     const logout = () => {
       authStore.logout();
       history.push('/');
@@ -190,7 +190,7 @@ export default function Dashboard() {
           <Divider />
           <List>
             <ListSubheader inset>Leraren dashboard</ListSubheader>
-            <ListItem button onClick={goToLessons}>
+            <ListItem button onClick={goToClasses}>
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
@@ -239,8 +239,8 @@ export default function Dashboard() {
               />
               <Route
                 exact
-                path="/dashboard/course/:id"
-                render={(props) => <Lesson {...props} authStore={authStore} />}
+                path="/dashboard/classes/:id"
+                render={(props) => <Class {...props} authStore={authStore} />}
               />
             </Switch>
           </Container>
