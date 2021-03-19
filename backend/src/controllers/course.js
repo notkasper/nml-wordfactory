@@ -21,7 +21,9 @@ const getCourses = async (req, res) => {
     return res.status(404).send({ message: 'Class not found' });
   }
 
-  const courses = await theClass.getCourses();
+  const courses = await theClass.getCourses({
+    include: { model: db.Lesson, as: 'lessons' },
+  });
 
   res.status(200).send({ data: courses });
 };

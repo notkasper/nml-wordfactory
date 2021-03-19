@@ -25,6 +25,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
@@ -192,9 +193,9 @@ export default function Dashboard() {
             <ListSubheader inset>Leraren dashboard</ListSubheader>
             <ListItem button onClick={goToClasses}>
               <ListItemIcon>
-                <DashboardIcon />
+                <FaceIcon />
               </ListItemIcon>
-              <ListItemText primary="Lessen" />
+              <ListItemText primary="Klassen" />
             </ListItem>
           </List>
           <Divider />

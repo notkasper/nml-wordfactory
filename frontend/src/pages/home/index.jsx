@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import request from 'superagent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Chart from './Chart';
 import Class from './Class';
 import Orders from './Orders';
@@ -105,15 +106,22 @@ const Dashboard = (props) => {
   const { authStore } = props;
   const classes = useStyles();
   const [classList, setClassList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const loadClassList = async () => {
+    setLoading(true);
     const response = await request.get('/api/v1/classes');
     setClassList(response.body.data);
+    setLoading(false);
   };
 
   useEffect(() => {
     loadClassList();
   }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (
