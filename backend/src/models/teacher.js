@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = (sequelize) =>
-  sequelize.define('User', {
+  sequelize.define('Teacher', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
@@ -13,10 +13,6 @@ module.exports = (sequelize) =>
     },
     passwordEncrypted: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM(['teacher', 'student']),
       allowNull: false,
     },
     email: {

@@ -2,12 +2,12 @@ const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = (sequelize) =>
-  sequelize.define('LessonGroup', {
+  sequelize.define('Course', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
