@@ -36,9 +36,6 @@ const seed = async () => {
       name: 'My first class',
     });
 
-    console.log(teacher.addStudents);
-    console.log(teacher.addTeachers);
-
     await theClass.addStudents(students);
     await theClass.addTeachers([teacher]);
 
@@ -54,7 +51,7 @@ const seed = async () => {
         courseId: course.id,
         prefix: lesson.lessonPrefix,
         instruction: lesson.lessonInstruction,
-        title: lesson.lessonTitle,
+        name: lesson.lessonTitle,
       });
 
       course.addLesson(createdLesson);
@@ -64,13 +61,13 @@ const seed = async () => {
           id: questionGroup.questionGroupId,
           lessonId: createdLesson.id,
           index: questionGroup.questionGroupIndex,
-          title: questionGroup.questionGroupTitle,
+          name: questionGroup.questionGroupTitle,
         });
 
         for (const question of questionGroup.questions) {
           await db.Question.create({
             id: question.questionId,
-            groupId: createdQuestionGroup.id,
+            questionGroupId: createdQuestionGroup.id,
             data: question.data,
             index: question.questionIndex,
             type: question.type,
@@ -80,12 +77,12 @@ const seed = async () => {
       }
     }
 
-    for (const studentData of studentstData) {
+    for (const studentData of studentsData) {
       const lessonAttempts = studentData.lessonAttempts;
       for (const lessonAttempt of lessonAttempts) {
         const createdLessonAttempt = await db.LessonAttempt.create({
           id: lessonAttempt.id,
-          userId: studentData.id,
+          studentId: studentData.id,
           lessonId: lessonAttempt.lessonId,
           stoppedTime: lessonAttempt.stoppedTime,
           startedTime: lessonAttempt.startedTime,

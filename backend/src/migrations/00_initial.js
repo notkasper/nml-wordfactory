@@ -110,8 +110,13 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
