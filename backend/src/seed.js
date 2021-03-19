@@ -36,14 +36,16 @@ const seed = async () => {
       name: 'My first class',
     });
 
+    await theClass.addTeacher(teacher);
     await theClass.addStudents(students);
-    await theClass.addTeachers([teacher]);
 
     const course = await db.Course.create({
       id: uuid.v4(),
       classId: theClass.id,
       name: 'My first course',
     });
+
+    await theClass.addCourse(course);
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({

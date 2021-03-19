@@ -72,9 +72,11 @@ const up = async (query) => {
   await query.createTable('TeacherClasses', {
     teacherId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     classId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -86,13 +88,15 @@ const up = async (query) => {
     },
   });
 
-  // TeacherClass join table
+  // StudentClass join table
   await query.createTable('StudentClasses', {
     studentId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     classId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,

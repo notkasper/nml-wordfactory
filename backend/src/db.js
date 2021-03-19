@@ -39,20 +39,23 @@ db.setupModels = async () => {
     db.Teacher.belongsToMany(db.Class, {
       as: 'classes',
       through: db.TeacherClass,
-      foreignKey: 'classId',
+      foreignKey: 'teacherId',
+      otherKey: 'classId',
     });
 
     // Class relationships
     db.Class.belongsToMany(db.Teacher, {
       as: 'teachers',
       through: db.TeacherClass,
-      foreignKey: 'teacherId',
+      foreignKey: 'classId',
+      otherKey: 'teacherId',
     });
 
     db.Class.belongsToMany(db.Student, {
       as: 'students',
       through: db.StudentClass,
-      foreignKey: 'studentId',
+      foreignKey: 'classId',
+      otherKey: 'studentId',
     });
 
     db.Class.hasMany(db.Course, {
@@ -64,6 +67,7 @@ db.setupModels = async () => {
       as: 'classes',
       through: db.StudentClass,
       foreignKey: 'studentId',
+      otherKey: 'classId',
     });
 
     // Course relationships
