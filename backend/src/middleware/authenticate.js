@@ -7,47 +7,74 @@ const isAuthenticated = async (req, res, next) => {
     return res.status(403).json({ message: 'No token provided.' });
   }
 
-  const { userId } = await verifyToken(token);
-  const user = await db.User.findByPk(userId);
-  if (!user) {
+  const { teacherId } = await verifyToken(token);
+  const teacher = await db.Teacher.findByPk(teacherId);
+  if (!teacher) {
     return res.status(404).send({ message: 'User not found' });
   }
-  req.user = user;
+  req.teacher = teacher;
 
   next();
 };
 
-const isTeacher = async (req, res, next) => {
-  if (!req.user.role === 'teacher') {
-    return res
-      .status(401)
-      .send({ message: 'Only teachers can access this route' });
+const teachesCourse = async (req, res, next) => {
+  const course = await db.Course.findByPk(req.params.id);
+  if (!course) {
+    return res.status(404).send({ message: 'Course not found' });
   }
 
-  next();
-};
+  const teachers = await course.getTeachers();
 
-const isStudent = (req, res, next) => {
-  if (!req.user.role === 'student') {
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
     return res
       .status(401)
-      .send({ message: 'Only students can access this route' });
+      .send({ message: 'You are not a teacher of this class' });
   }
+  req.course = course;
 
   next();
 };
 
-const isLessonTeacher = async (req, res, next) => {
+const teachesClass = async (req, res, next) => {
+  const theClass = await db.Class.findByPk(req.params.id);
+  if (!theClass) {
+    return res.status(404).send({ message: 'Class not found' });
+  }
+  const course = await theClass.getCourse();
+  const teachers = await course.getTeachers();
+
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
+    return res
+      .status(401)
+      .send({ message: 'You are not a teacher of this lesson' });
+  }
+  req.class = theClass;
+
+  next();
+};
+
+const teachesLesson = async (req, res, next) => {
   const lesson = await db.Lesson.findByPk(req.params.id);
-  const teachers = await lesson.getUsers({ where: { role: 'teacher' } });
-  if (!teachers.find((teacher) => teacher.id === req.user.id)) {
+  if (!lesson) {
+    return res.status(404).send({ message: 'Lesson not found' });
+  }
+  const course = await lesson.getCourse();
+  const theClass = await course.getClass();
+  const teachers = await theClass.getTeachers();
+
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
     return res
       .status(401)
-      .send({ message: 'You are not a teacher of this course' });
+      .send({ message: 'You are not a teacher of this lesson' });
   }
-  req.requestedLesson = lesson;
+  req.lesson = lesson;
 
   next();
 };
 
-module.exports = { isTeacher, isStudent, isAuthenticated, isLessonTeacher };
+module.exports = {
+  isAuthenticated,
+  teachesCourse,
+  teachesClass,
+  teachesLesson,
+};

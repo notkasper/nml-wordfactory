@@ -12,42 +12,52 @@ const seed = async () => {
   console.log('[SEEDING]: Seeding initialized');
   await db.initialize();
 
-  await db.User.destroy({ where: {} });
+  await db.Class.destroy({ where: {} });
+  await db.Student.destroy({ where: {} });
+  await db.Teacher.destroy({ where: {} });
+  await db.Course.destroy({ where: {} });
+  await db.TeacherClass.destroy({ where: {} });
+  await db.StudentClass.destroy({ where: {} });
   await db.Lesson.destroy({ where: {} });
   await db.LessonAttempt.destroy({ where: {} });
-  await db.LessonGroup.destroy({ where: {} });
   await db.Question.destroy({ where: {} });
   await db.QuestionAttempt.destroy({ where: {} });
   await db.QuestionGroup.destroy({ where: {} });
   await db.QuestionGroupAttempt.destroy({ where: {} });
-  await db.TeacherStudent.destroy({ where: {} });
-  await db.LessonGroup.destroy({ where: {} });
 
   try {
     const { users, lessons } = wordfactoryPreprocessed;
-    const [teacher, ...students] = await db.User.bulkCreate(users); // First user is a teacher in the seeding data file
-    await teacher.addStudents(students);
+    const [teacherData, ...studentsData] = users;
+    const teacher = await db.Teacher.create(teacherData);
+    const students = await db.Student.bulkCreate(studentsData);
 
-    const lessonGroup = await db.LessonGroup.create({
+    const theClass = await db.Class.create({
       id: uuid.v4(),
-      title: 'Superuser course',
-      userId: teacher.id,
+      name: 'My first class',
+    });
+
+    console.log(teacher.addStudents);
+    console.log(teacher.addTeachers);
+
+    await theClass.addStudents(students);
+    await theClass.addTeachers([teacher]);
+
+    const course = await db.Course.create({
+      id: uuid.v4(),
+      classId: theClass.id,
+      name: 'My first course',
     });
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({
         id: lesson.lessonId,
-        groupId: lessonGroup.id,
+        courseId: course.id,
         prefix: lesson.lessonPrefix,
         instruction: lesson.lessonInstruction,
         title: lesson.lessonTitle,
       });
 
-      lessonGroup.addLessons([createdLesson]);
-      teacher.addLessons([createdLesson]);
-      for (const student of students) {
-        await student.addLessons([createdLesson]);
-      }
+      course.addLesson(createdLesson);
 
       for (const questionGroup of lesson.questionGroups) {
         const createdQuestionGroup = await db.QuestionGroup.create({
@@ -70,12 +80,12 @@ const seed = async () => {
       }
     }
 
-    for (const user of users.filter((e) => e.role === 'student')) {
-      const lessonAttempts = user.lessonAttempts;
+    for (const studentData of studentstData) {
+      const lessonAttempts = studentData.lessonAttempts;
       for (const lessonAttempt of lessonAttempts) {
         const createdLessonAttempt = await db.LessonAttempt.create({
           id: lessonAttempt.id,
-          userId: user.id,
+          userId: studentData.id,
           lessonId: lessonAttempt.lessonId,
           stoppedTime: lessonAttempt.stoppedTime,
           startedTime: lessonAttempt.startedTime,
@@ -104,7 +114,7 @@ const seed = async () => {
           for (const questionAttempt of questionGroupAttempt.answers) {
             await db.QuestionAttempt.create({
               id: questionAttempt.id,
-              groupAttemptId: createdQuestionGroupAttempt.id,
+              questionGroupAttemptId: createdQuestionGroupAttempt.id,
               questionId: questionAttempt.questionId,
               content: questionAttempt.content,
             });

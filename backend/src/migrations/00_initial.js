@@ -49,6 +49,25 @@ const up = async (query) => {
     },
   });
 
+  await query.createTable('Classes', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
   // TeacherClass join table
   await query.createTable('TeacherClasses', {
     teacherId: {
@@ -170,7 +189,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    groupId: {
+    questionGroupId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -210,7 +229,7 @@ const up = async (query) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    userId: {
+    studentId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -296,7 +315,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    groupAttemptId: {
+    questionGroupAttemptId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
