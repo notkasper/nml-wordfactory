@@ -4,11 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import request from 'superagent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Chart from './Chart';
 import Class from './Class';
 import Orders from './Orders';
+import service from '../../service';
 
 const drawerWidth = 240;
 
@@ -103,14 +103,13 @@ const ClassBox = (props) => {
 };
 
 const Dashboard = (props) => {
-  const { authStore } = props;
   const classes = useStyles();
   const [classList, setClassList] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const loadClassList = async () => {
     setLoading(true);
-    const response = await request.get('/api/v1/classes');
+    const response = await service.loadClassList();
     setClassList(response.body.data);
     setLoading(false);
   };

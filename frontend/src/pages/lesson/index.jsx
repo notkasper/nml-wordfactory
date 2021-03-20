@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
-import request from 'superagent';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import service from '../../service';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -63,9 +63,7 @@ const Lesson = (props) => {
 
   const loadLessonAttempts = async () => {
     setLoading(true);
-    const response = await request
-      .get(`/api/v1/lessonAttempts`)
-      .query({ lessonId: params.lessonId });
+    const response = await service.loadLessonAttempts(params.lessonId);
     let loadedLessonAttempts = response.body.data;
     loadedLessonAttempts = addDuration(loadedLessonAttempts);
     loadedLessonAttempts = addPerformance(loadedLessonAttempts);
