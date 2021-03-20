@@ -59,7 +59,7 @@ const start = async () => {
   app.use(cors());
 
   // Set static folder (build folder)
-  app.use(express.static(path.join(__dirname, './build')));
+  app.use('/static', express.static(path.join(__dirname, './static')));
 
   // Set API documentation path
   const swaggerDocument = YAML.load(

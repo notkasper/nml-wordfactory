@@ -18,7 +18,7 @@ const Student = (props) => {
   return (
     <ListItem alignItems="flex-start" key={id}>
       <ListItemAvatar>
-        <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+        <Avatar alt="Travis Howard" src="/static/images/avatar.png" />
       </ListItemAvatar>
       <ListItemText
         primary={name}

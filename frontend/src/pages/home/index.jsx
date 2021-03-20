@@ -129,7 +129,11 @@ const Dashboard = (props) => {
       <Grid container spacing={3}>
         {/* Recent Deposits */}
         {classList.map((aClass) => (
-          <ClassBox className={fixedHeightPaper} class={aClass} />
+          <ClassBox
+            className={fixedHeightPaper}
+            class={aClass}
+            key={aClass.id}
+          />
         ))}
         {/* Chart */}
         <Grid item xs={12} md={12} lg={12}>

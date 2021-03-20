@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import { useParams } from 'react-router-dom';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
 import { DataGrid } from '@material-ui/data-grid';
 import request from 'superagent';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -27,10 +19,11 @@ const columns = [
   {
     field: 'duration',
     headerName: 'Duratie (minuten)',
-    width: 180,
+    width: 165,
   },
-  { field: 'Correct', headerName: 'Correct', width: 130, type: 'number' },
-  { field: 'Incorrect', headerName: 'Incorrect', width: 130, type: 'number' },
+  { field: 'correct', headerName: 'Correct', width: 100, type: 'number' },
+  { field: 'incorrect', headerName: 'Incorrect', width: 110, type: 'number' },
+  { field: 'performance', headerName: 'Prestatie', width: 130, type: 'number' },
 ];
 
 const addDuration = (lessonAttempts) => {
@@ -40,6 +33,24 @@ const addDuration = (lessonAttempts) => {
       0
     );
     lessonAttempt.duration = Math.round(duration / 60);
+    return lessonAttempt;
+  });
+};
+
+const addPerformance = (lessonAttempts) => {
+  return lessonAttempts.map((lessonAttempt) => {
+    const { correct, incorrect } = lessonAttempt.questionGroupAttempts.reduce(
+      (acc, curr) => {
+        acc.correct += curr.correct;
+        acc.incorrect += curr.incorrect + curr.missed;
+        return acc;
+      },
+      { correct: 0, incorrect: 0 }
+    );
+    lessonAttempt.correct = correct;
+    lessonAttempt.incorrect = incorrect;
+    lessonAttempt.performance =
+      Math.round((correct / (correct + incorrect)) * 100) / 10 || 0;
     return lessonAttempt;
   });
 };
@@ -57,6 +68,7 @@ const Lesson = (props) => {
       .query({ lessonId: params.lessonId });
     let loadedLessonAttempts = response.body.data;
     loadedLessonAttempts = addDuration(loadedLessonAttempts);
+    loadedLessonAttempts = addPerformance(loadedLessonAttempts);
     setLessonAttempts(loadedLessonAttempts);
     setLoading(false);
   };

@@ -79,7 +79,7 @@ const Lesson = (props) => {
           <Paper>
             <List className={classes.root}>
               {students.map((student) => (
-                <Student {...student} />
+                <Student {...student} key={student.id} />
               ))}
             </List>
           </Paper>
