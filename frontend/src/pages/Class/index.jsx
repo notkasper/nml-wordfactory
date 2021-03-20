@@ -33,19 +33,19 @@ const Lesson = (props) => {
   const loadStudents = async () => {
     const response = await request
       .get(`/api/v1/students`)
-      .query({ classId: params.id });
+      .query({ classId: params.classId });
     setStudents(response.body.data);
   };
 
   const loadClass = async () => {
-    const response = await request.get(`/api/v1/classes/${params.id}`);
+    const response = await request.get(`/api/v1/classes/${params.classId}`);
     setTheClass(response.body.data);
   };
 
   const loadCourses = async () => {
     const response = await request
       .get(`/api/v1/courses`)
-      .query({ classId: params.id });
+      .query({ classId: params.classId });
     setCourses(response.body.data);
   };
 

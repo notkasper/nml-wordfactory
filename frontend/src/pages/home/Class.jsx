@@ -2,6 +2,7 @@ import React from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
 import Title from './Title';
 
 const useStyles = makeStyles({
@@ -12,7 +13,11 @@ const useStyles = makeStyles({
 
 const Class = (props) => {
   const { name, createdAt, id } = props;
+  const history = useHistory();
   const classes = useStyles();
+  const goToClass = () => {
+    history.push(`classes/${id}`);
+  };
   return (
     <React.Fragment>
       <Title>{name}</Title>
@@ -20,7 +25,7 @@ const Class = (props) => {
         {`gemaakt op: ${createdAt.substring(0, 10)}`}
       </Typography>
       <div>
-        <Link color="primary" href={`classes/${id}`}>
+        <Link color="primary" onClick={goToClass} href="#">
           Klas bekijken
         </Link>
       </div>

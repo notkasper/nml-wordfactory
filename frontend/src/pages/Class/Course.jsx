@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { useHistory } from 'react-router-dom';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -17,6 +18,11 @@ const useStyles = makeStyles((theme) => ({}));
 const Course = (props) => {
   const { id, name, lessons } = props;
   const classes = useStyles();
+  const history = useHistory();
+
+  const goToLesson = (id) => {
+    history.push(`/dashboard/lessons/${id}`);
+  };
 
   return (
     <div>
@@ -41,7 +47,11 @@ const Course = (props) => {
               }
             />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="comments">
+              <IconButton
+                edge="end"
+                aria-label="comments"
+                onClick={() => goToLesson(lesson.id)}
+              >
                 <DehazeIcon />
               </IconButton>
             </ListItemSecondaryAction>

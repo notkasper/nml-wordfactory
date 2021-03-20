@@ -33,7 +33,8 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Login from './pages/login';
 import LessonView from './pages/home';
 import Profile from './pages/profile';
-import Class from './pages/Class';
+import Class from './pages/class';
+import Lesson from './pages/lesson';
 // STORES
 import AuthStore from './stores/auth';
 
@@ -240,8 +241,13 @@ export default function Dashboard() {
               />
               <Route
                 exact
-                path="/dashboard/classes/:id"
+                path="/dashboard/classes/:classId"
                 render={(props) => <Class {...props} authStore={authStore} />}
+              />
+              <Route
+                exact
+                path="/dashboard/lessons/:lessonId"
+                render={(props) => <Lesson {...props} authStore={authStore} />}
               />
             </Switch>
           </Container>
