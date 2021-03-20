@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import cookie from 'js-cookie';
 import service from '../service';
 
@@ -6,13 +6,28 @@ import service from '../service';
 class AuthStore {
   constructor() {
     makeObservable(this, {
+      error: observable,
       login: action,
       logout: action,
+      setError: action,
     });
   }
 
+  error = null;
+
+  setError = (error) => {
+    this.error = error;
+    setTimeout(() => {
+      this.error = null;
+    }, 2000);
+  };
+
   login = async (email, password) => {
-    await service.login(email, password);
+    const response = await service.login(email, password);
+    if (!response) {
+      return false;
+    }
+    return true;
   };
 
   logout = () => {
@@ -20,4 +35,4 @@ class AuthStore {
   };
 }
 
-export default AuthStore;
+export default new AuthStore();

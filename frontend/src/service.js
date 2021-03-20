@@ -1,4 +1,5 @@
 import request from 'superagent';
+import authStore from './stores/auth';
 
 const handleResponse = async (req) => {
   try {
@@ -6,7 +7,9 @@ const handleResponse = async (req) => {
     return response;
   } catch (error) {
     console.error('[[REQUEST ERROR]]');
-    console.error(error);
+    authStore.setError(
+      `Er is iets mis gegaan: ${error.response.message || 'server error'}`
+    );
     return null;
   }
 };

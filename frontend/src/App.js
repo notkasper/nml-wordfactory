@@ -36,7 +36,7 @@ import Profile from './pages/profile';
 import Class from './pages/class';
 import Lesson from './pages/lesson';
 // STORES
-import AuthStore from './stores/auth';
+import authStore from './stores/auth';
 
 const drawerWidth = 240;
 
@@ -118,8 +118,6 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
-const authStore = new AuthStore();
 
 export default function Dashboard() {
   const classes = useStyles();
