@@ -19,7 +19,7 @@ class AuthStore {
     this.error = error;
     setTimeout(() => {
       this.error = null;
-    }, 2000);
+    }, 4000);
   };
 
   login = async (email, password) => {

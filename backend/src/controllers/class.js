@@ -3,8 +3,6 @@ const db = require('../db');
 const getClasses = async (req, res) => {
   const { teacher } = req;
 
-  res.status(500).send({ message: 'error handler test' });
-
   const classes = await teacher.getClasses();
 
   res.status(200).send({ data: classes });

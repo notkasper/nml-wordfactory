@@ -24,11 +24,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import FaceIcon from '@material-ui/icons/Face';
 import PersonIcon from '@material-ui/icons/Person';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { observer } from 'mobx-react-lite';
 // PAGES
 import Login from './pages/login';
 import LessonView from './pages/home';
@@ -118,6 +120,19 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
+
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
+
+const ErrorPopup = observer((props) => {
+  const { authStore } = props;
+  return (
+    <Snackbar open={!!authStore.error}>
+      <Alert severity="warning">{authStore.error}</Alert>
+    </Snackbar>
+  );
+});
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -268,6 +283,7 @@ export default function Dashboard() {
           <Route path="/dashboard" component={Dashboard} />
         </Switch>
       </Router>
+      <ErrorPopup authStore={authStore} />
     </div>
   );
 }

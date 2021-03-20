@@ -6,9 +6,13 @@ const handleResponse = async (req) => {
     const response = await req;
     return response;
   } catch (error) {
-    console.error('[[REQUEST ERROR]]');
     authStore.setError(
-      `Er is iets mis gegaan: ${error.response.message || 'server error'}`
+      `Er is iets mis gegaan: ${
+        error.response.body.message ||
+        error.response.body.error ||
+        error.response.error ||
+        'server error'
+      }`
     );
     return null;
   }
