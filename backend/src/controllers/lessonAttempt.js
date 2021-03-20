@@ -24,16 +24,24 @@ const getLessonAttempts = async (req, res) => {
     return res.status(404).send({ message: 'Lesson not found' });
   }
 
-  const students = await theClass.getStudents();
   const lessonAttempts = await lesson.getLessonAttempts({
     include: [
       {
         model: db.Student,
         as: 'student',
+        attributes: ['id', 'name'],
       },
       {
         model: db.QuestionGroupAttempt,
         as: 'questionGroupAttempts',
+        attributes: [
+          'id',
+          'timeElapsedSeconds',
+          'correct',
+          'incorrect',
+          'missed',
+          'isCompleted',
+        ],
       },
     ],
   });
