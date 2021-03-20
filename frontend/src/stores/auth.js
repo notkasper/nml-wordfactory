@@ -1,44 +1,38 @@
-import {
-  action,
-  computed,
-  makeObservable,
-  observable,
-  autorun,
-  runInAction,
-} from 'mobx';
-import request from 'superagent';
+import { action, makeObservable, observable } from 'mobx';
 import cookie from 'js-cookie';
+import service from '../service';
 
 // Tutorial on mobx state management: https://blog.logrocket.com/introduction-to-mobx-with-react/
 class AuthStore {
   constructor() {
     makeObservable(this, {
+      error: observable,
       login: action,
+      logout: action,
+      setError: action,
     });
   }
 
+  error = null;
+
+  setError = (error) => {
+    this.error = error;
+    setTimeout(() => {
+      this.error = null;
+    }, 4000);
+  };
+
   login = async (email, password) => {
-    await request.post('/api/v1/auth/login').send({
-      email,
-      password,
-    });
-    this.test();
+    const response = await service.login(email, password);
+    if (!response) {
+      return false;
+    }
+    return true;
   };
 
-  getToken = () => {
-    const token = cookie.get('token');
-    const bearer = `bearer ${token}`;
-    return bearer;
-  };
-
-  test = async () => {
-    // test if teacher auth works
-    const res = await request
-      .get('/api/v1/auth/teacherTest')
-      .set('Authorization', this.getToken());
-
-    console.log(res.body.message);
+  logout = () => {
+    cookie.remove('token');
   };
 }
 
-export default AuthStore;
+export default new AuthStore();

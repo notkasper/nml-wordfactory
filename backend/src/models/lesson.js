@@ -15,11 +15,7 @@ module.exports = (sequelize) =>
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    index: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },

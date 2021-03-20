@@ -12,54 +12,64 @@ const seed = async () => {
   console.log('[SEEDING]: Seeding initialized');
   await db.initialize();
 
-  await db.User.destroy({ where: {} });
+  await db.Class.destroy({ where: {} });
+  await db.Student.destroy({ where: {} });
+  await db.Teacher.destroy({ where: {} });
+  await db.Course.destroy({ where: {} });
+  await db.TeacherClass.destroy({ where: {} });
+  await db.StudentClass.destroy({ where: {} });
   await db.Lesson.destroy({ where: {} });
   await db.LessonAttempt.destroy({ where: {} });
-  await db.LessonGroup.destroy({ where: {} });
   await db.Question.destroy({ where: {} });
   await db.QuestionAttempt.destroy({ where: {} });
   await db.QuestionGroup.destroy({ where: {} });
   await db.QuestionGroupAttempt.destroy({ where: {} });
-  await db.TeacherStudent.destroy({ where: {} });
-  await db.UserLessonGroup.destroy({ where: {} });
 
   try {
     const { users, lessons } = wordfactoryPreprocessed;
-    const [teacher, ...students] = await db.User.bulkCreate(users);
-    await teacher.addStudents(students);
+    const [teacherData, ...studentsData] = users;
+    const teacher = await db.Teacher.create(teacherData);
+    const students = await db.Student.bulkCreate(studentsData);
 
-    const lessonGroup = await db.LessonGroup.create({
+    const theClass = await db.Class.create({
       id: uuid.v4(),
-      title: 'Superuser course',
+      name: 'My first class',
     });
 
-    await teacher.addLessonGroups([lessonGroup]);
-    for (const student of students) {
-      await student.addLessonGroups([lessonGroup]);
-    }
+    await theClass.addTeacher(teacher);
+    await theClass.addStudents(students);
+
+    const course = await db.Course.create({
+      id: uuid.v4(),
+      classId: theClass.id,
+      name: 'My first course',
+    });
+
+    await theClass.addCourse(course);
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({
         id: lesson.lessonId,
-        groupId: lessonGroup.id,
+        courseId: course.id,
         prefix: lesson.lessonPrefix,
         instruction: lesson.lessonInstruction,
-        index: lesson.lessonIndex,
-        title: lesson.lessonTitle,
+        name: lesson.lessonTitle,
       });
+
+      course.addLesson(createdLesson);
 
       for (const questionGroup of lesson.questionGroups) {
         const createdQuestionGroup = await db.QuestionGroup.create({
           id: questionGroup.questionGroupId,
           lessonId: createdLesson.id,
           index: questionGroup.questionGroupIndex,
-          title: questionGroup.questionGroupTitle,
+          name: questionGroup.questionGroupTitle,
         });
 
         for (const question of questionGroup.questions) {
           await db.Question.create({
             id: question.questionId,
-            groupId: createdQuestionGroup.id,
+            questionGroupId: createdQuestionGroup.id,
             data: question.data,
             index: question.questionIndex,
             type: question.type,
@@ -69,12 +79,12 @@ const seed = async () => {
       }
     }
 
-    for (const user of users.filter((e) => e.role === 'student')) {
-      const lessonAttempts = user.lessonAttempts;
+    for (const studentData of studentsData) {
+      const lessonAttempts = studentData.lessonAttempts;
       for (const lessonAttempt of lessonAttempts) {
         const createdLessonAttempt = await db.LessonAttempt.create({
           id: lessonAttempt.id,
-          userId: user.id,
+          studentId: studentData.id,
           lessonId: lessonAttempt.lessonId,
           stoppedTime: lessonAttempt.stoppedTime,
           startedTime: lessonAttempt.startedTime,
@@ -103,7 +113,7 @@ const seed = async () => {
           for (const questionAttempt of questionGroupAttempt.answers) {
             await db.QuestionAttempt.create({
               id: questionAttempt.id,
-              groupAttemptId: createdQuestionGroupAttempt.id,
+              questionGroupAttemptId: createdQuestionGroupAttempt.id,
               questionId: questionAttempt.questionId,
               content: questionAttempt.content,
             });

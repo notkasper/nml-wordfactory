@@ -69,11 +69,16 @@ const Login = (props) => {
   const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const login = async (e) => {
+    setLoading(true);
     e.preventDefault(); // Prevent reloading of page, due to "submit" role on button
-    await authStore.login(email, password);
-    history.push('/home');
+    const response = await authStore.login(email, password);
+    if (response) {
+      history.push('/dashboard/home');
+    }
+    setLoading(false);
   };
 
   return (
@@ -124,6 +129,7 @@ const Login = (props) => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              busy={loading}
               onClick={login}
             >
               Inloggen

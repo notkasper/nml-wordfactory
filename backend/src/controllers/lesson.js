@@ -1,62 +1,49 @@
 const db = require('../db');
 
 const getLessons = async (req, res) => {
-  const { user } = req;
-  const lessons = await db.Lesson.findAll({
-    through: {
-      model: db.UserLessonGroup,
-      where: {
-        teacherId: user.id,
-      },
-    },
-  });
-  res.status(200).send({ data: lessons });
-};
-
-const getLessonsInGroup = async (req, res) => {
   const {
-    user,
-    params: { id },
+    query: { courseId },
   } = req;
 
-  const lessons = await db.Lesson.findAll({
-    through: {
-      model: db.UserLessonGroup,
-      where: {
-        teacherId: user.id,
-      },
-      through: {
-        model: db.LessonGroup,
-        where: {
-          id,
-        },
-      },
-    },
-  });
+  if (!courseId) {
+    return res
+      .status(400)
+      .send({ message: 'Please provide one of the following: courseId' });
+  }
 
-  res.status(200).send({ data: lessons });
+  const course = await db.Course.findByPk(courseId);
+  const theClass = await course.getClass();
+  const teachers = await theClass.getTeachers();
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
+    return res.status(404).send({ message: 'Course not found' });
+  }
+
+  const lessons = await course.getLessons();
+
+  await res.status(200).send({ data: lessons });
 };
 
-const getLessonDetails = async (req, res) => {
+const getLesson = async (req, res) => {
   const {
-    user,
-    params: { id },
+    params: { id: lessonId },
   } = req;
 
-  const data = await db.Lesson.findAll({
-    where: {
-      id,
-    },
-    through: {
-      model: db.UserLessonGroup,
-      where: {
-        teacherId: user.id,
-      },
-    },
-    include: [{ model: db.QuestionGroup, include: [{ model: db.Question }] }],
-  });
+  const lesson = await db.Lesson.findByPk(lessonId);
+  if (!lesson) {
+    return res.status(404).send({ message: 'Lesson not found' });
+  }
 
-  res.status(200).send({ data });
+  const course = await lesson.getCourse();
+  const theClass = await course.getClass();
+  const teachers = await theClass.getTeachers();
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
+    return res.status(404).send({ message: 'Lesson not found' });
+  }
+
+  await res.status(200).send({ data: lesson });
 };
 
-module.exports = { getLessons, getLessonsInGroup, getLessonDetails };
+module.exports = {
+  getLessons,
+  getLesson,
+};

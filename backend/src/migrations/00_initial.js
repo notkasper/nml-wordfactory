@@ -2,8 +2,8 @@ const { Sequelize } = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 const up = async (query) => {
-  // user table
-  await query.createTable('Users', {
+  // teacher table
+  await query.createTable('Teachers', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
@@ -14,10 +14,6 @@ const up = async (query) => {
     },
     passwordEncrypted: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM(['teacher', 'student']),
       allowNull: false,
     },
     email: {
@@ -34,13 +30,95 @@ const up = async (query) => {
     },
   });
 
-  // LessonGroup table
-  await query.createTable('LessonGroups', {
+  await query.createTable('Students', {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    title: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
+  await query.createTable('Classes', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
+  // TeacherClass join table
+  await query.createTable('TeacherClasses', {
+    teacherId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
+  // StudentClass join table
+  await query.createTable('StudentClasses', {
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  });
+
+  // Course table
+  await query.createTable('Courses', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -60,7 +138,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    groupId: {
+    courseId: {
       primaryKey: true,
       type: DataTypes.UUID,
     },
@@ -72,11 +150,7 @@ const up = async (query) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    index: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -104,7 +178,7 @@ const up = async (query) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -124,7 +198,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    groupId: {
+    questionGroupId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -164,7 +238,7 @@ const up = async (query) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    userId: {
+    studentId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -250,7 +324,7 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
-    groupAttemptId: {
+    questionGroupAttemptId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -271,52 +345,14 @@ const up = async (query) => {
       allowNull: false,
     },
   });
-
-  // teacher student join table
-  await query.createTable('TeacherStudents', {
-    studentId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    teacherId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-  });
-
-  // user lesson join table
-  await query.createTable('UserLessonGroups', {
-    lessonGroupId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-  });
 };
 
 const down = async (query) => {
   // regular tables
-  await query.dropTable('Users');
-  await query.dropTable('LessonGroups');
+  await query.dropTable('Teachers');
+  await query.dropTable('Students');
+  await query.dropTable('Classes');
+  await query.dropTable('Courses');
   await query.dropTable('Lessons');
   await query.dropTable('LessonAttempts');
   await query.dropTable('QuestionGroups');
@@ -325,8 +361,8 @@ const down = async (query) => {
   await query.dropTable('QuestionAttempts');
 
   // join tables
-  await query.dropTable('TeacherStudents');
-  await query.dropTable('UserLessonGroups');
+  await query.dropTable('StudentClasses');
+  await query.dropTable('TeacherClasses');
 };
 
 module.exports = { up, down };

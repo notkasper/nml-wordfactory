@@ -9,15 +9,15 @@ const login = async (req, res) => {
     return;
   }
 
-  const user = await db.User.findOne({ where: { email, role: 'teacher' } });
-  if (!user) {
+  const teacher = await db.Teacher.findOne({ where: { email } });
+  if (!teacher) {
     res.status(401).send({ message: invalidLoginMessage });
     return;
   }
 
   const validCredentials = await checkPassword(
     password,
-    user.passwordEncrypted
+    teacher.passwordEncrypted
   );
   if (!validCredentials) {
     // invalid password
@@ -26,7 +26,7 @@ const login = async (req, res) => {
   }
 
   // correct password
-  const data = { userId: user.id };
+  const data = { teacherId: teacher.id };
   const token = generateToken(data);
   res.cookie('token', token).status(200).send({ message: 'OK' });
 };
