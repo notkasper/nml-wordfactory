@@ -110,7 +110,9 @@ const Dashboard = (props) => {
   const loadClassList = async () => {
     setLoading(true);
     const response = await service.loadClassList();
-    setClassList(response.body.data);
+    if (response) {
+      setClassList(response.body.data);
+    }
     setLoading(false);
   };
 

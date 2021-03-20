@@ -7,6 +7,7 @@ const handleResponse = async (req) => {
   } catch (error) {
     console.error('[[REQUEST ERROR]]');
     console.error(error);
+    return null;
   }
 };
 

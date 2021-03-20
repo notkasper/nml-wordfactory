@@ -1,5 +1,4 @@
 import { action, makeObservable } from 'mobx';
-import request from 'superagent';
 import cookie from 'js-cookie';
 import service from '../service';
 

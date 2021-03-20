@@ -64,10 +64,12 @@ const Lesson = (props) => {
   const loadLessonAttempts = async () => {
     setLoading(true);
     const response = await service.loadLessonAttempts(params.lessonId);
-    let loadedLessonAttempts = response.body.data;
-    loadedLessonAttempts = addDuration(loadedLessonAttempts);
-    loadedLessonAttempts = addPerformance(loadedLessonAttempts);
-    setLessonAttempts(loadedLessonAttempts);
+    if (response) {
+      let loadedLessonAttempts = response.body.data;
+      loadedLessonAttempts = addDuration(loadedLessonAttempts);
+      loadedLessonAttempts = addPerformance(loadedLessonAttempts);
+      setLessonAttempts(loadedLessonAttempts);
+    }
     setLoading(false);
   };
 

@@ -30,16 +30,19 @@ const Lesson = (props) => {
 
   const loadStudents = async () => {
     const response = await service.loadStudents(params.classId);
+    if (!response) return;
     setStudents(response.body.data);
   };
 
   const loadClass = async () => {
     const response = await service.loadClass(params.classId);
+    if (!response) return;
     setTheClass(response.body.data);
   };
 
   const loadCourses = async () => {
     const response = await service.loadCourses(params.classId);
+    if (!response) return;
     setCourses(response.body.data);
   };
 
