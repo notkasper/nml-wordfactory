@@ -242,6 +242,7 @@ const preprocess = async () => {
 
     const index = preprocessedData.users.findIndex((e) => e.name === name);
     const lessonAttemptId = uuid.v4();
+    const completed = lessonAttempt.lesson.formats.every((e) => e.completed);
     preprocessedData.users[index].lessonAttempts.push({
       id: lessonAttemptId,
       lessonId: preprocessedLesson.lessonId,
@@ -249,7 +250,7 @@ const preprocess = async () => {
       startedTime: lesson.startedTime,
       isStopped: lesson.isStopped,
       isStarted: lesson.isStarted,
-      isCompleted: lesson.isCompleted,
+      isCompleted: completed,
       questionGroups: preprocessedLesson.questionGroups
         .map((questionGroup, questionGroupIndex) => {
           const format = lessonAttempt.lesson.formats[questionGroupIndex];
