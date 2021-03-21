@@ -71,18 +71,6 @@ const Lesson = (props) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="h5" className={classes.marginBottom}>
-            Leerlingen
-          </Typography>
-          <Paper>
-            <List className={classes.root}>
-              {students.map((student) => (
-                <Student {...student} key={student.id} />
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h5" className={classes.marginBottom}>
             Cursussen
           </Typography>
           <Paper>
@@ -92,6 +80,18 @@ const Lesson = (props) => {
                   <Course {...course} />
                   {index + 1 < courses.length ? <Divider /> : null}
                 </>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h5" className={classes.marginBottom}>
+            Leerlingen
+          </Typography>
+          <Paper>
+            <List className={classes.root}>
+              {students.map((student) => (
+                <Student {...student} key={student.id} />
               ))}
             </List>
           </Paper>
