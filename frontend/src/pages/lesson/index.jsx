@@ -4,6 +4,10 @@ import { useParams } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import service from '../../service';
+import Doughnut from './Doughnut';
+import Histogram from './Histogram';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -81,14 +85,27 @@ const Lesson = (props) => {
     return <CircularProgress />;
   }
 
+  // TODO: Make this a grid
   return (
-    <DataGrid
-      autoHeight
-      rows={lessonAttempts}
-      columns={columns}
-      pageSize={32}
-      checkboxSelection
-    />
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6} lg={4}>
+        <Doughnut lessonAttempts={lessonAttempts} title="Algemene voortgang" />
+      </Grid>
+      <Grid item xs={12} md={8} lg={8}>
+        <Histogram lessonAttempts={lessonAttempts} title="Cijfer verdeling" />
+      </Grid>
+      <Grid item xs={12}>
+        <Paper>
+          <DataGrid
+            autoHeight
+            rows={lessonAttempts}
+            columns={columns}
+            pageSize={32}
+            checkboxSelection
+          />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 
