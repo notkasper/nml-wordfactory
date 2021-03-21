@@ -6,7 +6,7 @@ import { PieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import Title from '../home/Title';
-import { Doughnut } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,18 +25,13 @@ const Histogram = (props) => {
   const classes = useStyles();
   const params = useParams();
   const [loading, setLoading] = useState(false);
-  const { started, completed, notStarted } = lessonAttempts.reduce(
+  let gradeDistribution = lessonAttempts.reduce(
     (acc, curr) => {
-      if (curr.isCompleted) {
-        acc.completed += 1;
-      } else if (curr.isStarted) {
-        acc.started += 1;
-      } else {
-        acc.notStarted += 1;
-      }
+      const index = Math.floor(curr.performance);
+      acc[index] += 1;
       return acc;
     },
-    { started: 0, completed: 0, notStarted: 0 }
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   );
 
   useEffect(() => {}, []);
@@ -48,17 +43,29 @@ const Histogram = (props) => {
   const data = {
     datasets: [
       {
-        data: [notStarted, started, completed],
+        label: 'Aantal studenten',
+        data: gradeDistribution,
       },
     ],
-    labels: ['Niet begonnen', 'Begonnen', 'Voltooid'],
+    labels: [
+      '0-1',
+      '1-2',
+      '2-3',
+      '3-4',
+      '4-5',
+      '5-6',
+      '6-7',
+      '7-8',
+      '8-9',
+      '9-10',
+    ],
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (
     <Paper className={fixedHeightPaper}>
       <Title>{title}</Title>
-      <Doughnut data={data} />
+      <Bar data={data} />
     </Paper>
   );
 };

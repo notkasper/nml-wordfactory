@@ -31,6 +31,10 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { observer } from 'mobx-react-lite';
+import { defaults } from 'react-chartjs-2';
+import 'chartjs-plugin-colorschemes';
+import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
+import merge from 'lodash';
 // PAGES
 import Login from './pages/login';
 import LessonView from './pages/home';
@@ -39,6 +43,8 @@ import Class from './pages/class';
 import Lesson from './pages/lesson';
 // STORES
 import authStore from './stores/auth';
+
+defaults.global.plugins.colorschemes.scheme = Classic10;
 
 const drawerWidth = 240;
 
