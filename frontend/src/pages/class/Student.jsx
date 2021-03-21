@@ -7,7 +7,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -16,7 +16,7 @@ const Student = (props) => {
   const classes = useStyles();
 
   return (
-    <ListItem alignItems="flex-start" key={id}>
+    <ListItem alignItems="flex-start" key={id} button>
       <ListItemAvatar>
         <Avatar alt="Travis Howard" src="/static/images/avatar.png" />
       </ListItemAvatar>
@@ -35,7 +35,7 @@ const Student = (props) => {
       />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="comments">
-          <CommentIcon />
+          <ArrowForwardIosIcon />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>

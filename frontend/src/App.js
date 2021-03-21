@@ -34,7 +34,6 @@ import { observer } from 'mobx-react-lite';
 import { defaults } from 'react-chartjs-2';
 import 'chartjs-plugin-colorschemes';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
-import merge from 'lodash';
 // PAGES
 import Login from './pages/login';
 import LessonView from './pages/home';

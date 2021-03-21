@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -9,10 +8,12 @@ import List from '@material-ui/core/List';
 import Student from './Student';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Course from './Course';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import service from '../../service';
+import Course from './Course';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -27,6 +28,8 @@ const Lesson = (props) => {
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [studentFilterValue, setStudentFilterValue] = useState(null);
+  const [studentFilterInputValue, setStudentFilterInputValue] = useState('');
 
   const loadStudents = async () => {
     const response = await service.loadStudents(params.classId);
@@ -56,6 +59,14 @@ const Lesson = (props) => {
   useEffect(() => {
     loadAll();
   }, []);
+
+  const onStudentFilterInputChange = (event, newInputValue) => {
+    setStudentFilterInputValue(newInputValue);
+  };
+
+  const onStudentFilterChange = (event, newValue) => {
+    setStudentFilterValue(newValue);
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -88,11 +99,32 @@ const Lesson = (props) => {
           <Typography variant="h5" className={classes.marginBottom}>
             Leerlingen
           </Typography>
+          <Autocomplete
+            value={studentFilterValue}
+            onChange={onStudentFilterChange}
+            inputValue={studentFilterInputValue}
+            onInputChange={onStudentFilterInputChange}
+            id="combo-box-demo"
+            options={students}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Leerling zoeken"
+                variant="outlined"
+              />
+            )}
+          />
+          <Divider style={{ margin: '1rem 0' }} />
           <Paper>
             <List className={classes.root}>
-              {students.map((student) => (
-                <Student {...student} key={student.id} />
-              ))}
+              {studentFilterValue ? (
+                <Student {...studentFilterValue} key={studentFilterValue.id} />
+              ) : (
+                students.map((student) => (
+                  <Student {...student} key={student.id} />
+                ))
+              )}
             </List>
           </Paper>
         </Grid>

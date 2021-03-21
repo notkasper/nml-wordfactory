@@ -5,13 +5,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useHistory } from 'react-router-dom';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
-import DehazeIcon from '@material-ui/icons/Dehaze';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -25,7 +22,7 @@ const Course = (props) => {
   };
 
   return (
-    <div>
+    <div key={id}>
       <List
         subheader={
           <ListSubheader component="div" id="nested-list-subheader">
@@ -34,7 +31,7 @@ const Course = (props) => {
         }
       >
         {lessons.map((lesson) => (
-          <ListItem alignItems="flex-start" key={lesson.id}>
+          <ListItem alignItems="flex-start" key={lesson.id} button>
             <ListItemText
               primary={`${lesson.prefix} - ${lesson.name}`}
               secondary={
@@ -52,7 +49,7 @@ const Course = (props) => {
                 aria-label="comments"
                 onClick={() => goToLesson(lesson.id)}
               >
-                <DehazeIcon />
+                <ArrowForwardIosIcon />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
