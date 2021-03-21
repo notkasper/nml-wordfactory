@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { PieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import Title from '../home/Title';
@@ -20,11 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Histogram = (props) => {
+const CustomDoughnut = (props) => {
   const { lessonAttempts, title } = props;
   const classes = useStyles();
-  const params = useParams();
-  const [loading, setLoading] = useState(false);
   const { started, completed, notStarted } = lessonAttempts.reduce(
     (acc, curr) => {
       if (curr.isCompleted) {
@@ -40,10 +37,6 @@ const Histogram = (props) => {
   );
 
   useEffect(() => {}, []);
-
-  if (loading) {
-    return <CircularProgress />;
-  }
 
   const data = {
     datasets: [
@@ -63,4 +56,4 @@ const Histogram = (props) => {
   );
 };
 
-export default Histogram;
+export default CustomDoughnut;
