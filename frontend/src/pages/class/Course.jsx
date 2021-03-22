@@ -17,8 +17,11 @@ const Course = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const goToLesson = (id) => {
-    history.push(`/dashboard/lessons/${id}`);
+  const goToLesson = (lessonId) => {
+    console.log(lessonId);
+    console.log(lessonId);
+    console.log(lessonId);
+    history.push(`/dashboard/lessons/${lessonId}`);
   };
 
   return (
@@ -31,7 +34,12 @@ const Course = (props) => {
         }
       >
         {lessons.map((lesson) => (
-          <ListItem alignItems="flex-start" key={lesson.id} button>
+          <ListItem
+            alignItems="flex-start"
+            key={lesson.id}
+            button
+            onClick={() => goToLesson(lesson.id)}
+          >
             <ListItemText
               primary={`${lesson.prefix} - ${lesson.name}`}
               secondary={
