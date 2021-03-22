@@ -141,14 +141,6 @@ const ErrorPopup = observer((props) => {
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   const Dashboard = () => {
     const history = useHistory();
@@ -160,22 +152,23 @@ export default function Dashboard() {
       history.push('/');
     };
 
+    const goBack = () => {
+      history.goBack();
+    };
+
     return (
       <>
         <AppBar
           position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
+          className={clsx(classes.appBar, classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
             <IconButton
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              className={clsx(
-                classes.menuButton,
-                open && classes.menuButtonHidden
-              )}
+              onClick={goBack}
+              className={clsx(classes.menuButton, classes.menuButtonHidden)}
             >
               <MenuIcon />
             </IconButton>
@@ -195,15 +188,9 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-        >
+        <Drawer variant="permanent" className={classes.drawerPaper} open>
           <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={goBack}>
               <ChevronLeftIcon />
             </IconButton>
           </div>
