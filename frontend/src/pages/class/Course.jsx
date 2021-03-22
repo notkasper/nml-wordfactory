@@ -17,12 +17,8 @@ const Course = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const goToLesson = (lessonId) => {
-    console.log(lessonId);
-    console.log(lessonId);
-    console.log(lessonId);
+  const goToLesson = (lessonId) =>
     history.push(`/dashboard/lessons/${lessonId}`);
-  };
 
   return (
     <div key={id}>
