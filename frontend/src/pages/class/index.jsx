@@ -97,12 +97,9 @@ const Lesson = (props) => {
   const renderStudents = () => {
     const start = page * PAGE_SIZE;
 
-    let shownStudents;
-    if (studentFilterValue) {
-      shownStudents = [studentFilterValue];
-    } else {
-      shownStudents = students.slice(start, start + PAGE_SIZE);
-    }
+    const shownStudents = studentFilterValue
+      ? [studentFilterValue]
+      : students.slice(start, start + PAGE_SIZE);
 
     return (
       <List className={classes.root}>
@@ -116,12 +113,9 @@ const Lesson = (props) => {
   const renderCourses = () => {
     const start = page * PAGE_SIZE;
 
-    let shownCourses;
-    if (courseFilterValue) {
-      shownCourses = [courseFilterValue];
-    } else {
-      shownCourses = courses.slice(start, start + PAGE_SIZE);
-    }
+    const shownCourses = courseFilterValue
+      ? [courseFilterValue]
+      : courses.slice(start, start + PAGE_SIZE);
 
     return (
       <List className={classes.root}>
