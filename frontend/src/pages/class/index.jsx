@@ -39,6 +39,9 @@ const Lesson = (props) => {
   const [studentFilterValue, setStudentFilterValue] = useState(null);
   const [studentFilterInputValue, setStudentFilterInputValue] = useState('');
 
+  const [courseFilterValue, setCourseFilterValue] = useState(null);
+  const [courseFilterInputValue, setCourseFilterInputValue] = useState('');
+
   const loadStudents = async () => {
     const response = await service.loadStudents(params.classId);
     if (!response) return;
@@ -76,6 +79,14 @@ const Lesson = (props) => {
     setStudentFilterValue(newValue);
   };
 
+  const onCourseFilterInputChange = (event, newInputValue) => {
+    setCourseFilterInputValue(newInputValue);
+  };
+
+  const onCourseFilterChange = (event, newValue) => {
+    setCourseFilterValue(newValue);
+  };
+
   const onChangePage = (event, value) => {
     setPage(value);
   };
@@ -103,6 +114,25 @@ const Lesson = (props) => {
     );
   };
 
+  const renderCourses = () => {
+    const start = page * PAGE_SIZE;
+
+    let shownCourses;
+    if (courseFilterValue) {
+      shownCourses = [courseFilterValue];
+    } else {
+      shownCourses = courses.slice(start, start + PAGE_SIZE);
+    }
+
+    return (
+      <List className={classes.root}>
+        {shownCourses.map((course) => (
+          <Course {...course} />
+        ))}
+      </List>
+    );
+  };
+
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container spacing={2}>
@@ -115,16 +145,20 @@ const Lesson = (props) => {
           <Typography variant="h5" className={classes.marginBottom}>
             Cursussen
           </Typography>
-          <Paper>
-            <List className={classes.root}>
-              {courses.map((course, index) => (
-                <>
-                  <Course {...course} />
-                  {index + 1 < courses.length ? <Divider /> : null}
-                </>
-              ))}
-            </List>
-          </Paper>
+          <Autocomplete
+            value={courseFilterValue}
+            onChange={onCourseFilterChange}
+            inputValue={courseFilterInputValue}
+            onInputChange={onCourseFilterInputChange}
+            id="combo-box-demo"
+            options={courses}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField {...params} label="Cursus zoeken" variant="outlined" />
+            )}
+          />
+          <Divider style={{ margin: '1rem 0' }} />
+          <Paper>{renderCourses()}</Paper>
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="h5" className={classes.marginBottom}>
