@@ -9,7 +9,6 @@ import Student from './Student';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { Box } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: '1rem',
   },
-  paginationContainer: {
+  pagination: {
     margin: '1rem auto',
   },
 }));
@@ -182,15 +181,14 @@ const Lesson = (props) => {
           />
           <Divider style={{ margin: '1rem 0' }} />
           <Paper>{renderStudents()}</Paper>
-          <Box className={classes.paginationContainer}>
-            {studentFilterValue ? null : (
-              <Pagination
-                count={Math.ceil(students.length / 10)}
-                color="primary"
-                onChange={onChangePage}
-              />
-            )}
-          </Box>
+          {studentFilterValue ? null : (
+            <Pagination
+              className={classes.pagination}
+              count={Math.ceil(students.length / 10)}
+              color="primary"
+              onChange={onChangePage}
+            />
+          )}
         </Grid>
       </Grid>
     </Container>
