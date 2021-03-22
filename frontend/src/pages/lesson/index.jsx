@@ -8,6 +8,8 @@ import Doughnut from './Doughnut';
 import Histogram from './Histogram';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -18,8 +20,20 @@ const columns = [
     width: 130,
     valueGetter: (params) => params.getValue('student').name,
   },
-  { field: 'isStarted', headerName: 'Gestart', width: 130 },
-  { field: 'isCompleted', headerName: 'Voltooid', width: 130 },
+  {
+    field: 'isStarted',
+    headerName: 'Gestart',
+    width: 130,
+    renderCell: (data) =>
+      data.getValue('isStarted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+  },
+  {
+    field: 'isCompleted',
+    headerName: 'Voltooid',
+    width: 130,
+    renderCell: (data) =>
+      data.getValue('isCompleted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+  },
   {
     field: 'duration',
     headerName: 'Duratie (minuten)',
