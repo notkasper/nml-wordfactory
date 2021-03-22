@@ -9,15 +9,22 @@ import Student from './Student';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { Box } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Pagination from '@material-ui/lab/Pagination';
 import service from '../../service';
 import Course from './Course';
+
+const PAGE_SIZE = 7;
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: '1rem',
+  },
+  paginationContainer: {
+    margin: '1rem auto',
   },
 }));
 
@@ -28,6 +35,7 @@ const Lesson = (props) => {
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [page, setPage] = useState(0);
   const [studentFilterValue, setStudentFilterValue] = useState(null);
   const [studentFilterInputValue, setStudentFilterInputValue] = useState('');
 
@@ -68,9 +76,32 @@ const Lesson = (props) => {
     setStudentFilterValue(newValue);
   };
 
+  const onChangePage = (event, value) => {
+    setPage(value);
+  };
+
   if (loading) {
     return <CircularProgress />;
   }
+
+  const renderStudents = () => {
+    const start = page * PAGE_SIZE;
+
+    let shownStudents;
+    if (studentFilterValue) {
+      shownStudents = [studentFilterValue];
+    } else {
+      shownStudents = students.slice(start, start + PAGE_SIZE);
+    }
+
+    return (
+      <List className={classes.root}>
+        {shownStudents.map((student) => (
+          <Student {...student} key={student.id} />
+        ))}
+      </List>
+    );
+  };
 
   return (
     <Container maxWidth="lg" className={classes.container}>
@@ -116,17 +147,16 @@ const Lesson = (props) => {
             )}
           />
           <Divider style={{ margin: '1rem 0' }} />
-          <Paper>
-            <List className={classes.root}>
-              {studentFilterValue ? (
-                <Student {...studentFilterValue} key={studentFilterValue.id} />
-              ) : (
-                students.map((student) => (
-                  <Student {...student} key={student.id} />
-                ))
-              )}
-            </List>
-          </Paper>
+          <Paper>{renderStudents()}</Paper>
+          <Box className={classes.paginationContainer}>
+            {studentFilterValue ? null : (
+              <Pagination
+                count={Math.ceil(students.length / 10)}
+                color="primary"
+                onChange={onChangePage}
+              />
+            )}
+          </Box>
         </Grid>
       </Grid>
     </Container>
