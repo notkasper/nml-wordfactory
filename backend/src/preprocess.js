@@ -5,13 +5,13 @@ const { encryptPassword } = require('./_utils');
 
 const wordfactoryExport = require('../wordfactory-export.json');
 
-convertQuestionItemToAnswer = ({ lesson, format, question }) => {
+convertQuestionItemToAnswer = ({ format, question, questionIndex = 0 }) => {
   if (['Format_F1', 'Format_F1b'].includes(format.format)) {
     return Object.values(question.answers || []);
   }
 
   if (['Format_V1', 'Format_V1c'].includes(format.format)) {
-    return [question.answers.indexOf(question.answer)];
+    return [question.answers.indexOf(question.answer)].filter((e) => e !== -1);
   }
 
   if (['Format_W1'].includes(format.format)) {
@@ -32,17 +32,28 @@ convertQuestionItemToAnswer = ({ lesson, format, question }) => {
     return [3];
   }
 
-  if (
-    [
-      'Format_H1',
-      'Format_B1',
-      'Format_B2',
-      'Format_B3',
-      'Format_W2',
-      'Format_WC',
-    ].includes(format.format)
-  ) {
-    return null;
+  if (['Format_H1'].includes(format.format)) {
+    return format.data.items
+      .map((item, index) => {
+        if (item.selected) {
+          return index;
+        }
+      })
+      .filter((e) => e !== null && e !== undefined);
+  }
+
+  if (['Format_B1', 'Format_B2', 'Format_B3'].includes(format.format)) {
+    return question.assignment.words.map((e) =>
+      e.morphemes.map((m) => m.selectedAnswer || null)
+    )[questionIndex];
+  }
+
+  if (['Format_W2'].includes(format.format)) {
+    return question.selectedAnswer;
+  }
+
+  if (['Format_WC'].includes(format.format)) {
+    return question;
   }
 
   return null;
@@ -157,24 +168,81 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     ];
   }
 
-  // question types which we do not know yet what to do with
-  if (
-    [
-      'Format_H1',
-      'Format_B1',
-      'Format_B2',
-      'Format_B3',
-      'Format_W2',
-      'Format_WC',
-    ].includes(format)
-  ) {
-    return items.map((item, index) => ({
+  if (['Format_H1'].includes(format)) {
+    return [
+      {
+        questionId: uuid.v4(),
+        questionIndex: 0,
+        type: 'multipleChoice',
+        instruction: lesson.lessonInstruction,
+        data: {
+          options: items.map((item) => ({
+            value: item.word,
+            isCorrect: item.isCorrect,
+          })),
+        },
+      },
+    ];
+  }
+
+  if (['Format_B1', 'Format_B2'].includes(format)) {
+    return items[0].assignment.words.map((w, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
-      type: 'UNKNOWN',
+      type: 'multipleChoice',
       instruction: lesson.lessonInstruction,
-      data: {},
+      data: {
+        word: w.word,
+        morphemes: w.morphemes.map((m) => ({
+          value: m.morpheme,
+          options: m.options.map((option) => ({
+            value: option,
+            isCorrect: option === m.answer,
+          })),
+        })),
+      },
     }));
+  }
+
+  if (['Format_B3'].includes(format)) {
+    return items[0].assignment.words.map((w, index) => ({
+      questionId: uuid.v4(),
+      questionIndex: index,
+      type: 'open',
+      instruction: lesson.lessonInstruction,
+      data: {
+        word: w.word,
+        morphemes: w.morphemes.map((m) => ({
+          value: m.morpheme,
+        })),
+      },
+    }));
+  }
+
+  if (['Format_W2'].includes(format)) {
+    return [
+      {
+        questionId: uuid.v4(),
+        questionIndex: 0,
+        type: 'open',
+        instruction: lesson.lessonInstruction,
+        data: {
+          wordpart: items[0].wordpart,
+        },
+      },
+    ];
+  }
+
+  if (['Format_WC'].includes(format)) {
+    return [
+      {
+        questionId: uuid.v4(),
+        questionIndex: 0,
+        type: 'open',
+        instruction: lesson.lessonInstruction,
+        data: {},
+      },
+    ];
   }
 
   return {};
@@ -276,9 +344,9 @@ const preprocess = async () => {
                     questionId: question.questionId,
                     content:
                       convertQuestionItemToAnswer({
-                        lesson,
                         format,
                         question: answer,
+                        questionIndex,
                       }) || {},
                   };
                 }
