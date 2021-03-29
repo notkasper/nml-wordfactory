@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -9,7 +9,8 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 const Lesson = (props) => {
   const { name, id, prefix } = props;
   const history = useHistory();
-  const onClick = () => history.push(`lessons/${id}`);
+  const location = useLocation();
+  const onClick = () => history.push(`${location.pathname}/lessons/${id}`);
 
   return (
     <ListItem alignItems="flex-start" key={id} button onClick={onClick}>
