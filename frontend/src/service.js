@@ -8,8 +8,8 @@ const handleResponse = async (req) => {
   } catch (error) {
     authStore.setError(
       `Er is iets mis gegaan: ${
-        error.response.body.message ||
-        error.response.body.error ||
+        error.response.body?.message ||
+        error.response.body?.error ||
         error.response.error ||
         'server error'
       }`
@@ -30,8 +30,8 @@ const loadClass = async (classId) => {
   return response;
 };
 
-const loadCourses = async (classId) => {
-  const req = request.get(`/api/v1/courses`).query({ classId });
+const loadCourses = async (query) => {
+  const req = request.get(`/api/v1/courses`).query(query);
   const response = await handleResponse(req);
   return response;
 };
@@ -57,11 +57,20 @@ const login = async (email, password) => {
   return response;
 };
 
-export default {
+const loadStudent = async (id) => {
+  const req = request.get(`/api/v1/students/${id}`);
+  const response = await handleResponse(req);
+  return response;
+};
+
+const service = {
   loadStudents,
+  loadStudent,
   loadClass,
   loadCourses,
   loadClassList,
   loadLessonAttempts,
   login,
 };
+
+export default service;

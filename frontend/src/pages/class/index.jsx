@@ -55,7 +55,8 @@ const Lesson = (props) => {
   };
 
   const loadCourses = async () => {
-    const response = await service.loadCourses(params.classId);
+    const classId = params.classId;
+    const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
   };

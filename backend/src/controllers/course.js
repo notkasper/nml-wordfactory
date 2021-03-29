@@ -2,27 +2,31 @@ const db = require('../db');
 
 const getCourses = async (req, res) => {
   const {
-    query: { classId },
+    query: { classId, studentId },
   } = req;
 
-  if (!classId) {
-    return res
-      .status(400)
-      .send({ message: 'Please provide one of the following: classId' });
+  if (!classId && !studentId) {
+    return res.status(400).send({
+      message: 'Please provide one of the following: classId, studentId',
+    });
   }
 
-  const theClass = await db.Class.findByPk(classId);
-  if (!theClass) {
-    return res.status(404).send({ message: 'Class not found' });
-  }
+  const studentWhere = studentId ? { studentId } : {};
+  const courseWhere = classId ? { classId } : {};
 
-  const teachers = await theClass.getTeachers();
-  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
-    return res.status(404).send({ message: 'Class not found' });
-  }
-
-  const courses = await theClass.getCourses({
-    include: { model: db.Lesson, as: 'lessons' },
+  const courses = await db.Course.findAll({
+    where: courseWhere,
+    include: [
+      {
+        model: db.Lesson,
+        as: 'lessons',
+        include: {
+          model: db.LessonAttempt,
+          as: 'lessonAttempts',
+          where: studentWhere,
+        },
+      },
+    ],
   });
 
   res.status(200).send({ data: courses });

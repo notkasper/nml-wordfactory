@@ -86,6 +86,7 @@ db.setupModels = async () => {
     });
 
     db.Lesson.hasMany(db.LessonAttempt, {
+      as: 'lessonAttempts',
       foreignKey: 'lessonId',
     });
 
