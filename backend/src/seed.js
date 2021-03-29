@@ -32,7 +32,7 @@ const seed = async () => {
     const students = await db.Student.bulkCreate(studentsData);
 
     const theClass = await db.Class.create({
-      id: uuid.v4(),
+      id: 'b5fb3711-1157-4f9b-b387-d9e549561012',
       name: 'My first class',
     });
 
@@ -40,7 +40,7 @@ const seed = async () => {
     await theClass.addStudents(students);
 
     const course = await db.Course.create({
-      id: uuid.v4(),
+      id: '94e8e1fc-dd2d-448d-a829-f7cc4369fd24',
       classId: theClass.id,
       name: 'My first course',
     });

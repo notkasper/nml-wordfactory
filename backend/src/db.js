@@ -118,6 +118,7 @@ db.setupModels = async () => {
     });
 
     db.LessonAttempt.belongsTo(db.Lesson, {
+      as: 'lesson',
       foreignKey: 'lessonId',
     });
 
