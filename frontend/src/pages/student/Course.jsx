@@ -45,7 +45,7 @@ const Course = (props) => {
             }
             style={{ width: '100%' }}
           >
-            {lessons.map((lesson, index) => (
+            {lessons.map((lesson) => (
               <Lesson {...lesson} />
             ))}
           </List>
