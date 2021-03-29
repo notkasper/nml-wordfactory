@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import {
   BrowserRouter as Router,
@@ -40,6 +40,8 @@ import LessonView from './pages/home';
 import Profile from './pages/profile';
 import Class from './pages/class';
 import Lesson from './pages/lesson';
+import Student from './pages/student';
+import StudentLesson from './pages/studentLesson';
 // STORES
 import authStore from './stores/auth';
 
@@ -253,6 +255,18 @@ export default function Dashboard() {
                 exact
                 path="/dashboard/lessons/:lessonId"
                 render={(props) => <Lesson {...props} authStore={authStore} />}
+              />
+              <Route
+                exact
+                path="/dashboard/students/:studentId"
+                render={(props) => <Student {...props} authStore={authStore} />}
+              />
+              <Route
+                exact
+                path="/dashboard/students/:studentId/lessons/:lessonId"
+                render={(props) => (
+                  <StudentLesson {...props} authStore={authStore} />
+                )}
               />
             </Switch>
           </Container>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import Student from './Student';
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const Lesson = (props) => {
   const classes = useStyles();
   const params = useParams();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
@@ -54,7 +55,8 @@ const Lesson = (props) => {
   };
 
   const loadCourses = async () => {
-    const response = await service.loadCourses(params.classId);
+    const classId = params.classId;
+    const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
   };
@@ -101,10 +103,13 @@ const Lesson = (props) => {
       ? [studentFilterValue]
       : students.slice(start, start + PAGE_SIZE);
 
+    const onClick = (studentId) =>
+      history.push(`/dashboard/students/${studentId}`);
+
     return (
       <List className={classes.root}>
         {shownStudents.map((student) => (
-          <Student {...student} key={student.id} />
+          <Student {...student} onClick={() => onClick(student.id)} />
         ))}
       </List>
     );

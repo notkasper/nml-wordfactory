@@ -26,4 +26,12 @@ const getStudents = async (req, res) => {
   res.status(200).send({ data: students });
 };
 
-module.exports = { getStudents };
+const getStudent = async (req, res) => {
+  const { id } = req.params;
+
+  const student = await db.Student.findByPk(id);
+
+  res.status(200).send({ data: student });
+};
+
+module.exports = { getStudents, getStudent };

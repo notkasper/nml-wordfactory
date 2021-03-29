@@ -12,11 +12,11 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 const useStyles = makeStyles((theme) => ({}));
 
 const Student = (props) => {
-  const { id, name, email } = props;
+  const { id, name, email, onClick } = props;
   const classes = useStyles();
 
   return (
-    <ListItem alignItems="flex-start" key={id} button>
+    <ListItem alignItems="flex-start" key={id} button onClick={onClick}>
       <ListItemAvatar>
         <Avatar alt="Travis Howard" src="/static/images/avatar.png" />
       </ListItemAvatar>
