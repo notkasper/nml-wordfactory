@@ -7,8 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 const Lesson = (props) => {
-  const history = useHistory();
   const { name, id, prefix } = props;
+  const history = useHistory();
   const onClick = () => history.push(`lessons/${id}`);
 
   return (

@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Course = (props) => {
+  const { name, id, lessons } = props;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
   const onChange = () => setExpanded(!expanded);
-  const { name, id, lessons } = props;
   return (
     <ListItem alignItems="flex-start" key={id}>
       <Accordion
