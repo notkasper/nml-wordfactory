@@ -116,11 +116,7 @@ const Lesson = (props) => {
   };
 
   const renderCourses = () => {
-    const start = page * PAGE_SIZE;
-
-    const shownCourses = courseFilterValue
-      ? [courseFilterValue]
-      : courses.slice(start, start + PAGE_SIZE);
+    const shownCourses = courseFilterValue ? [courseFilterValue] : courses;
 
     return (
       <List className={classes.root}>
