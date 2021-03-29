@@ -257,7 +257,7 @@ export default function Dashboard() {
               />
               <Route
                 exact
-                path="/dashboard/student/:studentId"
+                path="/dashboard/students/:studentId"
                 render={(props) => <Student {...props} authStore={authStore} />}
               />
             </Switch>
