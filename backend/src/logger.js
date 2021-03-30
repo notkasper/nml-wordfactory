@@ -1,12 +1,9 @@
 const bunyan = require('bunyan');
-const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 const PrettyStream = require('bunyan-prettystream');
 
 const package = require('../package.json');
-
-dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const mode = process.env.NODE_ENV === 'production' ? 'long' : 'short';
 const prettyStream = new PrettyStream({ mode });
@@ -18,6 +15,7 @@ if (!fs.existsSync(productionLogFolder)) {
 }
 
 const productionStream = {
+  level: 'debug',
   type: 'rotating-file',
   path: path.join(productionLogFolder, '/production.log'),
   period: '1d',

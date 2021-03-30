@@ -1,7 +1,10 @@
-const express = require('express');
 const dotenv = require('dotenv');
-const morgan = require('morgan');
 const path = require('path');
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+
+const express = require('express');
+const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
@@ -20,10 +23,7 @@ const classRouter = require('./routes/class');
 const studentRouter = require('./routes/students');
 const lessonAttemptRouter = require('./routes/lessonAttempt');
 const db = require('./db');
-
 const logger = require('./logger');
-
-dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const start = async () => {
   await db.initialize();
