@@ -3,13 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import service from '../../service';
-import Doughnut from './Doughnut';
-import Histogram from './Histogram';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import service from '../../service';
+import Doughnut from './Doughnut';
+import Histogram from './Histogram';
 import PageContainer from '../_shared/PageContainer';
 
 const useStyles = makeStyles((theme) => ({}));
@@ -77,7 +77,6 @@ const addPerformance = (lessonAttempts) => {
 const Lesson = (props) => {
   const classes = useStyles();
   const params = useParams();
-  const [value, setValue] = useState(0);
   const [lessonAttempts, setLessonAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
 

@@ -48,6 +48,12 @@ const loadLessonAttempts = async (lessonId) => {
   return response;
 };
 
+const loadLesson = async (lessonId) => {
+  const req = request.get(`/api/v1/lessons/${lessonId}`);
+  const response = await handleResponse(req);
+  return response;
+};
+
 const login = async (email, password) => {
   const req = request.post('/api/v1/auth/login').send({
     email,
@@ -70,6 +76,7 @@ const service = {
   loadCourses,
   loadClassList,
   loadLessonAttempts,
+  loadLesson,
   login,
 };
 
