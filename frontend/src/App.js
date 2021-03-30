@@ -18,8 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import Badge from '@material-ui/core/Badge';
-// import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -47,14 +46,11 @@ import authStore from './stores/auth';
 
 defaults.global.plugins.colorschemes.scheme = Classic10;
 
-const drawerWidth = 240;
+const drawerWidth = 245;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
     display: 'flex',
@@ -183,11 +179,9 @@ export default function Dashboard() {
             >
               Dashboard
             </Typography>
-            {/* <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
+            <IconButton color="inherit" onClick={goToProfile}>
+              <AccountCircle />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" className={classes.drawerPaper} open>
@@ -209,12 +203,6 @@ export default function Dashboard() {
           <Divider />
           <List>
             <ListSubheader inset>Persoonlijke instellingen</ListSubheader>
-            <ListItem button onClick={goToProfile}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profiel" />
-            </ListItem>
             <ListItem button>
               <ListItemIcon>
                 <AccountBalanceWalletIcon />
