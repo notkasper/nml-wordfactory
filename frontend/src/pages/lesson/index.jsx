@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import PageContainer from '../_shared/PageContainer';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -99,27 +100,31 @@ const Lesson = (props) => {
     return <CircularProgress />;
   }
 
-  // TODO: Make this a grid
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <Doughnut lessonAttempts={lessonAttempts} title="Algemene voortgang" />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Histogram lessonAttempts={lessonAttempts} title="Cijfer verdeling" />
-      </Grid>
-      <Grid item xs={12}>
-        <Paper>
-          <DataGrid
-            autoHeight
-            rows={lessonAttempts}
-            columns={columns}
-            pageSize={32}
-            checkboxSelection
+    <PageContainer maxWidth="lg">
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Doughnut
+            lessonAttempts={lessonAttempts}
+            title="Algemene voortgang"
           />
-        </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Histogram lessonAttempts={lessonAttempts} title="Cijfer verdeling" />
+        </Grid>
+        <Grid item xs={12}>
+          <Paper>
+            <DataGrid
+              autoHeight
+              rows={lessonAttempts}
+              columns={columns}
+              pageSize={32}
+              checkboxSelection
+            />
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </PageContainer>
   );
 };
 

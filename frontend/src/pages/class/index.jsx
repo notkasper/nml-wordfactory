@@ -13,6 +13,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Pagination from '@material-ui/lab/Pagination';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import service from '../../service';
 import Course from './Course';
 
@@ -128,65 +131,78 @@ const Lesson = (props) => {
   };
 
   return (
-    <Container maxWidth="lg" className={classes.container}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h4" className={classes.marginBottom}>
-            {theClass.name}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h5" className={classes.marginBottom}>
-            Cursussen
-          </Typography>
-          <Autocomplete
-            value={courseFilterValue}
-            onChange={onCourseFilterChange}
-            inputValue={courseFilterInputValue}
-            onInputChange={onCourseFilterInputChange}
-            id="combo-box-demo"
-            options={courses}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <TextField {...params} label="Cursus zoeken" variant="outlined" />
-            )}
-          />
-          <Divider style={{ margin: '1rem 0' }} />
-          <Paper>{renderCourses()}</Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h5" className={classes.marginBottom}>
-            Leerlingen
-          </Typography>
-          <Autocomplete
-            value={studentFilterValue}
-            onChange={onStudentFilterChange}
-            inputValue={studentFilterInputValue}
-            onInputChange={onStudentFilterInputChange}
-            id="combo-box-demo"
-            options={students}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Leerling zoeken"
-                variant="outlined"
+    <>
+      <AppBar position="static">
+        <Tabs value={0} onChange={() => {}} aria-label="simple tabs example">
+          <Tab label="Item One" />
+          <Tab label="Item Two" />
+          <Tab label="Item Three" />
+        </Tabs>
+      </AppBar>
+      <Container maxWidth="lg">
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h4" className={classes.marginBottom}>
+              {theClass.name}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h5" className={classes.marginBottom}>
+              Cursussen
+            </Typography>
+            <Autocomplete
+              value={courseFilterValue}
+              onChange={onCourseFilterChange}
+              inputValue={courseFilterInputValue}
+              onInputChange={onCourseFilterInputChange}
+              id="combo-box-demo"
+              options={courses}
+              getOptionLabel={(option) => option.name}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Cursus zoeken"
+                  variant="outlined"
+                />
+              )}
+            />
+            <Divider style={{ margin: '1rem 0' }} />
+            <Paper>{renderCourses()}</Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h5" className={classes.marginBottom}>
+              Leerlingen
+            </Typography>
+            <Autocomplete
+              value={studentFilterValue}
+              onChange={onStudentFilterChange}
+              inputValue={studentFilterInputValue}
+              onInputChange={onStudentFilterInputChange}
+              id="combo-box-demo"
+              options={students}
+              getOptionLabel={(option) => option.name}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Leerling zoeken"
+                  variant="outlined"
+                />
+              )}
+            />
+            <Divider style={{ margin: '1rem 0' }} />
+            <Paper>{renderStudents()}</Paper>
+            {studentFilterValue ? null : (
+              <Pagination
+                className={classes.pagination}
+                count={Math.ceil(students.length / 10)}
+                color="primary"
+                onChange={onChangePage}
               />
             )}
-          />
-          <Divider style={{ margin: '1rem 0' }} />
-          <Paper>{renderStudents()}</Paper>
-          {studentFilterValue ? null : (
-            <Pagination
-              className={classes.pagination}
-              count={Math.ceil(students.length / 10)}
-              color="primary"
-              onChange={onChangePage}
-            />
-          )}
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 };
 

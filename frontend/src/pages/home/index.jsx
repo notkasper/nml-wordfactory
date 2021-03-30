@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -9,6 +8,7 @@ import Chart from './Chart';
 import Class from './Class';
 import Orders from './Orders';
 import service from '../../service';
+import PageContainer from '../_shared/PageContainer';
 
 const drawerWidth = 240;
 
@@ -76,10 +76,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     overflow: 'auto',
   },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
@@ -126,7 +122,7 @@ const Dashboard = (props) => {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (
-    <Container maxWidth="lg" className={classes.container}>
+    <PageContainer>
       <Grid container spacing={3}>
         {/* Recent Deposits */}
         {classList.map((aClass) => (
@@ -149,7 +145,7 @@ const Dashboard = (props) => {
           </Paper>
         </Grid>
       </Grid>
-    </Container>
+    </PageContainer>
   );
 };
 

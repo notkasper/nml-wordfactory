@@ -219,45 +219,43 @@ export default function Dashboard() {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-            {/* ACTUAL INNTER COMPONENT */}
-            <Switch>
-              <Route
-                exact
-                path="/dashboard/home"
-                render={(props) => (
-                  <LessonView {...props} authStore={authStore} />
-                )}
-              />
-              <Route
-                exact
-                path="/dashboard/profile"
-                render={(props) => <Profile {...props} authStore={authStore} />}
-              />
-              <Route
-                exact
-                path="/dashboard/classes/:classId"
-                render={(props) => <Class {...props} authStore={authStore} />}
-              />
-              <Route
-                exact
-                path="/dashboard/lessons/:lessonId"
-                render={(props) => <Lesson {...props} authStore={authStore} />}
-              />
-              <Route
-                exact
-                path="/dashboard/students/:studentId"
-                render={(props) => <Student {...props} authStore={authStore} />}
-              />
-              <Route
-                exact
-                path="/dashboard/students/:studentId/lessons/:lessonId"
-                render={(props) => (
-                  <StudentLesson {...props} authStore={authStore} />
-                )}
-              />
-            </Switch>
-          </Container>
+          {/* ACTUAL INNTER COMPONENT */}
+          <Switch>
+            <Route
+              exact
+              path="/dashboard/home"
+              render={(props) => (
+                <LessonView {...props} authStore={authStore} />
+              )}
+            />
+            <Route
+              exact
+              path="/dashboard/profile"
+              render={(props) => <Profile {...props} authStore={authStore} />}
+            />
+            <Route
+              exact
+              path="/dashboard/classes/:classId"
+              render={(props) => <Class {...props} authStore={authStore} />}
+            />
+            <Route
+              exact
+              path="/dashboard/lessons/:lessonId"
+              render={(props) => <Lesson {...props} authStore={authStore} />}
+            />
+            <Route
+              exact
+              path="/dashboard/students/:studentId"
+              render={(props) => <Student {...props} authStore={authStore} />}
+            />
+            <Route
+              exact
+              path="/dashboard/students/:studentId/lessons/:lessonId"
+              render={(props) => (
+                <StudentLesson {...props} authStore={authStore} />
+              )}
+            />
+          </Switch>
         </main>
       </>
     );
