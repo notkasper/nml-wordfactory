@@ -11,7 +11,7 @@ const LessonContent = (props) => {
 
   const loadLesson = async () => {
     setLoading(true);
-    const response = await service.loadLessonAttempts(params.lessonId);
+    const response = await service.loadLesson(params.lessonId);
     if (!response) {
       return;
     }
@@ -26,6 +26,8 @@ const LessonContent = (props) => {
   if (loading) {
     return <CircularProgress />;
   }
+
+  console.log(lesson);
 
   return <PageContainer>Here will be questions</PageContainer>;
 };

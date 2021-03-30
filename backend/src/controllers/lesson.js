@@ -25,10 +25,26 @@ const getLessons = async (req, res) => {
 
 const getLesson = async (req, res) => {
   const {
-    params: { id: lessonId },
+    params: { id },
   } = req;
 
-  const lesson = await db.Lesson.findByPk(lessonId);
+  const lesson = await db.Lesson.findOne({
+    where: {
+      id,
+    },
+    include: [
+      {
+        model: db.QuestionGroup,
+        as: 'questionGroups',
+        include: [
+          {
+            model: db.Question,
+            as: 'questions',
+          },
+        ],
+      },
+    ],
+  });
   if (!lesson) {
     return res.status(404).send({ message: 'Lesson not found' });
   }
