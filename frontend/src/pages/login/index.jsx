@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
+import loginBanner from '../../assets/loginBanner.jpg';
 
 const Copyright = () => {
   return (
@@ -27,15 +28,12 @@ const Copyright = () => {
   );
 };
 
-const sideImage =
-  'https://images.unsplash.com/photo-1588072432836-e10032774350?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1952&q=80';
-
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
   image: {
-    backgroundImage: `url(${sideImage})`,
+    backgroundImage: `url(${loginBanner})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light'
