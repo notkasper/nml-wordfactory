@@ -204,7 +204,7 @@ export default function Dashboard() {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {/* ACTUAL INNTER COMPONENT */}
+          {/* ACTUAL INNER COMPONENT */}
           <Switch>
             <Route
               exact
