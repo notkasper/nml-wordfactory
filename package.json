@@ -4,7 +4,7 @@
   "description": "yes",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "dev": "concurrently -c \"blue.bold,magenta.bold\" -n \"back-end,front-end\" -p name \"cd backend && npm run dev\" \"cd frontend && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

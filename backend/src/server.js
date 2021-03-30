@@ -21,8 +21,7 @@ const studentRouter = require('./routes/students');
 const lessonAttemptRouter = require('./routes/lessonAttempt');
 const db = require('./db');
 
-const { customLogger } = require('./logger');
-const logger = customLogger('SERVER');
+const logger = require('./logger');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 

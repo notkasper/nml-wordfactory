@@ -6,8 +6,7 @@ const path = require('path');
 const db = require('./db');
 const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
 
-const { customLogger } = require('./logger');
-const logger = customLogger('SEEDING');
+const logger = require('./logger');
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
