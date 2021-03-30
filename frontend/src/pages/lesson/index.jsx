@@ -102,10 +102,10 @@ const Lesson = (props) => {
   // TODO: Make this a grid
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item xs={12} md={6}>
         <Doughnut lessonAttempts={lessonAttempts} title="Algemene voortgang" />
       </Grid>
-      <Grid item xs={12} md={8} lg={8}>
+      <Grid item xs={12} md={6}>
         <Histogram lessonAttempts={lessonAttempts} title="Cijfer verdeling" />
       </Grid>
       <Grid item xs={12}>
