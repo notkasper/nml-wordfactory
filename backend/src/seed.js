@@ -1,15 +1,11 @@
-const uuid = require('uuid');
-const _ = require('lodash');
 const dotenv = require('dotenv');
 const path = require('path');
 
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+
 const db = require('./db');
 const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
-
-const { customLogger } = require('./logger');
-const logger = customLogger('SEEDING');
-
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+const logger = require('./logger');
 
 const seed = async () => {
   logger.info('Seeding initialized');
