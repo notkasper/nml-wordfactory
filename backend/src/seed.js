@@ -33,7 +33,7 @@ const seed = async () => {
 
     const theClass = await db.Class.create({
       id: 'b5fb3711-1157-4f9b-b387-d9e549561012',
-      name: 'My first class',
+      name: 'Oefen klas 1',
     });
 
     await theClass.addTeacher(teacher);
