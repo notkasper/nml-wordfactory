@@ -38,6 +38,7 @@ import Class from './pages/class';
 import Lesson from './pages/lesson';
 import Student from './pages/student';
 import StudentLesson from './pages/studentLesson';
+import QuestionStats from './pages/questionStats';
 // STORES
 import authStore from './stores/auth';
 
@@ -238,6 +239,13 @@ export default function Dashboard() {
               path="/dashboard/students/:studentId/lessons/:lessonId"
               render={(props) => (
                 <StudentLesson {...props} authStore={authStore} />
+              )}
+            />
+            <Route
+              exact
+              path="/dashboard/questions/:questionId/stats"
+              render={(props) => (
+                <QuestionStats {...props} authStore={authStore} />
               )}
             />
           </Switch>

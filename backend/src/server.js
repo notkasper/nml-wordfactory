@@ -88,7 +88,6 @@ const start = async () => {
 
   // MUST have all 4 of these parameters!
   app.use((error, req, res, next) => {
-    console.log(error);
     logger.error(error);
     res.status(500).send({ message: 'Server error' });
   });

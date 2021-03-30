@@ -4,19 +4,21 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Open from '../_shared/questionTypes/Open';
+import MultipleChoice from '../_shared/questionTypes/MultipleChoice';
+import Button from '@material-ui/core/Button';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 
 const useStyles = makeStyles((theme) => ({}));
 
 const Question = (props) => {
   const { type } = props;
   switch (type) {
-    case 'open':
-      return <Open {...props} />;
+    case 'multipleChoice':
+      return <MultipleChoice {...props} />;
     default:
       return (
         <p>{`Er is iets fout gegaan, ${type} wordt niet herkend als vraag type`}</p>
@@ -29,6 +31,10 @@ const QuestionGroup = (props) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const onChange = () => setExpanded(!expanded);
+  const history = useHistory();
+
+  const goToQuestionStats = (questionId) =>
+    history.push(`/dashboard/questions/${questionId}/stats`);
 
   return (
     <Accordion
@@ -45,18 +51,21 @@ const QuestionGroup = (props) => {
         <Typography>{name}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <List
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Lessen
-            </ListSubheader>
-          }
-          style={{ width: '100%' }}
-        >
-          {questions.map((question) => (
-            <ListItem>
-              <Question {...question} />
-            </ListItem>
+        <List subheader={questions[0].instruction}>
+          {questions.map((question, index) => (
+            <>
+              <ListItem>
+                <Question {...question} index={index} />
+              </ListItem>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<EqualizerIcon />}
+                onClick={() => goToQuestionStats(question.id)}
+              >
+                Bekijk statistieken
+              </Button>
+            </>
           ))}
         </List>
       </AccordionDetails>
