@@ -2,24 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
-import { useParams, useHistory } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
-import List from '@material-ui/core/List';
-import Student from './Student';
-import Paper from '@material-ui/core/Paper';
+import { useParams } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
-import Pagination from '@material-ui/lab/Pagination';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import service from '../../service';
-import Course from './Course';
-
-const PAGE_SIZE = 7;
+import Courses from './Courses';
+import Students from './Students';
+import PageContainer from '../_shared/PageContainer';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import PeopleIcon from '@material-ui/icons/People';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -30,20 +24,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const TabContent = (props) => {
+  const { value, index, children } = props;
+  if (value !== index) {
+    return null;
+  }
+  return children;
+};
+
 const Lesson = (props) => {
   const classes = useStyles();
   const params = useParams();
-  const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const [value, setValue] = useState(0);
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [page, setPage] = useState(0);
-  const [studentFilterValue, setStudentFilterValue] = useState(null);
-  const [studentFilterInputValue, setStudentFilterInputValue] = useState('');
-
-  const [courseFilterValue, setCourseFilterValue] = useState(null);
-  const [courseFilterInputValue, setCourseFilterInputValue] = useState('');
 
   const loadStudents = async () => {
     const response = await service.loadStudents(params.classId);
@@ -71,137 +67,37 @@ const Lesson = (props) => {
     setLoading(false);
   };
 
+  const onChangeTab = (event, newValue) => setValue(newValue);
+
   useEffect(() => {
     loadAll();
   }, []);
-
-  const onStudentFilterInputChange = (event, newInputValue) => {
-    setStudentFilterInputValue(newInputValue);
-  };
-
-  const onStudentFilterChange = (event, newValue) => {
-    setStudentFilterValue(newValue);
-  };
-
-  const onCourseFilterInputChange = (event, newInputValue) => {
-    setCourseFilterInputValue(newInputValue);
-  };
-
-  const onCourseFilterChange = (event, newValue) => {
-    setCourseFilterValue(newValue);
-  };
-
-  const onChangePage = (event, value) => {
-    setPage(value);
-  };
 
   if (loading) {
     return <CircularProgress />;
   }
 
-  const renderStudents = () => {
-    const start = page * PAGE_SIZE;
-
-    const shownStudents = studentFilterValue
-      ? [studentFilterValue]
-      : students.slice(start, start + PAGE_SIZE);
-
-    const onClick = (studentId) =>
-      history.push(`/dashboard/students/${studentId}`);
-
-    return (
-      <List className={classes.root}>
-        {shownStudents.map((student) => (
-          <Student {...student} onClick={() => onClick(student.id)} />
-        ))}
-      </List>
-    );
-  };
-
-  const renderCourses = () => {
-    const shownCourses = courseFilterValue ? [courseFilterValue] : courses;
-
-    return (
-      <List className={classes.root}>
-        {shownCourses.map((course) => (
-          <Course {...course} />
-        ))}
-      </List>
-    );
-  };
-
   return (
     <>
-      <AppBar position="static">
-        <Tabs value={0} onChange={() => {}} aria-label="simple tabs example">
-          <Tab label="Item One" />
-          <Tab label="Item Two" />
-          <Tab label="Item Three" />
+      <AppBar position="relative">
+        <Tabs value={value} onChange={onChangeTab}>
+          <Tab label="Cursussen" icon={<MenuBookIcon />} />
+          <Tab label="Studenten" icon={<PeopleIcon />} />
         </Tabs>
       </AppBar>
-      <Container maxWidth="lg">
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h4" className={classes.marginBottom}>
-              {theClass.name}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" className={classes.marginBottom}>
-              Cursussen
-            </Typography>
-            <Autocomplete
-              value={courseFilterValue}
-              onChange={onCourseFilterChange}
-              inputValue={courseFilterInputValue}
-              onInputChange={onCourseFilterInputChange}
-              id="combo-box-demo"
-              options={courses}
-              getOptionLabel={(option) => option.name}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Cursus zoeken"
-                  variant="outlined"
-                />
-              )}
-            />
-            <Divider style={{ margin: '1rem 0' }} />
-            <Paper>{renderCourses()}</Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" className={classes.marginBottom}>
-              Leerlingen
-            </Typography>
-            <Autocomplete
-              value={studentFilterValue}
-              onChange={onStudentFilterChange}
-              inputValue={studentFilterInputValue}
-              onInputChange={onStudentFilterInputChange}
-              id="combo-box-demo"
-              options={students}
-              getOptionLabel={(option) => option.name}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Leerling zoeken"
-                  variant="outlined"
-                />
-              )}
-            />
-            <Divider style={{ margin: '1rem 0' }} />
-            <Paper>{renderStudents()}</Paper>
-            {studentFilterValue ? null : (
-              <Pagination
-                className={classes.pagination}
-                count={Math.ceil(students.length / 10)}
-                color="primary"
-                onChange={onChangePage}
-              />
-            )}
-          </Grid>
+      <PageContainer>
+        <Grid item xs={12}>
+          <Typography variant="h4" className={classes.marginBottom}>
+            {theClass.name}
+          </Typography>
         </Grid>
-      </Container>
+        <TabContent index={0} value={value}>
+          <Courses courses={courses} />
+        </TabContent>
+        <TabContent index={1} value={value}>
+          <Students students={students} />
+        </TabContent>
+      </PageContainer>
     </>
   );
 };
