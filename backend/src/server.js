@@ -21,6 +21,9 @@ const studentRouter = require('./routes/students');
 const lessonAttemptRouter = require('./routes/lessonAttempt');
 const db = require('./db');
 
+const { customLogger } = require('./logger');
+const logger = customLogger('SERVER');
+
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const start = async () => {
@@ -85,19 +88,19 @@ const start = async () => {
 
   // MUST have all 4 of these parameters!
   app.use((error, req, res, next) => {
-    console.error(error);
+    logger.error(error);
     res.status(500).send({ message: 'Server error' });
   });
 
   const server = app.listen(
     port,
-    console.log(
+    logger.info(
       `Server running in ${process.env.NODE_ENV} mode on port ${port}`
     )
   );
 
   process.on('unhandledRejection', (error, promise) => {
-    console.error(error);
+    logger.error(error);
     server.close(() => {
       process.exit(1);
     });
