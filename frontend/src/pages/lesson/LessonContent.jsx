@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PageContainer from '../_shared/PageContainer';
+import QuestionGroup from '../_shared/QuestionGroup';
 import service from '../../service';
 
 const LessonContent = (props) => {
@@ -27,9 +28,18 @@ const LessonContent = (props) => {
     return <CircularProgress />;
   }
 
-  console.log(lesson);
+  // TODO: Figure out why this is needed, and remove it hopefully
+  if (!loading && !lesson) {
+    return <p>Les kon niet worden geladen</p>;
+  }
 
-  return <PageContainer>Here will be questions</PageContainer>;
+  return (
+    <PageContainer>
+      {lesson.questionGroups.map((questionGroup) => (
+        <QuestionGroup {...questionGroup} />
+      ))}
+    </PageContainer>
+  );
 };
 
 export default LessonContent;
