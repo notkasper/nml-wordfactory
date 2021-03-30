@@ -79,7 +79,7 @@ const Lesson = (props) => {
 
   return (
     <>
-      <AppBar position="relative">
+      <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
           <Tab label="Cursussen" icon={<MenuBookIcon />} />
           <Tab label="Studenten" icon={<PeopleIcon />} />

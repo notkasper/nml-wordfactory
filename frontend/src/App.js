@@ -15,8 +15,6 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Container from '@material-ui/core/Container';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ListItem from '@material-ui/core/ListItem';
@@ -24,15 +22,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import FaceIcon from '@material-ui/icons/Face';
-import PersonIcon from '@material-ui/icons/Person';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { observer } from 'mobx-react-lite';
 import { defaults } from 'react-chartjs-2';
-import 'chartjs-plugin-colorschemes';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
+import 'chartjs-plugin-colorschemes';
 // PAGES
 import Login from './pages/login';
 import LessonView from './pages/home';
@@ -51,13 +48,6 @@ const drawerWidth = 245;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -161,14 +151,8 @@ export default function Dashboard() {
           className={clsx(classes.appBar, classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={goBack}
-              className={clsx(classes.menuButton, classes.menuButtonHidden)}
-            >
-              <MenuIcon />
+            <IconButton onClick={goBack}>
+              <ChevronLeftIcon style={{ color: 'white' }} />
             </IconButton>
             <Typography
               component="h1"
@@ -184,14 +168,15 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" className={classes.drawerPaper} open>
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={goBack}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
+        <Drawer
+          variant="permanent"
+          className={classes.drawerPaper}
+          open
+          style={{ paddingTop: '50px' }}
+        >
+          <List style={{ padding: 0 }}>
+            <div style={{ marginTop: '64px', padding: 0 }} />
+            <Divider />
             <ListSubheader inset>Leraren dashboard</ListSubheader>
             <ListItem button onClick={goToClasses}>
               <ListItemIcon>
