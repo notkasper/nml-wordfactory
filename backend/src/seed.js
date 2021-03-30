@@ -6,10 +6,13 @@ const path = require('path');
 const db = require('./db');
 const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
 
+const { customLogger } = require('./logger');
+const logger = customLogger('SEEDING');
+
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const seed = async () => {
-  console.log('[SEEDING]: Seeding initialized');
+  logger.info('Seeding initialized');
   await db.initialize();
 
   await db.Class.destroy({ where: {} });
@@ -122,9 +125,9 @@ const seed = async () => {
       }
     }
 
-    console.log('[SEEDING]: Seeding completed');
+    logger.info('Seeding completed');
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   } finally {
     db.close();
   }

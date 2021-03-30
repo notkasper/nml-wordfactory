@@ -16,6 +16,9 @@ const StudentClass = require('./models/studentClass');
 const Teacher = require('./models/teacher');
 const TeacherClass = require('./models/teacherClass');
 
+const { customLogger } = require('./logger');
+const logger = customLogger('DATABASE');
+
 const db = {};
 
 // models and relationships can be found at this url: https://drawsql.app/radboud-university/diagrams/wordfactory-teacher-dashboard
@@ -150,9 +153,9 @@ db.setupModels = async () => {
       foreignKey: 'questionId',
     });
 
-    console.log('[DATABASE]: All models created successfully');
+    logger.info('All models created successfully');
   } catch (error) {
-    console.error('Error setting up models');
+    logger.error('Error setting up models');
     throw error;
   }
 };
@@ -172,10 +175,10 @@ db.connect = async () => {
     );
     await sequelize.authenticate();
     db.sequelize = sequelize;
-    console.log('[DATABASE]: Connected to database successfully');
+    logger.info('Connected to database successfully');
     return sequelize;
   } catch (error) {
-    console.error('Error connecting to database');
+    logger.error('Error connecting to database');
     throw error;
   }
 };
@@ -199,11 +202,11 @@ db.migrate = async () => {
     });
 
     await umzug.up();
-    console.log('[DATABASE]: All migrations performed successfully');
+    logger.info('All migrations performed successfully');
     db.umzug = umzug;
     return umzug;
   } catch (error) {
-    console.error('Error migrating database');
+    logger.error('Error migrating database');
     throw error;
   }
 };
