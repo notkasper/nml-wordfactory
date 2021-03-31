@@ -7,6 +7,10 @@ module.exports = (sequelize) =>
       primaryKey: true,
       type: DataTypes.UUID,
     },
+    index: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     prefix: {
       type: DataTypes.STRING,
       allowNull: false,

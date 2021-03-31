@@ -50,6 +50,7 @@ const seed = async () => {
       const createdLesson = await db.Lesson.create({
         id: lesson.lessonId,
         courseId: course.id,
+        index: lesson.lessonIndex,
         prefix: lesson.lessonPrefix,
         instruction: lesson.lessonInstruction,
         name: lesson.lessonTitle,
