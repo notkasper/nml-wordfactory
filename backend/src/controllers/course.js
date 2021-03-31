@@ -27,6 +27,7 @@ const getCourses = async (req, res) => {
         },
       },
     ],
+    order: [[{ model: db.Lesson, as: 'lessons' }, 'index', 'ASC']],
   });
 
   res.status(200).send({ data: courses });

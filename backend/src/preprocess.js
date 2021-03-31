@@ -189,7 +189,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     return items[0].assignment.words.map((w, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
-      type: 'multipleChoice',
+      type: 'multipleChoiceGroup',
       instruction: lesson.lessonInstruction,
       data: {
         word: w.word,
@@ -208,7 +208,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     return items[0].assignment.words.map((w, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
-      type: 'open',
+      type: 'openGroup',
       instruction: lesson.lessonInstruction,
       data: {
         word: w.word,
