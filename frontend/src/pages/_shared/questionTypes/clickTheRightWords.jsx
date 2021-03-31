@@ -16,8 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClickTheRightWords = (props) => {
-  const { id, data, instruction } = props;
-  console.log(props);
+  const { id } = props;
   const classes = useStyles();
 
   return (
@@ -25,13 +24,12 @@ const ClickTheRightWords = (props) => {
       <Grid container>
         <Grid item xs={12}>
           <Typography variant="body1" className={classes.marginBottom}>
-            {instruction}
+            {/* {instruction} */}
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography>{data.value}</Typography>
+          <Typography>Oh oh, dit wordt nog niet ondersteund.</Typography>
         </Grid>
-        <Grid item xs={12}></Grid>
       </Grid>
     </ListItem>
   );
