@@ -16,50 +16,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MultipleChoice = (props) => {
-  const { id } = props;
+  const { id, instruction, data } = props;
   const classes = useStyles();
   const [value, setValue] = useState('female');
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
   // TODO WFT-72: Sometimes multiple choice questions have multiple nested multiple choice questions inside.. for now only show the first one
-  let data = props.data;
-  if (data.morphemes?.length) {
-    data = props.data.morphemes[0];
-  }
 
   return (
-    <ListItem alignItems="flex-start" key={id}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography>{data.value}</Typography>
+    <>
+      <ListItem alignItems="flex-start" key={id}>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography variant="body1" className={classes.marginBottom}>
+              {instruction}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>{data.value}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">
+                Selecteer het juiste antwoord
+              </FormLabel>
+              <RadioGroup aria-label="gender" name="gender1" value={value}>
+                {data.options.map((option) => (
+                  <FormControlLabel
+                    value={option.value}
+                    control={<Radio />}
+                    label={option.value}
+                    disabled
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">
-              Selecteer het juiste antwoord
-            </FormLabel>
-            <RadioGroup
-              aria-label="gender"
-              name="gender1"
-              value={value}
-              onChange={handleChange}
-            >
-              {data.options.map((option) => (
-                <FormControlLabel
-                  value={option.value}
-                  control={<Radio />}
-                  label={option.value}
-                  disabled
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </ListItem>
+      </ListItem>
+    </>
   );
 };
 
