@@ -13,6 +13,7 @@ const typeLabels = {
   clickTheRightWords: 'Selecteer het correcte antwoord',
   multipleChoice: 'Meerkeuze',
   divideTheWord: 'Verdeel het woord',
+  combineAndFillInTheBlanks: 'Combineer en vul in',
 };
 
 const columns = [
@@ -41,7 +42,7 @@ const columns = [
     width: 200,
     valueGetter: (data) => {
       const type = data.getValue('questions')[0].type;
-      const label = typeLabels[type];
+      const label = typeLabels[type] || type;
       return label;
     },
   },
