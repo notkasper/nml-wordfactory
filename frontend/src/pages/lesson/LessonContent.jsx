@@ -39,7 +39,7 @@ const columns = [
   {
     field: 'type',
     headerName: 'Type',
-    width: 200,
+    width: 175,
     valueGetter: (data) => {
       const type = data.getValue('questions')[0].type;
       const label = typeLabels[type] || type;
@@ -50,6 +50,12 @@ const columns = [
     field: 'averageScore',
     headerName: 'Gem. score (%)',
     width: 150,
+    type: 'number',
+  },
+  {
+    field: 'completions',
+    headerName: 'Klaar',
+    width: 100,
     type: 'number',
   },
   {

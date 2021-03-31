@@ -29,30 +29,30 @@ const addPerformance = (lessonAttempts) => {
 
 const addQuestionGroupAverages = (lesson) => {
   lesson.questionGroups = lesson.questionGroups.map((questionGroup) => {
-    const { correct, total } = questionGroup.questionGroupAttempts.reduce(
+    const {
+      correct,
+      total,
+      completions,
+    } = questionGroup.questionGroupAttempts.reduce(
       (acc, curr) => {
-        if (curr.correct) {
+        if (curr.isCompleted) {
           acc.correct += curr.correct;
-          acc.total += curr.correct;
-        }
-        if (curr.incorrect) {
-          acc.total += curr.incorrect;
-        }
-        if (curr.missed) {
-          acc.total += curr.missed;
+          acc.total += curr.correct + curr.incorrect + curr.missed;
+          acc.completions += 1;
         }
         return acc;
       },
       {
         correct: 0,
         total: 0,
+        completions: 0,
       }
     );
     let averageScore = Math.round((correct / total) * 100) / 10;
     if (!averageScore) {
       averageScore = 0;
     }
-    return { ...questionGroup, averageScore };
+    return { ...questionGroup, averageScore, completions };
   });
 
   return lesson;
