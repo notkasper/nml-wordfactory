@@ -1,24 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { DataGrid } from '@material-ui/data-grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import Grid from '@material-ui/core/Grid';
 import Title from './Title';
+import service from '../../service';
 
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
+const convertDateToReadableString = (date) => {
+  return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
 }
 
-const rows = [
-  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Les 1', 'vraag 6', 'x'),
-  createData(1, '16 Mar, 2019', 'Paul McCartney', 'Les 1', 'vraag 6', 'x'),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Les 1', 'vraag 6', 'x'),
-  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Les 1', 'vraag 6', '√'),
-  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Les 1', 'vraag 6', '√'),
+const columns = [
+  {
+    field: 'updatedAt',
+    headerName: 'Datum',
+    width: 160,
+    renderCell: (data) => convertDateToReadableString(data.getValue('updatedAt'))
+  },
+  {
+    field: 'student',
+    headerName: 'Leerling',
+    width: 200,
+    valueGetter: (data) => data.getValue('LessonAttempt').student.name
+  },
+  {
+    field: 'lesson',
+    headerName: 'Les',
+    width: 200,
+    valueGetter: (data) => data.getValue('QuestionGroup').Lesson.prefix
+  },
+  {
+    field: 'question',
+    headerName: 'Vraag',
+    width: 200,
+    valueGetter: (data) => data.getValue('QuestionGroup').index + 1
+  },
+  {
+    field: 'isCompleted',
+    headerName: 'Voltooid',
+    width: 130,
+    renderCell: (data) =>
+      data.getValue('isCompleted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+  },
 ];
 
 function preventDefault(event) {
@@ -33,31 +59,41 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Orders() {
   const classes = useStyles();
+  const [questionAttempts, setQuestionAttempts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadQuestionAttempts = async () => {
+    setLoading(true);
+
+    const response = await service.loadQuestionAttempts();
+    console.log(response.body.data);
+    if (response) {
+      setQuestionAttempts(response.body.data);
+    }
+
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    loadQuestionAttempts();
+  }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
+
   return (
     <React.Fragment>
       <Title>Recente leerlingen activiteit</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Datum</TableCell>
-            <TableCell>Naam</TableCell>
-            <TableCell>Les</TableCell>
-            <TableCell>Vraag</TableCell>
-            <TableCell align="right">Nagekeken?</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <Grid item xs={12}>
+            <DataGrid
+              autoHeight
+              rows={questionAttempts}
+              columns={columns}
+              pageSize={5}
+              checkboxSelection
+            />
+        </Grid>
       <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={preventDefault}>
           See more orders
