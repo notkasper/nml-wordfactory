@@ -40,7 +40,7 @@ const QuestionStats = (props) => {
         <Grid item xs={6}>
           <Doughnut
             questionGroupAttempts={questionGroupAttempts}
-            title="Correctheid verdeling van de vraag groep"
+            title="Correctheid verdeling van de vraag"
           />
         </Grid>
         <Grid item xs={6}>
