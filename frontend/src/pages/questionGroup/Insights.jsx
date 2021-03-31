@@ -37,23 +37,23 @@ const Details = (props) => {
   return (
     <PageContainer>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Doughnut
             questionGroupAttempts={questionGroupAttempts}
             title="Correctheid verdeling van de vraag"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Paper style={{ padding: '2rem', height: '100%' }}>
             <Typography>Meer data visualisatie</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Paper style={{ padding: '2rem', height: '100%' }}>
             <Typography>Meer data visualisatie</Typography>
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Paper style={{ padding: '2rem', height: '100%' }}>
             <Typography>Meer data visualisatie</Typography>
           </Paper>

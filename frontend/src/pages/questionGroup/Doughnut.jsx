@@ -30,7 +30,7 @@ const CustomDoughnut = (props) => {
     { correct: 0, incorrect: 0, missed: 0 }
   );
 
-  useEffect(() => {}, []);
+  console.log({ correct, incorrect, missed });
 
   const data = {
     datasets: [
