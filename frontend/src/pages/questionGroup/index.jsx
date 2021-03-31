@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
-import Grid from '@material-ui/core/Grid';
-import PieChartIcon from '@material-ui/icons/PieChart';
-import Typography from '@material-ui/core/Typography';
-import EditIcon from '@material-ui/icons/Edit';
-import Paper from '@material-ui/core/Paper';
-import PageContainer from '../_shared/PageContainer';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -30,8 +23,12 @@ const QuestionStats = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
-          <Tab label="Vraag" icon={<VisibilityIcon />} value="question" />
-          <Tab label="Inzichten" icon={<EqualizerIcon />} value="insights" />
+          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
+          <Tab
+            label="Inzicht (opdracht)"
+            icon={<EqualizerIcon />}
+            value="insights"
+          />
         </Tabs>
       </AppBar>
       <TabContent index="question" value={value}>

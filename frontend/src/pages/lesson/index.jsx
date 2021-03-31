@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PieChartIcon from '@material-ui/icons/PieChart';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import EditIcon from '@material-ui/icons/Edit';
 import { observer } from 'mobx-react-lite';
 import Insights from './Insights';
@@ -25,7 +25,11 @@ const Lesson = (props) => {
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
           <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
-          <Tab label="Inzicht (les)" icon={<PieChartIcon />} value="insights" />
+          <Tab
+            label="Inzicht (les)"
+            icon={<EqualizerIcon />}
+            value="insights"
+          />
         </Tabs>
       </AppBar>
       <TabContent index="questions" value={value}>
