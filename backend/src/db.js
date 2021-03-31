@@ -16,8 +16,7 @@ const StudentClass = require('./models/studentClass');
 const Teacher = require('./models/teacher');
 const TeacherClass = require('./models/teacherClass');
 
-const { customLogger } = require('./logger');
-const logger = customLogger('DATABASE');
+const logger = require('./logger');
 
 const db = {};
 
