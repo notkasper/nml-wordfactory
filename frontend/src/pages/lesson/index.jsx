@@ -19,7 +19,6 @@ const Lesson = (props) => {
   const [value, setValue] = useState(params.tab);
 
   const onChangeTab = (event, newValue) => {
-    console.log(newValue);
     history.push(newValue);
     setValue(newValue);
   };
