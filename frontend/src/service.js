@@ -48,6 +48,12 @@ const loadLessonAttempts = async (lessonId) => {
   return response;
 };
 
+const loadLesson = async (lessonId) => {
+  const req = request.get(`/api/v1/lessons/${lessonId}`);
+  const response = await handleResponse(req);
+  return response;
+};
+
 const login = async (email, password) => {
   const req = request.post('/api/v1/auth/login').send({
     email,
@@ -63,6 +69,20 @@ const loadStudent = async (id) => {
   return response;
 };
 
+const loadQuestionGroupAttempts = async (id) => {
+  const req = request
+    .get(`/api/v1/questionGroupAttempts`)
+    .query({ questionGroupId: id });
+  const response = await handleResponse(req);
+  return response;
+};
+
+const loadQuestionGroup = async (id) => {
+  const req = request.get(`/api/v1/questionGroup/${id}`);
+  const response = await handleResponse(req);
+  return response;
+};
+
 const service = {
   loadStudents,
   loadStudent,
@@ -70,7 +90,10 @@ const service = {
   loadCourses,
   loadClassList,
   loadLessonAttempts,
+  loadLesson,
   login,
+  loadQuestionGroupAttempts,
+  loadQuestionGroup,
 };
 
 export default service;

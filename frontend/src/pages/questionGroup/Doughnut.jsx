@@ -18,31 +18,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomDoughnut = (props) => {
-  const { lessonAttempts, title } = props;
+  const { questionGroupAttempts, title } = props;
   const classes = useStyles();
-  const { started, completed, notStarted } = lessonAttempts.reduce(
+  const { correct, incorrect, missed } = questionGroupAttempts.reduce(
     (acc, curr) => {
-      if (curr.isCompleted) {
-        acc.completed += 1;
-      } else if (curr.isStarted) {
-        acc.started += 1;
-      } else {
-        acc.notStarted += 1;
-      }
+      acc.correct += curr.correct;
+      acc.incorrect += curr.incorrect;
+      acc.missed += curr.missed;
       return acc;
     },
-    { started: 0, completed: 0, notStarted: 0 }
+    { correct: 0, incorrect: 0, missed: 0 }
   );
 
-  useEffect(() => {}, []);
+  console.log({ correct, incorrect, missed });
 
   const data = {
     datasets: [
       {
-        data: [notStarted, started, completed],
+        data: [correct, incorrect, missed],
       },
     ],
-    labels: ['Niet begonnen', 'Begonnen', 'Voltooid'],
+    labels: ['Correct', 'Incorrect', 'Gemist'],
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);

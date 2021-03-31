@@ -35,7 +35,7 @@ export default function Orders() {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Recente leerlingen activiteit</Title>
+      <Title>Recente leerlingen activiteit (PLACEHOLDER)</Title>
       <Table size="small">
         <TableHead>
           <TableRow>

@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
-import EditIcon from '@material-ui/icons/Edit';
-import { observer } from 'mobx-react-lite';
-import Insights from './Insights';
-import Questions from './LessonContent';
 import TabContent from '../_shared/TabContent';
+import Details from './Insights';
+import Question from './Question';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 
-const Lesson = (props) => {
+const QuestionStats = (props) => {
   const params = useParams();
   const history = useHistory();
   const [value, setValue] = useState(params.tab);
@@ -24,22 +23,22 @@ const Lesson = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
-          <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
+          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
           <Tab
-            label="Inzicht (les)"
+            label="Inzicht (opdracht)"
             icon={<EqualizerIcon />}
             value="insights"
           />
         </Tabs>
       </AppBar>
-      <TabContent index="questions" value={value}>
-        <Questions {...props} />
+      <TabContent index="question" value={value}>
+        <Question {...props} />
       </TabContent>
       <TabContent index="insights" value={value}>
-        <Insights {...props} />
+        <Details {...props} />
       </TabContent>
     </>
   );
 };
 
-export default observer(Lesson);
+export default QuestionStats;
