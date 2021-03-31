@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   marginTop: {
     marginTop: '1rem',
   },
+  marginBottom: {
+    marginBottom: '1rem',
+  },
 }));
 
 const Students = (props) => {
