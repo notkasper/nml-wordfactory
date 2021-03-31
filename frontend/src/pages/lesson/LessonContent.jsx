@@ -1,45 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import { observer } from 'mobx-react-lite';
+import IconButton from '@material-ui/core/IconButton';
 import PageContainer from '../_shared/PageContainer';
-import QuestionGroup from '../_shared/QuestionGroup';
-import service from '../../service';
+import { DataGrid } from '@material-ui/data-grid';
+
+const columns = [
+  {
+    field: 'name',
+    headerName: 'Naam',
+    width: 300,
+  },
+  {
+    field: 'questionGroups',
+    headerName: 'Vragen',
+    width: 130,
+    valueGetter: (data) => data.getValue('questions').length,
+    type: 'number',
+  },
+  {
+    field: 'createdAt',
+    headerName: 'Gemiddelde correctheid (%)',
+    width: 230,
+    valueGetter: (data) => 50,
+    type: 'number',
+  },
+  {
+    field: 'updatedAt',
+    headerName: 'Statistieken',
+    width: 150,
+    renderCell: (data) => <StatIcon id={data.getValue('id')} />,
+  },
+];
+
+const StatIcon = (props) => {
+  const { id } = props;
+  const history = useHistory();
+  const goToStats = () => history.push(`/dashboard/questionGroups/${id}/stats`);
+  return (
+    <IconButton onClick={goToStats}>
+      <EqualizerIcon color="primary" />
+    </IconButton>
+  );
+};
 
 const LessonContent = (props) => {
-  const [lesson, setLesson] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { lessonStore } = props;
   const params = useParams();
 
-  const loadLesson = async () => {
-    setLoading(true);
-    const response = await service.loadLesson(params.lessonId);
-    if (!response) {
-      return;
-    }
-    setLesson(response.body.data);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    loadLesson();
+    lessonStore.loadLesson(params.lessonId);
   }, []);
 
-  if (loading) {
+  if (lessonStore.isLoading || !lessonStore.lesson) {
     return <CircularProgress />;
-  }
-
-  // TODO: Figure out why this is needed, and remove it hopefully
-  if (!loading && !lesson) {
-    return <p>Les kon niet worden geladen</p>;
   }
 
   return (
     <PageContainer>
-      {lesson.questionGroups.map((questionGroup) => (
-        <QuestionGroup {...questionGroup} />
-      ))}
+      <DataGrid
+        autoHeight
+        rows={lessonStore.lesson.questionGroups}
+        columns={columns}
+        pageSize={12}
+      />
     </PageContainer>
   );
 };
 
-export default LessonContent;
+export default observer(LessonContent);
