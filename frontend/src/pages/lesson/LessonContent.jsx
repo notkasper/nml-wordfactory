@@ -47,10 +47,9 @@ const columns = [
     },
   },
   {
-    field: 'createdAt',
+    field: 'averageScore',
     headerName: 'Gem. score (%)',
     width: 150,
-    valueGetter: (data) => 50,
     type: 'number',
   },
   {

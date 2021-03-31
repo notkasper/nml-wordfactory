@@ -109,6 +109,7 @@ db.setupModels = async () => {
     });
 
     db.QuestionGroup.hasMany(db.QuestionGroupAttempt, {
+      as: 'questionGroupAttempts',
       foreignKey: 'questionGroupId',
     });
 

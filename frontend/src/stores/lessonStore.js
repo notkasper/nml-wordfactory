@@ -42,7 +42,10 @@ class LessonStore {
     if (!response) {
       return;
     }
-    this.setlesson(response.body.data);
+
+    // Calculate average score... not pretty. Do this in the backend query at some point
+    const lesson = utils.addQuestionGroupAverages(response.body.data);
+    this.setlesson(lesson);
     this.popLoad();
   };
 
