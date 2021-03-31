@@ -243,7 +243,7 @@ export default function Dashboard() {
             />
             <Route
               exact
-              path="/dashboard/questions/:questionId/stats"
+              path="/dashboard/questionGroups/:questionGroupId/stats"
               render={(props) => (
                 <QuestionStats {...props} authStore={authStore} />
               )}

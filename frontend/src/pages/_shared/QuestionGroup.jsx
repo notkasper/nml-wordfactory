@@ -27,14 +27,14 @@ const Question = (props) => {
 };
 
 const QuestionGroup = (props) => {
-  const { questions, name } = props;
+  const { questions, name, id } = props;
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const onChange = () => setExpanded(!expanded);
   const history = useHistory();
 
-  const goToQuestionStats = (questionId) =>
-    history.push(`/dashboard/questions/${questionId}/stats`);
+  const goToQuestionGroupStats = () =>
+    history.push(`/dashboard/questionGroups/${id}/stats`);
 
   return (
     <Accordion
@@ -57,16 +57,16 @@ const QuestionGroup = (props) => {
               <ListItem>
                 <Question {...question} index={index} />
               </ListItem>
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<EqualizerIcon />}
-                onClick={() => goToQuestionStats(question.id)}
-              >
-                Bekijk statistieken
-              </Button>
             </>
           ))}
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<EqualizerIcon />}
+            onClick={goToQuestionGroupStats}
+          >
+            Bekijk statistieken
+          </Button>
         </List>
       </AccordionDetails>
     </Accordion>
