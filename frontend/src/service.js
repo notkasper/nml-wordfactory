@@ -69,6 +69,14 @@ const loadStudent = async (id) => {
   return response;
 };
 
+const loadQuestionGroupAttempts = async (id) => {
+  const req = request
+    .get(`/api/v1/questionGroupAttempts`)
+    .query({ questionGroupId: id });
+  const response = await handleResponse(req);
+  return response;
+};
+
 const service = {
   loadStudents,
   loadStudent,
@@ -78,6 +86,7 @@ const service = {
   loadLessonAttempts,
   loadLesson,
   login,
+  loadQuestionGroupAttempts,
 };
 
 export default service;

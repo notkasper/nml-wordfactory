@@ -22,6 +22,7 @@ const courseRouter = require('./routes/course');
 const classRouter = require('./routes/class');
 const studentRouter = require('./routes/students');
 const lessonAttemptRouter = require('./routes/lessonAttempt');
+const questionGroupAttemptRouter = require('./routes/questionGroupAttempt');
 const db = require('./db');
 const logger = require('./logger');
 
@@ -82,6 +83,7 @@ const start = async () => {
   app.use('/api/v1/classes', classRouter);
   app.use('/api/v1/students', studentRouter);
   app.use('/api/v1/lessonAttempts', lessonAttemptRouter);
+  app.use('/api/v1/questionGroupAttempts', questionGroupAttemptRouter);
 
   const port = process.env.SERVER_PORT || 5000;
 
