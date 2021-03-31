@@ -26,10 +26,7 @@ const columns = [
     headerName: 'Nummer',
     width: 110,
     type: 'number',
-    valueGetter: (data) => {
-      console.log(data);
-      return data.value + 1;
-    },
+    valueGetter: (data) => data.value + 1,
   },
   {
     field: 'questionGroups',
@@ -67,7 +64,7 @@ const ViewIcon = (props) => {
   const { id } = props;
   const history = useHistory();
   const goToStats = () =>
-    history.push(`/dashboard/questionGroups/${id}/details`);
+    history.push(`/dashboard/questionGroups/${id}/question`);
   return (
     <IconButton onClick={goToStats}>
       <VisibilityIcon color="primary" />

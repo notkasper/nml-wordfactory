@@ -18,7 +18,7 @@ const Course = (props) => {
   const history = useHistory();
 
   const goToLesson = (lessonId) =>
-    history.push(`/dashboard/lessons/${lessonId}/insights`);
+    history.push(`/dashboard/lessons/${lessonId}/questions`);
 
   return (
     <div key={id}>

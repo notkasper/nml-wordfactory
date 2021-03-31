@@ -1,65 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
+import PieChartIcon from '@material-ui/icons/PieChart';
 import Typography from '@material-ui/core/Typography';
+import EditIcon from '@material-ui/icons/Edit';
 import Paper from '@material-ui/core/Paper';
 import PageContainer from '../_shared/PageContainer';
-import service from '../../service';
-import Doughnut from './Doughnut';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import TabContent from '../_shared/TabContent';
+import Details from './Insights';
+import Question from './Question';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 
 const QuestionStats = (props) => {
-  const [questionGroupAttempts, setQuestionGroupAttempts] = useState([]);
-  const [loading, setLoading] = useState(false);
   const params = useParams();
+  const history = useHistory();
+  const [value, setValue] = useState(params.tab);
 
-  const loadQuestionGroupAttempts = async () => {
-    setLoading(true);
-    const response = await service.loadQuestionGroupAttempts(
-      params.questionGroupId
-    );
-    if (!response) {
-      return;
-    }
-    const data = response.body.data.filter((attempt) => attempt.isCompleted);
-    setQuestionGroupAttempts(data);
-    setLoading(false);
+  const onChangeTab = (event, newValue) => {
+    history.push(newValue);
+    setValue(newValue);
   };
 
-  useEffect(() => {
-    loadQuestionGroupAttempts();
-  }, []);
-
-  if (loading) {
-    return <CircularProgress />;
-  }
-
   return (
-    <PageContainer>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Doughnut
-            questionGroupAttempts={questionGroupAttempts}
-            title="Correctheid verdeling van de vraag"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '2rem', height: '100%' }}>
-            <Typography>Meer data visualisatie</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '2rem', height: '100%' }}>
-            <Typography>Meer data visualisatie</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper style={{ padding: '2rem', height: '100%' }}>
-            <Typography>Meer data visualisatie</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-    </PageContainer>
+    <>
+      <AppBar position="static">
+        <Tabs value={value} onChange={onChangeTab}>
+          <Tab label="Vraag" icon={<VisibilityIcon />} value="question" />
+          <Tab label="Inzichten" icon={<EqualizerIcon />} value="insights" />
+        </Tabs>
+      </AppBar>
+      <TabContent index="question" value={value}>
+        <Question {...props} />
+      </TabContent>
+      <TabContent index="insights" value={value}>
+        <Details {...props} />
+      </TabContent>
+    </>
   );
 };
 
