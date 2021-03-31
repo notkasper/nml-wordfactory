@@ -7,11 +7,28 @@ import IconButton from '@material-ui/core/IconButton';
 import PageContainer from '../_shared/PageContainer';
 import { DataGrid } from '@material-ui/data-grid';
 
+const typeLabels = {
+  open: 'Open',
+  clickTheRightWords: 'Selecteer het correcte antwoord',
+  multipleChoice: 'Meerkeuze',
+  divideTheWord: 'Verdeel het woord',
+};
+
 const columns = [
   {
     field: 'name',
     headerName: 'Naam',
     width: 300,
+  },
+  {
+    field: 'index',
+    headerName: 'Nummer',
+    width: 110,
+    type: 'number',
+    valueGetter: (data) => {
+      console.log(data);
+      return data.value + 1;
+    },
   },
   {
     field: 'questionGroups',
@@ -21,9 +38,19 @@ const columns = [
     type: 'number',
   },
   {
+    field: 'type',
+    headerName: 'Type',
+    width: 200,
+    valueGetter: (data) => {
+      const type = data.getValue('questions')[0].type;
+      const label = typeLabels[type];
+      return label;
+    },
+  },
+  {
     field: 'createdAt',
-    headerName: 'Gemiddelde correctheid (%)',
-    width: 230,
+    headerName: 'Gem. score (%)',
+    width: 150,
     valueGetter: (data) => 50,
     type: 'number',
   },
