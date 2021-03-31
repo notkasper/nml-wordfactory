@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import IconButton from '@material-ui/core/IconButton';
 import PageContainer from '../_shared/PageContainer';
 import { DataGrid } from '@material-ui/data-grid';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const typeLabels = {
   open: 'Open',
@@ -55,20 +56,21 @@ const columns = [
     type: 'number',
   },
   {
-    field: 'updatedAt',
-    headerName: 'Statistieken',
+    field: 'Bekijken',
+    headerName: '',
     width: 150,
-    renderCell: (data) => <StatIcon id={data.getValue('id')} />,
+    renderCell: (data) => <ViewIcon id={data.getValue('id')} />,
   },
 ];
 
-const StatIcon = (props) => {
+const ViewIcon = (props) => {
   const { id } = props;
   const history = useHistory();
-  const goToStats = () => history.push(`/dashboard/questionGroups/${id}/stats`);
+  const goToStats = () =>
+    history.push(`/dashboard/questionGroups/${id}/details`);
   return (
     <IconButton onClick={goToStats}>
-      <EqualizerIcon color="primary" />
+      <VisibilityIcon color="primary" />
     </IconButton>
   );
 };
