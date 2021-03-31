@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import { observer } from 'mobx-react-lite';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import service from '../../service';
 import Doughnut from './Doughnut';
 import Histogram from './Histogram';
 import PageContainer from '../_shared/PageContainer';
-
-const useStyles = makeStyles((theme) => ({}));
 
 const columns = [
   {
@@ -45,58 +42,15 @@ const columns = [
   { field: 'performance', headerName: 'Prestatie', width: 130, type: 'number' },
 ];
 
-const addDuration = (lessonAttempts) => {
-  return lessonAttempts.map((lessonAttempt) => {
-    const duration = lessonAttempt.questionGroupAttempts.reduce(
-      (acc, curr) => acc + curr.timeElapsedSeconds,
-      0
-    );
-    lessonAttempt.duration = Math.round(duration / 60);
-    return lessonAttempt;
-  });
-};
-
-const addPerformance = (lessonAttempts) => {
-  return lessonAttempts.map((lessonAttempt) => {
-    const { correct, incorrect } = lessonAttempt.questionGroupAttempts.reduce(
-      (acc, curr) => {
-        acc.correct += curr.correct;
-        acc.incorrect += curr.incorrect + curr.missed;
-        return acc;
-      },
-      { correct: 0, incorrect: 0 }
-    );
-    lessonAttempt.correct = correct;
-    lessonAttempt.incorrect = incorrect;
-    lessonAttempt.performance =
-      Math.round((correct / (correct + incorrect)) * 100) / 10 || 0;
-    return lessonAttempt;
-  });
-};
-
 const Lesson = (props) => {
-  const classes = useStyles();
+  const { lessonStore } = props;
   const params = useParams();
-  const [lessonAttempts, setLessonAttempts] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const loadLessonAttempts = async () => {
-    setLoading(true);
-    const response = await service.loadLessonAttempts(params.lessonId);
-    if (response) {
-      let loadedLessonAttempts = response.body.data;
-      loadedLessonAttempts = addDuration(loadedLessonAttempts);
-      loadedLessonAttempts = addPerformance(loadedLessonAttempts);
-      setLessonAttempts(loadedLessonAttempts);
-    }
-    setLoading(false);
-  };
 
   useEffect(() => {
-    loadLessonAttempts();
+    lessonStore.loadLessonAttempts(params.lessonId);
   }, []);
 
-  if (loading) {
+  if (lessonStore.isLoading) {
     return <CircularProgress />;
   }
 
@@ -105,20 +59,23 @@ const Lesson = (props) => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Doughnut
-            lessonAttempts={lessonAttempts}
+            lessonAttempts={lessonStore.lessonAttempts}
             title="Algemene voortgang"
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Histogram lessonAttempts={lessonAttempts} title="Cijfer verdeling" />
+          <Histogram
+            lessonAttempts={lessonStore.lessonAttempts}
+            title="Cijfer verdeling"
+          />
         </Grid>
         <Grid item xs={12}>
           <Paper>
             <DataGrid
               autoHeight
-              rows={lessonAttempts}
+              rows={lessonStore.lessonAttempts}
               columns={columns}
-              pageSize={32}
+              pageSize={12}
               checkboxSelection
             />
           </Paper>
@@ -128,4 +85,4 @@ const Lesson = (props) => {
   );
 };
 
-export default Lesson;
+export default observer(Lesson);

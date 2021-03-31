@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -10,8 +9,6 @@ import { observer } from 'mobx-react-lite';
 import Insights from './Insights';
 import Questions from './LessonContent';
 import TabContent from '../_shared/TabContent';
-
-const useStyles = makeStyles((theme) => ({}));
 
 const Lesson = (props) => {
   const params = useParams();
