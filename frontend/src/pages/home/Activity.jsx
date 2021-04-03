@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
@@ -57,12 +57,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Activity() {
+const Activity = () => {
   const classes = useStyles();
   const [questionAttempts, setQuestionAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadQuestionAttempts = async () => {
+  const loadQuestionAttempts = useCallback(async () => {
     setLoading(true);
 
     const response = await service.loadQuestionAttempts();
@@ -71,11 +71,11 @@ export default function Activity() {
     }
 
     setLoading(false);
-  }
+  }, []);
 
   useEffect(() => {
     loadQuestionAttempts();
-  }, []);
+  }, [loadQuestionAttempts]);
 
   if (loading) {
     return <CircularProgress />;
@@ -101,3 +101,5 @@ export default function Activity() {
     </React.Fragment>
   );
 }
+
+export default Activity;
