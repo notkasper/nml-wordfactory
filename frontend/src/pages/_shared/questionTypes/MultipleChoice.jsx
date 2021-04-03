@@ -46,6 +46,7 @@ const MultipleChoice = (props) => {
                     control={<Radio />}
                     label={option.value}
                     disabled
+                    checked={option.isCorrect}
                   />
                 ))}
               </RadioGroup>
