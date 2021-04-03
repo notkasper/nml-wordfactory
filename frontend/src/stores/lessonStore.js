@@ -14,6 +14,7 @@ class LessonStore {
       popLoad: action,
       pushLoad: action,
       setlesson: action,
+      setlessonAttempts: action,
       clearLesson: action,
       isLoading: computed,
     });
@@ -50,7 +51,10 @@ class LessonStore {
   };
 
   loadLessonAttempts = async (lessonId) => {
-    if (this.lessonAttempts && this.lessonAttempts[0]?.lessonId === lessonId) {
+    if (
+      this.lessonAttempts?.length &&
+      this.lessonAttempts[0]?.lessonId === lessonId
+    ) {
       return;
     }
     this.pushLoad();

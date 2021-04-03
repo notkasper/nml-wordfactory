@@ -16,21 +16,21 @@ const columns = [
     field: 'name',
     headerName: 'Naam',
     width: 130,
-    valueGetter: (params) => params.getValue('student').name,
+    valueGetter: (params) => params.row.student.name,
   },
   {
     field: 'isStarted',
     headerName: 'Gestart',
     width: 130,
-    renderCell: (data) =>
-      data.getValue('isStarted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+    renderCell: (params) =>
+      params.row.isStarted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
   },
   {
     field: 'isCompleted',
     headerName: 'Voltooid',
     width: 130,
-    renderCell: (data) =>
-      data.getValue('isCompleted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+    renderCell: (params) =>
+      params.row.isCompleted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
   },
   {
     field: 'duration',

@@ -33,11 +33,9 @@ const QuestionGroup = (props) => {
         }
       >
         {questions.map((question, index) => (
-          <>
-            <ListItem>
-              <Question {...question} index={index} />
-            </ListItem>
-          </>
+          <ListItem key={question.id}>
+            <Question {...question} index={index} />
+          </ListItem>
         ))}
       </List>
     </Paper>

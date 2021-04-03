@@ -26,21 +26,21 @@ const columns = [
     headerName: 'Nummer',
     width: 110,
     type: 'number',
-    valueGetter: (data) => data.value + 1,
+    valueGetter: (params) => params.value + 1,
   },
   {
     field: 'questionGroups',
     headerName: 'Vragen',
     width: 130,
-    valueGetter: (data) => data.getValue('questions').length,
+    valueGetter: (params) => params.row.questions.length,
     type: 'number',
   },
   {
     field: 'type',
     headerName: 'Type',
     width: 175,
-    valueGetter: (data) => {
-      const type = data.getValue('questions')[0].type;
+    valueGetter: (params) => {
+      const type = params.row.questions[0].type;
       const label = typeLabels[type] || type;
       return label;
     },
@@ -61,7 +61,7 @@ const columns = [
     field: 'Bekijken',
     headerName: '',
     width: 150,
-    renderCell: (data) => <ViewIcon id={data.getValue('id')} />,
+    renderCell: (params) => <ViewIcon id={params.row.id} />,
   },
 ];
 

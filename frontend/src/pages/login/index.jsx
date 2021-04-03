@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -73,10 +73,10 @@ const Login = (props) => {
     setLoading(true);
     e.preventDefault(); // Prevent reloading of page, due to "submit" role on button
     const response = await authStore.login(email, password);
+    setLoading(false);
     if (response) {
       history.push('/dashboard/home');
     }
-    setLoading(false);
   };
 
   return (
