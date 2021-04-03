@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   marginTop: {
     marginTop: '1rem',
   },
+  marginBottom: {
+    marginBottom: '1rem',
+  },
 }));
 
 const Students = (props) => {
@@ -70,7 +73,7 @@ const Students = (props) => {
         <Paper>
           <List className={classes.root}>
             {shownStudents.map((student) => (
-              <Student {...student} onClick={() => onClick(student.id)} />
+              <Student key={student.id} {...student} onClick={() => onClick(student.id)} />
             ))}
           </List>
         </Paper>

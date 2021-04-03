@@ -38,8 +38,10 @@ import Class from './pages/class';
 import Lesson from './pages/lesson';
 import Student from './pages/student';
 import StudentLesson from './pages/studentLesson';
+import QuestionGroup from './pages/questionGroup';
 // STORES
 import authStore from './stores/auth';
+import lessonStore from './stores/lessonStore';
 
 defaults.global.plugins.colorschemes.scheme = Classic10;
 
@@ -225,8 +227,14 @@ export default function Dashboard() {
             />
             <Route
               exact
-              path="/dashboard/lessons/:lessonId"
-              render={(props) => <Lesson {...props} authStore={authStore} />}
+              path="/dashboard/lessons/:lessonId/:tab"
+              render={(props) => (
+                <Lesson
+                  {...props}
+                  authStore={authStore}
+                  lessonStore={lessonStore}
+                />
+              )}
             />
             <Route
               exact
@@ -238,6 +246,13 @@ export default function Dashboard() {
               path="/dashboard/students/:studentId/lessons/:lessonId"
               render={(props) => (
                 <StudentLesson {...props} authStore={authStore} />
+              )}
+            />
+            <Route
+              exact
+              path="/dashboard/questionGroups/:questionGroupId/:tab"
+              render={(props) => (
+                <QuestionGroup {...props} authStore={authStore} />
               )}
             />
           </Switch>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
@@ -8,12 +8,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import PeopleIcon from '@material-ui/icons/People';
 import service from '../../service';
 import Courses from './Courses';
 import Students from './Students';
 import PageContainer from '../_shared/PageContainer';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
-import PeopleIcon from '@material-ui/icons/People';
+import TabContent from '../_shared/TabContent';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -24,14 +25,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TabContent = (props) => {
-  const { value, index, children } = props;
-  if (value !== index) {
-    return null;
-  }
-  return children;
-};
-
 const Lesson = (props) => {
   const classes = useStyles();
   const params = useParams();
@@ -41,37 +34,37 @@ const Lesson = (props) => {
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
 
-  const loadStudents = async () => {
+  const loadStudents = useCallback(async () => {
     const response = await service.loadStudents(params.classId);
     if (!response) return;
     setStudents(response.body.data);
-  };
+  }, [params.classId]);
 
-  const loadClass = async () => {
+  const loadClass = useCallback(async () => {
     const response = await service.loadClass(params.classId);
     if (!response) return;
     setTheClass(response.body.data);
-  };
+  }, [params.classId]);
 
-  const loadCourses = async () => {
+  const loadCourses = useCallback(async () => {
     const classId = params.classId;
     const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
-  };
+  }, [params.classId]);
 
-  const loadAll = async () => {
+  const loadAll = useCallback(async () => {
     setLoading(true);
     const promises = [loadStudents(), loadCourses(), loadClass()];
     await Promise.all(promises);
     setLoading(false);
-  };
+  }, [loadClass, loadStudents, loadCourses]);
 
   const onChangeTab = (event, newValue) => setValue(newValue);
 
   useEffect(() => {
     loadAll();
-  }, []);
+  }, [loadAll]);
 
   if (loading) {
     return <CircularProgress />;

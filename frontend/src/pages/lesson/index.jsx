@@ -1,131 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { useParams } from 'react-router-dom';
-import { DataGrid } from '@material-ui/data-grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import service from '../../service';
-import Doughnut from './Doughnut';
-import Histogram from './Histogram';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import PageContainer from '../_shared/PageContainer';
-
-const useStyles = makeStyles((theme) => ({}));
-
-const columns = [
-  {
-    field: 'name',
-    headerName: 'Naam',
-    width: 130,
-    valueGetter: (params) => params.getValue('student').name,
-  },
-  {
-    field: 'isStarted',
-    headerName: 'Gestart',
-    width: 130,
-    renderCell: (data) =>
-      data.getValue('isStarted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
-  },
-  {
-    field: 'isCompleted',
-    headerName: 'Voltooid',
-    width: 130,
-    renderCell: (data) =>
-      data.getValue('isCompleted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
-  },
-  {
-    field: 'duration',
-    headerName: 'Duratie (minuten)',
-    width: 165,
-  },
-  { field: 'correct', headerName: 'Correct', width: 100, type: 'number' },
-  { field: 'incorrect', headerName: 'Incorrect', width: 110, type: 'number' },
-  { field: 'performance', headerName: 'Prestatie', width: 130, type: 'number' },
-];
-
-const addDuration = (lessonAttempts) => {
-  return lessonAttempts.map((lessonAttempt) => {
-    const duration = lessonAttempt.questionGroupAttempts.reduce(
-      (acc, curr) => acc + curr.timeElapsedSeconds,
-      0
-    );
-    lessonAttempt.duration = Math.round(duration / 60);
-    return lessonAttempt;
-  });
-};
-
-const addPerformance = (lessonAttempts) => {
-  return lessonAttempts.map((lessonAttempt) => {
-    const { correct, incorrect } = lessonAttempt.questionGroupAttempts.reduce(
-      (acc, curr) => {
-        acc.correct += curr.correct;
-        acc.incorrect += curr.incorrect + curr.missed;
-        return acc;
-      },
-      { correct: 0, incorrect: 0 }
-    );
-    lessonAttempt.correct = correct;
-    lessonAttempt.incorrect = incorrect;
-    lessonAttempt.performance =
-      Math.round((correct / (correct + incorrect)) * 100) / 10 || 0;
-    return lessonAttempt;
-  });
-};
+import React, { useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import EditIcon from '@material-ui/icons/Edit';
+import { observer } from 'mobx-react-lite';
+import Insights from './Insights';
+import Questions from './LessonContent';
+import TabContent from '../_shared/TabContent';
 
 const Lesson = (props) => {
-  const classes = useStyles();
   const params = useParams();
-  const [lessonAttempts, setLessonAttempts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const [value, setValue] = useState(params.tab);
 
-  const loadLessonAttempts = async () => {
-    setLoading(true);
-    const response = await service.loadLessonAttempts(params.lessonId);
-    if (response) {
-      let loadedLessonAttempts = response.body.data;
-      loadedLessonAttempts = addDuration(loadedLessonAttempts);
-      loadedLessonAttempts = addPerformance(loadedLessonAttempts);
-      setLessonAttempts(loadedLessonAttempts);
-    }
-    setLoading(false);
+  const onChangeTab = (event, newValue) => {
+    history.push(newValue);
+    setValue(newValue);
   };
 
-  useEffect(() => {
-    loadLessonAttempts();
-  }, []);
-
-  if (loading) {
-    return <CircularProgress />;
-  }
-
   return (
-    <PageContainer maxWidth="lg">
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Doughnut
-            lessonAttempts={lessonAttempts}
-            title="Algemene voortgang"
+    <>
+      <AppBar position="static">
+        <Tabs value={value} onChange={onChangeTab}>
+          <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
+          <Tab
+            label="Inzicht (les)"
+            icon={<EqualizerIcon />}
+            value="insights"
           />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Histogram lessonAttempts={lessonAttempts} title="Cijfer verdeling" />
-        </Grid>
-        <Grid item xs={12}>
-          <Paper>
-            <DataGrid
-              autoHeight
-              rows={lessonAttempts}
-              columns={columns}
-              pageSize={32}
-              checkboxSelection
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-    </PageContainer>
+        </Tabs>
+      </AppBar>
+      <TabContent index="questions" value={value}>
+        <Questions {...props} />
+      </TabContent>
+      <TabContent index="insights" value={value}>
+        <Insights {...props} />
+      </TabContent>
+    </>
   );
 };
 
-export default Lesson;
+export default observer(Lesson);

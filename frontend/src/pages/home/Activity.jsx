@@ -18,32 +18,32 @@ const columns = [
     field: 'updatedAt',
     headerName: 'Datum',
     width: 200,
-    renderCell: (data) => convertDateToReadableString(data.getValue('updatedAt'))
+    renderCell: (params) => convertDateToReadableString(params.row.updatedAt)
   },
   {
     field: 'student',
     headerName: 'Leerling',
     width: 400,
-    valueGetter: (data) => data.getValue('LessonAttempt').student.name
+    valueGetter: (params) => params.row.LessonAttempt.student.name
   },
   {
     field: 'lesson',
     headerName: 'Les',
     width: 200,
-    valueGetter: (data) => data.getValue('QuestionGroup').Lesson.prefix
+    valueGetter: (params) => params.row.QuestionGroup.Lesson.prefix
   },
   {
     field: 'question',
     headerName: 'Vraag',
     width: 100,
-    valueGetter: (data) => data.getValue('QuestionGroup').index + 1
+    valueGetter: (params) => params.row.QuestionGroup.index + 1
   },
   {
     field: 'isCompleted',
     headerName: 'Voltooid',
     width: 125,
-    renderCell: (data) =>
-      data.getValue('isCompleted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+    renderCell: (params) =>
+      params.row.isCompleted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
   },
 ];
 
