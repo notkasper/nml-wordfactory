@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -127,7 +127,7 @@ const Login = (props) => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              busy={loading}
+              disabled={loading}
               onClick={login}
             >
               Inloggen

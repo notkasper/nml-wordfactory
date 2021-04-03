@@ -57,7 +57,7 @@ const Courses = (props) => {
         <Paper>
           <List className={classes.root}>
             {shownCourses.map((course) => (
-              <Course {...course} />
+              <Course key={course.id} {...course} />
             ))}
           </List>
         </Paper>

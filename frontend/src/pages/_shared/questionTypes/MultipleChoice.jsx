@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { v4 } from 'uuid';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
@@ -43,7 +42,7 @@ const MultipleChoice = (props) => {
               <RadioGroup aria-label="gender" name="gender1" value={value}>
                 {data.options.map((option) => (
                   <FormControlLabel
-                    key={v4()}
+                    key={option.value}
                     value={option.value}
                     control={<Radio />}
                     label={option.value}
