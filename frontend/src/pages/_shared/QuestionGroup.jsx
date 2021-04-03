@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Typography from '@material-ui/core/Typography';
 import MultipleChoice from '../_shared/questionTypes/MultipleChoice';
 import ClickTheRightWords from '../_shared/questionTypes/clickTheRightWords';
-
-const useStyles = makeStyles((theme) => ({}));
 
 const Question = (props) => {
   const { type } = props;
@@ -25,9 +21,7 @@ const Question = (props) => {
 };
 
 const QuestionGroup = (props) => {
-  const { questions, name, id } = props;
-  const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
+  const { questions } = props;
 
   return (
     <Paper>

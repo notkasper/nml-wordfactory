@@ -48,7 +48,7 @@ const Lesson = (props) => {
 
   useEffect(() => {
     lessonStore.loadLessonAttempts(params.lessonId);
-  }, []);
+  }, [lessonStore, params.lessonId]);
 
   if (lessonStore.isLoading) {
     return <CircularProgress />;

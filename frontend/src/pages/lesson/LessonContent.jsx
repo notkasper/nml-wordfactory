@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
 import { observer } from 'mobx-react-lite';
 import IconButton from '@material-ui/core/IconButton';
 import PageContainer from '../_shared/PageContainer';
@@ -84,7 +83,7 @@ const LessonContent = (props) => {
 
   useEffect(() => {
     lessonStore.loadLesson(params.lessonId);
-  }, []);
+  }, [lessonStore, params.lessonId]);
 
   if (lessonStore.isLoading || !lessonStore.lesson) {
     return <CircularProgress />;
