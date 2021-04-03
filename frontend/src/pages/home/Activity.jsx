@@ -17,13 +17,13 @@ const columns = [
   {
     field: 'updatedAt',
     headerName: 'Datum',
-    width: 160,
+    width: 200,
     renderCell: (data) => convertDateToReadableString(data.getValue('updatedAt'))
   },
   {
     field: 'student',
     headerName: 'Leerling',
-    width: 200,
+    width: 400,
     valueGetter: (data) => data.getValue('LessonAttempt').student.name
   },
   {
@@ -35,13 +35,13 @@ const columns = [
   {
     field: 'question',
     headerName: 'Vraag',
-    width: 200,
+    width: 100,
     valueGetter: (data) => data.getValue('QuestionGroup').index + 1
   },
   {
     field: 'isCompleted',
     headerName: 'Voltooid',
-    width: 130,
+    width: 125,
     renderCell: (data) =>
       data.getValue('isCompleted') ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
   },
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Orders() {
+export default function Activity() {
   const classes = useStyles();
   const [questionAttempts, setQuestionAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,7 +96,7 @@ export default function Orders() {
         </Grid>
       <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={preventDefault}>
-          See more orders
+          See more activity
         </Link>
       </div>
     </React.Fragment>
