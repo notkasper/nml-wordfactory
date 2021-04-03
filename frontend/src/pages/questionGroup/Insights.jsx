@@ -15,12 +15,15 @@ const Details = (props) => {
 
   const loadQuestionGroupAttempts = useCallback(async () => {
     setLoading(true);
+
     const response = await service.loadQuestionGroupAttempts(
       params.questionGroupId
     );
+
     if (!response) {
       return;
     }
+    
     const data = response.body.data.filter((attempt) => attempt.isCompleted);
     setQuestionGroupAttempts(data);
     setLoading(false);

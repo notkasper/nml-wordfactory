@@ -105,10 +105,13 @@ const Dashboard = (props) => {
 
   const loadClassList = useCallback(async () => {
     setLoading(true);
+    
     const response = await service.loadClassList();
-    if (response) {
-      setClassList(response.body.data);
+    if (!response) {
+      return;
     }
+
+    setClassList(response.body.data);
     setLoading(false);
   }, []);
 

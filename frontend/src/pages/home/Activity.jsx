@@ -30,7 +30,7 @@ const columns = [
     field: 'lesson',
     headerName: 'Les',
     width: 200,
-    valueGetter: (params) => params.row.QuestionGroup.Lesson.prefix
+    valueGetter: (params) => params.row.QuestionGroup.questionGroups.prefix
   },
   {
     field: 'question',
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Activity = () => {
+const Activity = (props) => {
   const classes = useStyles();
   const [questionAttempts, setQuestionAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,10 +66,11 @@ const Activity = () => {
     setLoading(true);
 
     const response = await service.loadQuestionAttempts();
-    if (response) {
-      setQuestionAttempts(response.body.data);
+    if (!response) {
+      return;
     }
 
+    setQuestionAttempts(response.body.data);
     setLoading(false);
   }, []);
 

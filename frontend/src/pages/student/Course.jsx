@@ -46,7 +46,7 @@ const Course = (props) => {
             style={{ width: '100%' }}
           >
             {lessons.map((lesson) => (
-              <Lesson {...lesson} />
+              <Lesson key={lesson.id} {...lesson} />
             ))}
           </List>
         </AccordionDetails>

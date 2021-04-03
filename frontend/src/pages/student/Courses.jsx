@@ -14,7 +14,7 @@ const Courses = (props) => {
       }
     >
       {courses.map((course) => (
-        <Course {...course} />
+        <Course key={course.id} {...course} />
       ))}
     </List>
   );
