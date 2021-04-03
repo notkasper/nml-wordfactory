@@ -66,7 +66,6 @@ export default function Activity() {
     setLoading(true);
 
     const response = await service.loadQuestionAttempts();
-    console.log(response.body.data);
     if (response) {
       setQuestionAttempts(response.body.data);
     }
