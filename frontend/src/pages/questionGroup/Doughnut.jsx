@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
@@ -29,8 +29,6 @@ const CustomDoughnut = (props) => {
     },
     { correct: 0, incorrect: 0, missed: 0 }
   );
-
-  console.log({ correct, incorrect, missed });
 
   const data = {
     datasets: [

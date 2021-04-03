@@ -73,10 +73,10 @@ const Login = (props) => {
     setLoading(true);
     e.preventDefault(); // Prevent reloading of page, due to "submit" role on button
     const response = await authStore.login(email, password);
+    setLoading(false);
     if (response) {
       history.push('/dashboard/home');
     }
-    setLoading(false);
   };
 
   return (
@@ -127,7 +127,7 @@ const Login = (props) => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              busy={loading}
+              disabled={loading}
               onClick={login}
             >
               Inloggen

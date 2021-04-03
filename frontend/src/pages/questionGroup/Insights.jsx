@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -13,7 +13,7 @@ const Details = (props) => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
 
-  const loadQuestionGroupAttempts = async () => {
+  const loadQuestionGroupAttempts = useCallback(async () => {
     setLoading(true);
     const response = await service.loadQuestionGroupAttempts(
       params.questionGroupId
@@ -24,11 +24,11 @@ const Details = (props) => {
     const data = response.body.data.filter((attempt) => attempt.isCompleted);
     setQuestionGroupAttempts(data);
     setLoading(false);
-  };
+  }, [params.questionGroupId]);
 
   useEffect(() => {
     loadQuestionGroupAttempts();
-  }, []);
+  }, [loadQuestionGroupAttempts]);
 
   if (loading) {
     return <CircularProgress />;
