@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Chart from './Chart';
 import Class from './Class';
-import Orders from './Orders';
+import Activity from './Activity';
 import service from '../../service';
 import PageContainer from '../_shared/PageContainer';
 
@@ -105,10 +105,13 @@ const Dashboard = (props) => {
 
   const loadClassList = useCallback(async () => {
     setLoading(true);
+    
     const response = await service.loadClassList();
-    if (response) {
-      setClassList(response.body.data);
+    if (!response) {
+      return;
     }
+
+    setClassList(response.body.data);
     setLoading(false);
   }, []);
 
@@ -138,10 +141,10 @@ const Dashboard = (props) => {
             <Chart />
           </Paper>
         </Grid>
-        {/* Recent Orders */}
+        {/* Recent activity */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Orders />
+            <Activity />
           </Paper>
         </Grid>
       </Grid>
