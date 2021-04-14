@@ -8,27 +8,13 @@ import {
 } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import FaceIcon from '@material-ui/icons/Face';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { observer } from 'mobx-react-lite';
 import { defaults } from 'react-chartjs-2';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
+import Menu from './Menu';
+import AppBar from './AppBar';
 import 'chartjs-plugin-colorschemes';
 // PAGES
 import Login from './pages/login';
@@ -133,77 +119,10 @@ export default function Dashboard() {
   const classes = useStyles();
 
   const Dashboard = () => {
-    const history = useHistory();
-
-    const goToProfile = () => history.push('/dashboard/profile');
-    const goToClasses = () => history.push('/dashboard/home');
-    const logout = () => {
-      authStore.logout();
-      history.push('/');
-    };
-
-    const goBack = () => {
-      history.goBack();
-    };
-
     return (
       <>
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, classes.appBarShift)}
-        >
-          <Toolbar className={classes.toolbar}>
-            <IconButton onClick={goBack}>
-              <ChevronLeftIcon style={{ color: 'white' }} />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit" onClick={goToProfile}>
-              <AccountCircle />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          className={classes.drawerPaper}
-          open
-          style={{ paddingTop: '50px' }}
-        >
-          <List style={{ padding: 0 }}>
-            <div style={{ marginTop: '64px', padding: 0 }} />
-            <Divider />
-            <ListSubheader inset>Leraren dashboard</ListSubheader>
-            <ListItem button onClick={goToClasses}>
-              <ListItemIcon>
-                <FaceIcon />
-              </ListItemIcon>
-              <ListItemText primary="Klassen" />
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListSubheader inset>Persoonlijke instellingen</ListSubheader>
-            <ListItem button>
-              <ListItemIcon>
-                <AccountBalanceWalletIcon />
-              </ListItemIcon>
-              <ListItemText primary="Account" />
-            </ListItem>
-            <ListItem button onClick={logout}>
-              <ListItemIcon>
-                <MeetingRoomIcon />
-              </ListItemIcon>
-              <ListItemText primary="Uitloggen" />
-            </ListItem>
-          </List>
-        </Drawer>
+        <AppBar />
+        <Menu authStore={authStore} />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           {/* ACTUAL INNER COMPONENT */}
