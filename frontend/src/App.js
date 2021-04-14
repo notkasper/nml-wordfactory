@@ -9,16 +9,10 @@ import { defaults } from 'react-chartjs-2';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
 import Menu from './Menu';
 import AppBar from './AppBar';
-import 'chartjs-plugin-colorschemes';
-// PAGES
+import Content from './Content';
 import Login from './pages/login';
-import LessonView from './pages/home';
-import Profile from './pages/profile';
-import Class from './pages/class';
-import Lesson from './pages/lesson';
-import Student from './pages/student';
-import StudentLesson from './pages/studentLesson';
-import QuestionGroup from './pages/questionGroup';
+import 'chartjs-plugin-colorschemes';
+
 // STORES
 import authStore from './stores/auth';
 import lessonStore from './stores/lessonStore';
@@ -28,12 +22,6 @@ defaults.global.plugins.colorschemes.scheme = Classic10;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
   },
 }));
 
@@ -50,86 +38,35 @@ const ErrorPopup = observer((props) => {
   );
 });
 
-export default function Dashboard() {
+const LoginPage = () => <Login authStore={authStore} />;
+
+const Dashboard = () => {
+  return (
+    <>
+      <AppBar />
+      <Menu authStore={authStore} />
+      <Content authStore={authStore} lessonStore={lessonStore} />
+    </>
+  );
+};
+
+const App = () => {
   const classes = useStyles();
-
-  const Dashboard = () => {
-    return (
-      <>
-        <AppBar />
-        <Menu authStore={authStore} />
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          {/* ACTUAL INNER COMPONENT */}
-          <Switch>
-            <Route
-              exact
-              path="/dashboard/home"
-              render={(props) => (
-                <LessonView {...props} authStore={authStore} />
-              )}
-            />
-            <Route
-              exact
-              path="/dashboard/profile"
-              render={(props) => <Profile {...props} authStore={authStore} />}
-            />
-            <Route
-              exact
-              path="/dashboard/classes/:classId"
-              render={(props) => <Class {...props} authStore={authStore} />}
-            />
-            <Route
-              exact
-              path="/dashboard/lessons/:lessonId/:tab"
-              render={(props) => (
-                <Lesson
-                  {...props}
-                  authStore={authStore}
-                  lessonStore={lessonStore}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/dashboard/students/:studentId"
-              render={(props) => <Student {...props} authStore={authStore} />}
-            />
-            <Route
-              exact
-              path="/dashboard/students/:studentId/lessons/:lessonId"
-              render={(props) => (
-                <StudentLesson {...props} authStore={authStore} />
-              )}
-            />
-            <Route
-              exact
-              path="/dashboard/questionGroups/:questionGroupId/:tab"
-              render={(props) => (
-                <QuestionGroup {...props} authStore={authStore} />
-              )}
-            />
-          </Switch>
-        </main>
-      </>
-    );
-  };
-
   return (
     <div className={classes.root}>
       <Router>
         <CssBaseline />
-        {/* Two main 'routes', the login screen, and the actual dashboard. The dashboard has its own sub-routes */}
+        {/* Two main routers, this top router checks if the user is logged in;
+        If logged in -> Delegate routing to the dashboard component.
+        Else -> Show login page */}
         <Switch>
-          <Route
-            path="/"
-            exact
-            render={(props) => <Login {...props} authStore={authStore} />}
-          />
+          <Route path="/" exact component={LoginPage} />
           <Route path="/dashboard" component={Dashboard} />
         </Switch>
       </Router>
       <ErrorPopup authStore={authStore} />
     </div>
   );
-}
+};
+
+export default App;
