@@ -6,7 +6,11 @@ import {
   Route,
   useHistory,
 } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -27,7 +31,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { observer } from 'mobx-react-lite';
-import { defaults } from 'react-chartjs-2';
+import { Chart, defaults } from 'react-chartjs-2';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
 import 'chartjs-plugin-colorschemes';
 // PAGES
@@ -44,6 +48,42 @@ import authStore from './stores/auth';
 import lessonStore from './stores/lessonStore';
 
 defaults.global.plugins.colorschemes.scheme = Classic10;
+
+const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
+Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
+  draw: function () {
+    originalDoughnutDraw.apply(this, arguments);
+
+    if (this.chart.config.options.elements.center) {
+      const chart = this.chart.chart;
+      const { text, color } = this.chart.config.options.elements.center;
+      const { ctx, width, height } = chart;
+      const fontSize = (height / 114).toFixed(2);
+      ctx.font = fontSize + 'em Verdana';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = color;
+
+      const textX = Math.round((width - ctx.measureText(text).width) / 2);
+      const textY = height / 2;
+
+      ctx.fillText(text, textX, textY);
+    }
+  },
+});
+
+const theme = createMuiTheme({
+  widget: {
+    primary: {
+      main: '#729ece',
+    },
+    secondary: {
+      main: '#ff9e4a',
+    },
+    tertiary: {
+      main: '#67bf5c',
+    },
+  },
+});
 
 const drawerWidth = 245;
 
@@ -262,20 +302,22 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={classes.root}>
-      <Router>
-        <CssBaseline />
-        {/* Two main 'routes', the login screen, and the actual dashboard. The dashboard has its own sub-routes */}
-        <Switch>
-          <Route
-            path="/"
-            exact
-            render={(props) => <Login {...props} authStore={authStore} />}
-          />
-          <Route path="/dashboard" component={Dashboard} />
-        </Switch>
-      </Router>
-      <ErrorPopup authStore={authStore} />
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <Router>
+          <CssBaseline />
+          {/* Two main 'routes', the login screen, and the actual dashboard. The dashboard has its own sub-routes */}
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={(props) => <Login {...props} authStore={authStore} />}
+            />
+            <Route path="/dashboard" component={Dashboard} />
+          </Switch>
+        </Router>
+        <ErrorPopup authStore={authStore} />
+      </div>
+    </ThemeProvider>
   );
 }
