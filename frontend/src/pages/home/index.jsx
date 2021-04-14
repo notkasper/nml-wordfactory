@@ -56,7 +56,6 @@ const Dashboard = (props) => {
         ]
       },
     ],
-    text: '73%'
   });
 
   const options = ({ color }) => ({
