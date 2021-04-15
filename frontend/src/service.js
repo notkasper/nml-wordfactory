@@ -18,8 +18,8 @@ const handleResponse = async (req) => {
   }
 };
 
-const loadStudents = async (classId) => {
-  const req = request.get(`/api/v1/students`).query({ classId });
+const loadStudents = async (query) => {
+  const req = request.get(`/api/v1/students`).query(query);
   const response = await handleResponse(req);
   return response;
 };

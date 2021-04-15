@@ -33,21 +33,21 @@ const Lesson = (props) => {
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+  const classId = params.classId;
 
   const loadStudents = async () => {
-    const response = await service.loadStudents(params.classId);
+    const response = await service.loadStudents(classId);
     if (!response) return;
     setStudents(response.body.data);
   };
 
   const loadClass = async () => {
-    const response = await service.loadClass(params.classId);
+    const response = await service.loadClass(classId);
     if (!response) return;
     setTheClass(response.body.data);
   };
 
   const loadCourses = async () => {
-    const classId = params.classId;
     const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
