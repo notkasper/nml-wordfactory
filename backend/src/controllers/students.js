@@ -17,7 +17,7 @@ const getStudents = async (req, res) => {
   });
 
   const students = classes.reduce((acc, curr) => {
-    acc.push(curr.students);
+    acc.push(...curr.students);
     return acc;
   }, []);
 

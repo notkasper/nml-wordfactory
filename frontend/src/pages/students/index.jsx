@@ -8,7 +8,7 @@ import service from '../../service';
 
 const Students = () => {
   const [loading, setLoading] = useState(false);
-  const [student, setStudent] = useState([]);
+  const [students, setStudents] = useState([]);
 
   const loadStudents = async () => {
     setLoading(true);
@@ -17,7 +17,7 @@ const Students = () => {
     if (!response) {
       return;
     }
-    setStudent(response.body.data);
+    setStudents(response.body.data);
   };
 
   useEffect(() => {
@@ -31,12 +31,11 @@ const Students = () => {
   return (
     <PageContainer>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <p>test</p>
-        </Grid>
-        <Grid item xs={12}>
-          <p>test</p>
-        </Grid>
+        {students.map((student) => (
+          <Grid item xs={12}>
+            <p>{student.name || 'student'}</p>
+          </Grid>
+        ))}
       </Grid>
     </PageContainer>
   );
