@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 const MultipleChoice = (props) => {
   const { id, instruction, data } = props;
   const classes = useStyles();
-  const [value, setValue] = useState('female');
+  const [value] = useState('female');
 
   // TODO WFT-72: Sometimes multiple choice questions have multiple nested multiple choice questions inside.. for now only show the first one
 
@@ -42,10 +42,12 @@ const MultipleChoice = (props) => {
               <RadioGroup aria-label="gender" name="gender1" value={value}>
                 {data.options.map((option) => (
                   <FormControlLabel
+                    key={option.value}
                     value={option.value}
                     control={<Radio />}
                     label={option.value}
                     disabled
+                    checked={option.isCorrect}
                   />
                 ))}
               </RadioGroup>

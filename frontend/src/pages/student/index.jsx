@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
@@ -14,34 +14,34 @@ const Student = () => {
   const [student, setStudent] = useState([]);
   const [courses, setCourses] = useState([]);
 
-  const loadCourses = async () => {
+  const loadCourses = useCallback(async () => {
     const studentId = params.studentId;
     const response = await service.loadCourses({ studentId });
     if (!response) {
       return;
     }
     setCourses(response.body.data);
-  };
+  }, [params.studentId]);
 
-  const loadStudent = async () => {
+  const loadStudent = useCallback(async () => {
     const studentId = params.studentId;
     const response = await service.loadStudent(studentId);
     if (!response) {
       return;
     }
     setStudent(response.body.data);
-  };
+  }, [params.studentId]);
 
-  const loadAll = async () => {
+  const loadAll = useCallback(async () => {
     setLoading(true);
     const promises = [loadCourses(), loadStudent()];
     await Promise.all(promises);
     setLoading(false);
-  };
+  }, [loadCourses, loadStudent]);
 
   useEffect(() => {
     loadAll();
-  }, []);
+  }, [loadAll]);
 
   if (loading) {
     return <CircularProgress />;

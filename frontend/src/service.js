@@ -48,6 +48,12 @@ const loadLessonAttempts = async (lessonId) => {
   return response;
 };
 
+const loadQuestionAttempts = async () => {
+  const req = request.get(`/api/v1/questionAttempts`).query({ pageSize: 10 });
+  const response = await handleResponse(req);
+  return response;
+};
+
 const loadLesson = async (lessonId) => {
   const req = request.get(`/api/v1/lessons/${lessonId}`);
   const response = await handleResponse(req);
@@ -90,6 +96,7 @@ const service = {
   loadCourses,
   loadClassList,
   loadLessonAttempts,
+  loadQuestionAttempts,
   loadLesson,
   login,
   loadQuestionGroupAttempts,

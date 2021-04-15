@@ -113,11 +113,9 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         type: 'clickTheRightWords',
         instruction: lesson.lessonInstruction,
         data: {
-          options: items[0].story.split(/\W+/).map((word) => ({
-            value: word,
-            isOption: items[0].words.includes(word),
-            isCorrect: items[0].correctWords.includes(word),
-          })),
+          story: items[0].story,
+          words: items[0].words,
+          correctWords: items[0].correctWords,
         },
       },
     ];

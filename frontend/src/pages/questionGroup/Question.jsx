@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -13,7 +13,7 @@ const Question = (props) => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
 
-  const loadQuestionGroup = async () => {
+  const loadQuestionGroup = useCallback(async () => {
     setLoading(true);
     const response = await service.loadQuestionGroup(params.questionGroupId);
     if (!response) {
@@ -21,11 +21,11 @@ const Question = (props) => {
     }
     setQuestionGroup(response.body.data);
     setLoading(false);
-  };
+  }, [params.questionGroupId]);
 
   useEffect(() => {
     loadQuestionGroup();
-  }, []);
+  }, [loadQuestionGroup]);
 
   const enableEdit = () => {
     // TODO: make editable
