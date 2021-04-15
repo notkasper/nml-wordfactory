@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import VisibilityIcon from '@material-ui/icons/Visibility';

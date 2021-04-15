@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Typography from '@material-ui/core/Typography';
 import MultipleChoice from '../_shared/questionTypes/MultipleChoice';
 import ClickTheRightWords from '../_shared/questionTypes/clickTheRightWords';
 
