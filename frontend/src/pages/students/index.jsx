@@ -1,10 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useHistory } from 'react-router-dom';
+import { DataGrid } from '@material-ui/data-grid';
+import Paper from '@material-ui/core/Paper';
 import PageContainer from '../_shared/PageContainer';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import service from '../../service';
+
+const columns = [
+  {
+    field: 'name',
+    headerName: 'Naam',
+    width: 130,
+  },
+  {
+    field: 'Bekijken',
+    headerName: '',
+    width: 150,
+    renderCell: (data) => <ViewIcon id={data.getValue('id')} />,
+  },
+];
+
+const ViewIcon = (props) => {
+  const { id } = props;
+  const history = useHistory();
+  const goToStats = () => history.push(`/dashboard/student/${id}`);
+  return (
+    <IconButton onClick={goToStats}>
+      <VisibilityIcon color="primary" />
+    </IconButton>
+  );
+};
 
 const Students = () => {
   const [loading, setLoading] = useState(false);
@@ -31,11 +60,17 @@ const Students = () => {
   return (
     <PageContainer>
       <Grid container spacing={2}>
-        {students.map((student) => (
-          <Grid item xs={12}>
-            <p>{student.name || 'student'}</p>
-          </Grid>
-        ))}
+        <Grid item xs={12}>
+          <Paper>
+            <DataGrid
+              autoHeight
+              rows={students}
+              columns={columns}
+              pageSize={24}
+              checkboxSelection
+            />
+          </Paper>
+        </Grid>
       </Grid>
     </PageContainer>
   );

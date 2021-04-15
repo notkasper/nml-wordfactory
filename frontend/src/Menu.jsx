@@ -167,6 +167,7 @@ const Menu = (props) => {
             // labelInfo="3"
             color="#1a73e8"
             bgColor="#e8f0fe"
+            key={classItem.id}
           />
         ))}
       </StyledTreeItem>
