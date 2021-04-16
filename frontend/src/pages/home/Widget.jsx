@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Widget(props) {
+const Widget = (props) => {
 	const classes = useStyles();
 
   return (
@@ -52,3 +52,5 @@ export default function Widget(props) {
 Widget.propTypes = {
   children: PropTypes.node,
 };
+
+export default Widget;

@@ -1,21 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-} from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { observer } from 'mobx-react-lite';
 import { Chart, defaults } from 'react-chartjs-2';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
+import 'chartjs-plugin-colorschemes';
+
+import theme from './theme';
 import Menu from './Menu';
 import AppBar from './AppBar';
 import Content from './Content';
 import Login from './pages/login';
-import 'chartjs-plugin-colorschemes';
 
 // STORES
 import authStore from './stores/auth';
@@ -42,20 +40,6 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
 
       ctx.fillText(text, textX, textY);
     }
-  },
-});
-
-const theme = createMuiTheme({
-  widget: {
-    primary: {
-      main: '#729ece',
-    },
-    secondary: {
-      main: '#ff9e4a',
-    },
-    tertiary: {
-      main: '#67bf5c',
-    },
   },
 });
 
