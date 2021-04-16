@@ -3,11 +3,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Doughnut } from 'react-chartjs-2';
 
 import Activity from './Activity';
-import Title from './Title';
 import Widget from './Widget';
+import PercentageDoughnut from './PercentageDoughnut';
 import service from '../../service';
 import PageContainer from '../_shared/PageContainer';
 
@@ -57,7 +56,7 @@ const Dashboard = (props) => {
       },
     ],
   });
-
+  
   const options = ({ color }) => ({
     cutoutPercentage: 75,
     tooltips: { enabled: false },
@@ -75,27 +74,13 @@ const Dashboard = (props) => {
     <PageContainer>
       <Grid container spacing={3}>
         {/* Widgets with general information */}
-        <Widget left={6} right="lessen" color={theme.widget.primary.main}></Widget>
-        <Widget left={104} right="leerlingen" color={theme.widget.secondary.main}></Widget>
-        <Widget left={25} right="na te kijken opdrachten" color={theme.widget.tertiary.main}></Widget>
-        <Grid item xs={12} md={4}>
-          <Paper className={classes.paper}>
-            <Title color={theme.widget.primary.main}>{"Gemiddelde correctheid"}</Title>
-            <Doughnut data={data({ color: theme.widget.primary.main })} options={options({ color: theme.widget.primary.main })} />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper className={classes.paper}>
-            <Title color={theme.widget.secondary.main}>{"Gemiddelde voortgang"}</Title>
-            <Doughnut data={data({ color: theme.widget.secondary.main })} options={options({ color: theme.widget.secondary.main })} />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper className={classes.paper}>
-            <Title color={theme.widget.tertiary.main}>{"Gemiddelde correctheid"}</Title>
-            <Doughnut data={data({ color: theme.widget.tertiary.main })} options={options({ color: theme.widget.tertiary.main })} />
-          </Paper>
-        </Grid>
+        <Widget left={6} right="lessen" color={theme.widget.primary.main} />
+        <Widget left={104} right="leerlingen" color={theme.widget.secondary.main} />
+        <Widget left={25} right="na te kijken opdrachten" color={theme.widget.tertiary.main} />
+        {/* Average percentage statistics */}
+        <PercentageDoughnut title="Gemiddelde correctheid" data={data({ color: theme.widget.primary.main })} options={options({ color: theme.widget.primary.main })}/>
+        <PercentageDoughnut title="Gemiddelde voortgang" data={data({ color: theme.widget.secondary.main })} options={options({ color: theme.widget.secondary.main })}/>
+        <PercentageDoughnut title="Gemiddelde tijdsduur" data={data({ color: theme.widget.tertiary.main })} options={options({ color: theme.widget.tertiary.main })}/>
         {/* Recent activity */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>

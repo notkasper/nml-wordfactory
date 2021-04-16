@@ -5,10 +5,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { observer } from 'mobx-react-lite';
-import { Chart, defaults } from 'react-chartjs-2';
+import { defaults } from 'react-chartjs-2';
 import { Classic10 } from 'chartjs-plugin-colorschemes/src/colorschemes/colorschemes.tableau';
 import 'chartjs-plugin-colorschemes';
 
+import extendChart from './config/extendChart';
 import theme from './theme';
 import Menu from './Menu';
 import AppBar from './AppBar';
@@ -20,28 +21,7 @@ import authStore from './stores/auth';
 import lessonStore from './stores/lessonStore';
 
 defaults.global.plugins.colorschemes.scheme = Classic10;
-
-const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
-Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
-  draw: function () {
-    originalDoughnutDraw.apply(this, arguments);
-
-    if (this.chart.config.options.elements.center) {
-      const chart = this.chart.chart;
-      const { text, color } = this.chart.config.options.elements.center;
-      const { ctx, width, height } = chart;
-      const fontSize = (height / 114).toFixed(2);
-      ctx.font = fontSize + 'em Verdana';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = color;
-
-      const textX = Math.round((width - ctx.measureText(text).width) / 2);
-      const textY = height / 2;
-
-      ctx.fillText(text, textX, textY);
-    }
-  },
-});
+extendChart();
 
 const useStyles = makeStyles((theme) => ({
   root: {
