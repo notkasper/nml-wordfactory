@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "concurrently -c \"blue.bold,magenta.bold\" -n \"back-end,front-end\" -p name \"cd backend && npm run dev\" \"cd frontend && npm start\"",
     "build": "cd frontend && npm run build && copyfiles -u 1 build/* build/static/js/* build/static/media/* ../backend/src/build",
+    "prod": "cd backend && npm run prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
