@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 	widget: {
     height: 230,
     padding: theme.spacing(3),
-		marginBottom: theme.spacing(11),
+		marginBottom: theme.spacing(12),
   },
 	paper: {
 		borderBottomLeftRadius: 4,
