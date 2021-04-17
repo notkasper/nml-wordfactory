@@ -40,3 +40,12 @@ JWT_SECRET= // for development, anything will do
 
 run `npm run dev` in the root  
 if it does not work, contact repo owner or a collaborator
+
+# how to deploy
+
+run `npm run build` in the root folder, this will:
+
+1. Create a fresh build for the frontend
+2. move the new build into the backend folder so it may be served by the API
+
+after this you can test by running `npm run prod` in the root, and visiting the url (if testing locally; localhost:3000)

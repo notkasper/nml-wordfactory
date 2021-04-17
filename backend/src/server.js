@@ -46,7 +46,17 @@ const start = async () => {
   app.use(cookieParser());
 
   // Security headers
-  app.use(helmet());
+  app.use(
+    helmet({
+      // Setting this options allows us to use inline javascript. By default Helmet does now allow this, but as we are a SPA this is required
+      contentSecurityPolicy: {
+        directives: {
+          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          'script-src': ["'self'", "'unsafe-inline'"],
+        },
+      },
+    })
+  );
 
   // Xss prevention
   app.use(xssClean());
@@ -66,7 +76,7 @@ const start = async () => {
   app.use(cors());
 
   // Set static folder (build folder)
-  app.use('/static', express.static(path.join(__dirname, './static')));
+  app.use('/', express.static(path.join(__dirname, './build')));
 
   // Set API documentation path
   const swaggerDocument = YAML.load(
@@ -98,6 +108,13 @@ const start = async () => {
     logger.error(error);
     res.status(500).send({ message: 'Server error' });
   });
+
+  if (process.env.NODE_ENV === 'production') {
+    app.get('*', (req, res) => {
+      logger.info('[[ CATCH ALL ]]');
+      res.sendFile(path.join(__dirname, './build/index.html'));
+    });
+  }
 
   const server = app.listen(
     port,
