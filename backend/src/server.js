@@ -59,7 +59,7 @@ const start = async () => {
   );
 
   // Xss prevention
-  app.use(xssClean());
+  // app.use(xssClean());
 
   // Rate limiting
   app.use(
@@ -70,10 +70,10 @@ const start = async () => {
   );
 
   // Prevent http param pollution
-  app.use(hpp());
+  // app.use(hpp());
 
   // CORS
-  app.use(cors());
+  // app.use(cors());
 
   // Set static folder (build folder)
   app.use('/', express.static(path.join(__dirname, './build')));
