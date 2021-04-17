@@ -16,10 +16,8 @@ if (!fs.existsSync(productionLogFolder)) {
 
 const productionStream = {
   level: 'debug',
-  type: 'rotating-file',
-  path: path.join(productionLogFolder, '/production.log'),
-  period: '1d',
-  count: 14,
+  type: 'raw',
+  stream: prettyStream,
 };
 
 const developmentStream = {
@@ -30,7 +28,7 @@ const developmentStream = {
 
 const logger = bunyan.createLogger({
   name: package.name,
-  level: process.env.NODE_ENV === 'production' ? 'warn' : 'info',
+  level: 'info',
   streams: [
     process.env.NODE_ENV === 'production'
       ? productionStream

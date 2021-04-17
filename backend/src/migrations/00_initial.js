@@ -58,6 +58,10 @@ const up = async (query) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    level: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
