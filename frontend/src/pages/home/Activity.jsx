@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import Grid from '@material-ui/core/Grid';
-import Title from './Title';
+import Title from '../_shared/Title';
 import service from '../../service';
 
 const convertDateToReadableString = (date) => {
