@@ -58,4 +58,4 @@ const addQuestionGroupAverages = (lesson) => {
   return lesson;
 };
 
-module.exports = { addDuration, addPerformance, addQuestionGroupAverages };
+export default { addDuration, addPerformance, addQuestionGroupAverages };
