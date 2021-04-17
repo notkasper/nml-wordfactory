@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import 'chartjs-plugin-colorschemes';
 // PAGES
