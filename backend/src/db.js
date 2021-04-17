@@ -216,9 +216,9 @@ db.migrate = async () => {
 };
 
 db.initialize = async () => {
-  // await db.connect();
-  // await db.migrate();
-  // await db.setupModels();
+  await db.connect();
+  await db.migrate();
+  await db.setupModels();
 };
 
 db.close = () => {
