@@ -111,7 +111,6 @@ const start = async () => {
 
   if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => {
-      logger.info('[[ CATCH ALL ]]');
       res.sendFile(path.join(__dirname, './build/index.html'));
     });
   }
