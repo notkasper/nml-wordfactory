@@ -7,7 +7,11 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import FormLabel from '@material-ui/core/FormLabel';
+import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
   fullWidth: {
@@ -15,12 +19,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const RemoveButton = ({ onClick }) => (
+  <label htmlFor="icon-button-file">
+    <IconButton
+      color="primary"
+      aria-label="upload picture"
+      component="span"
+      onClick={onClick}
+    >
+      <ClearRoundedIcon />
+    </IconButton>
+  </label>
+);
+
 const MultipleChoice = (props) => {
-  const { id, instruction, data } = props;
+  const { id, instruction, data: originalData, editing } = props;
+  const [data, setData] = useState(Object.assign({}, originalData));
   const classes = useStyles();
   const [value] = useState('female');
 
   // TODO WFT-72: Sometimes multiple choice questions have multiple nested multiple choice questions inside.. for now only show the first one
+
+  const addOption = () => {
+    const newOption = { isCorrect: false, value: 'testValue' };
+    const newOptions = [...data.options, newOption];
+    const newData = { ...data, options: newOptions };
+    setData(newData);
+  };
+
+  const removeOption = (optionToRemove) => {
+    const newOptions = data.options.filter(
+      (option) => option !== optionToRemove
+    );
+    const newData = { ...data, options: newOptions };
+    setData(newData);
+  };
+
+  const editOption = (optionToEdit, event) => {
+    const newOptions = data.options.map((option) => {
+      if (option === optionToEdit) {
+        return { ...option, value: event.target.value };
+      }
+      return option;
+    });
+    const newData = { ...data, options: newOptions };
+    setData(newData);
+  };
+
+  const editCorrect = (newCorrectOption, event) => {
+    const newOptions = data.options.map((option) => {
+      if (option === newCorrectOption) {
+        return { ...newCorrectOption, isCorrect: !option.isCorrect };
+      }
+      return option;
+    });
+    const newData = { ...data, options: newOptions };
+    setData(newData);
+  };
 
   return (
     <>
@@ -40,17 +95,45 @@ const MultipleChoice = (props) => {
                 Selecteer het juiste antwoord
               </FormLabel>
               <RadioGroup aria-label="gender" name="gender1" value={value}>
-                {data.options.map((option) => (
-                  <FormControlLabel
-                    key={option.value}
-                    value={option.value}
-                    control={<Radio />}
-                    label={option.value}
-                    disabled
-                    checked={option.isCorrect}
-                  />
+                {data.options.map((option, index) => (
+                  <div>
+                    <FormControlLabel
+                      key={index}
+                      value={option.value}
+                      control={<Radio />}
+                      label={
+                        editing ? (
+                          <TextField
+                            value={option.value}
+                            onChange={(event) => editOption(option, event)}
+                          />
+                        ) : (
+                          option.value
+                        )
+                      }
+                      disabled={!editing}
+                      checked={option.isCorrect}
+                      onClick={(event) => editCorrect(option, event)}
+                    />
+                    {editing && (
+                      <RemoveButton onClick={() => removeOption(option)} />
+                    )}
+                  </div>
                 ))}
               </RadioGroup>
+              {editing ? (
+                <label htmlFor="icon-button-file">
+                  <IconButton
+                    color="primary"
+                    aria-label="upload picture"
+                    component="span"
+                    onClick={addOption}
+                  >
+                    <AddCircleIcon />
+                  </IconButton>
+                  Antwoord toevoegen
+                </label>
+              ) : null}
             </FormControl>
           </Grid>
         </Grid>

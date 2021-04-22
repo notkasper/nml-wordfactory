@@ -21,7 +21,7 @@ const Question = (props) => {
 };
 
 const QuestionGroup = (props) => {
-  const { questions } = props;
+  const { questions, editing, saveEdit } = props;
 
   return (
     <Paper>
@@ -34,7 +34,7 @@ const QuestionGroup = (props) => {
       >
         {questions.map((question, index) => (
           <ListItem key={question.id}>
-            <Question {...question} index={index} />
+            <Question {...question} index={index} editing={editing} />
           </ListItem>
         ))}
       </List>
