@@ -29,9 +29,7 @@ const Question = (props) => {
     loadQuestionGroup();
   }, [loadQuestionGroup]);
 
-  const enableEdit = () => setEditing(true);
-  const disableEdit = () => setEditing(false);
-  const saveEdit = (newData) => {
+  const save = (newData) => {
     console.log(newData);
     console.log('saving new data...');
   };
@@ -43,47 +41,9 @@ const Question = (props) => {
   return (
     <PageContainer>
       <Grid container spacing={2}>
+        <Grid item xs={12}></Grid>
         <Grid item xs={12}>
-          {editing ? (
-            <Grid container spacing={2}>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<CancelIcon />}
-                  onClick={disableEdit}
-                >
-                  Aanpassen annuleren
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<EditIcon />}
-                  onClick={enableEdit}
-                >
-                  Aanpassing opslaan
-                </Button>
-              </Grid>
-            </Grid>
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<EditIcon />}
-              onClick={enableEdit}
-            >
-              Vraag aanpassen
-            </Button>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <QuestionGroup
-            {...questionGroup}
-            editing={editing}
-            saveEdit={saveEdit}
-          />
+          <QuestionGroup {...questionGroup} save={save} />
         </Grid>
       </Grid>
     </PageContainer>

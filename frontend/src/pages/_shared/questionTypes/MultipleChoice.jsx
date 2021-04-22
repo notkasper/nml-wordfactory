@@ -5,12 +5,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import EditIcon from '@material-ui/icons/Edit';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import FormLabel from '@material-ui/core/FormLabel';
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
+import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,10 +36,10 @@ const RemoveButton = ({ onClick }) => (
 );
 
 const MultipleChoice = (props) => {
-  const { id, instruction, data: originalData, editing } = props;
+  const { id, instruction, data: originalData, save } = props;
   const [data, setData] = useState(Object.assign({}, originalData));
   const classes = useStyles();
-  const [value] = useState('female');
+  const [editing, setEditing] = useState(false);
 
   // TODO WFT-72: Sometimes multiple choice questions have multiple nested multiple choice questions inside.. for now only show the first one
 
@@ -77,6 +80,18 @@ const MultipleChoice = (props) => {
     setData(newData);
   };
 
+  const enableEdit = () => setEditing(true);
+
+  const saveEdit = () => {
+    setEditing(false);
+    save(data);
+  };
+
+  const cancelEdit = () => {
+    setEditing(false);
+    setData(originalData);
+  };
+
   return (
     <>
       <ListItem alignItems="flex-start" key={id}>
@@ -89,18 +104,23 @@ const MultipleChoice = (props) => {
           <Grid item xs={12}>
             <Typography>{data.value}</Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={10}>
             <FormControl component="fieldset">
               <FormLabel component="legend">
                 Selecteer het juiste antwoord
               </FormLabel>
-              <RadioGroup aria-label="gender" name="gender1" value={value}>
+              <RadioGroup>
                 {data.options.map((option, index) => (
                   <div>
                     <FormControlLabel
                       key={index}
                       value={option.value}
-                      control={<Radio />}
+                      control={
+                        <Radio
+                          checked={option.isCorrect}
+                          onClick={(event) => editCorrect(option, event)}
+                        />
+                      }
                       label={
                         editing ? (
                           <TextField
@@ -112,8 +132,6 @@ const MultipleChoice = (props) => {
                         )
                       }
                       disabled={!editing}
-                      checked={option.isCorrect}
-                      onClick={(event) => editCorrect(option, event)}
                     />
                     {editing && (
                       <RemoveButton onClick={() => removeOption(option)} />
@@ -136,6 +154,41 @@ const MultipleChoice = (props) => {
               ) : null}
             </FormControl>
           </Grid>
+          {editing ? (
+            <>
+              <Grid item xs={1}>
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                  onClick={saveEdit}
+                >
+                  <CheckCircleRoundedIcon />
+                </IconButton>
+              </Grid>
+              <Grid item xs={1}>
+                <IconButton
+                  color="secondary"
+                  aria-label="upload picture"
+                  component="span"
+                  onClick={cancelEdit}
+                >
+                  <CancelRoundedIcon />
+                </IconButton>
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={2}>
+              <IconButton
+                color="primary"
+                aria-label="upload picture"
+                component="span"
+                onClick={enableEdit}
+              >
+                <EditIcon />
+              </IconButton>
+            </Grid>
+          )}
         </Grid>
       </ListItem>
     </>
