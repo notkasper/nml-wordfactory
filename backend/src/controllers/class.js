@@ -3,7 +3,14 @@ const db = require('../db');
 const getClasses = async (req, res) => {
   const { teacher } = req;
 
-  const classes = await teacher.getClasses();
+  const classes = await teacher.getClasses({
+    include: [
+      {
+        model: db.Student,
+        as: 'students',
+      },
+    ],
+  });
 
   res.status(200).send({ data: classes });
 };

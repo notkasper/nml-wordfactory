@@ -10,6 +10,7 @@ import Lesson from './pages/lesson';
 import Student from './pages/student';
 import StudentLesson from './pages/studentLesson';
 import QuestionGroup from './pages/questionGroup';
+import Students from './pages/students';
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -68,6 +69,11 @@ const ContentRouter = (props) => {
           exact
           path="/dashboard/questionGroups/:questionGroupId/:tab"
           render={(props) => <QuestionGroup {...props} authStore={authStore} />}
+        />
+        <Route
+          exact
+          path="/dashboard/students"
+          render={(props) => <Students {...props} authStore={authStore} />}
         />
       </Switch>
     </main>
