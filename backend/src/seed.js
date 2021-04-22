@@ -30,22 +30,32 @@ const seed = async () => {
     const teacher = await db.Teacher.create(teacherData);
     const students = await db.Student.bulkCreate(studentsData);
 
-    const theClass = await db.Class.create({
+    const class1 = await db.Class.create({
       id: 'b5fb3711-1157-4f9b-b387-d9e549561012',
       name: 'Oefen klas 1',
       level: 'HAVO',
     });
 
-    await theClass.addTeacher(teacher);
-    await theClass.addStudents(students);
+    const class2 = await db.Class.create({
+      id: 'b3b104a3-c54a-4bc9-bd72-015e4af41717',
+      name: 'Oefen klas 2',
+      level: 'VWO',
+    });
+
+    await class1.addTeacher(teacher);
+    await class1.addStudents(students);
+
+    await class2.addTeacher(teacher);
+    await class2.addStudents(students);
 
     const course = await db.Course.create({
       id: '94e8e1fc-dd2d-448d-a829-f7cc4369fd24',
-      classId: theClass.id,
+      classId: class1.id,
       name: 'Morphologie cursus 1',
     });
 
-    await theClass.addCourse(course);
+    await class1.addCourse(course);
+    await class2.addCourse(course);
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({
