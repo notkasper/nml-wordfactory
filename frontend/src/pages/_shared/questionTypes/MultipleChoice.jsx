@@ -37,7 +37,8 @@ const RemoveButton = ({ onClick }) => (
 
 const MultipleChoice = (props) => {
   const { id, instruction, data: originalData, save } = props;
-  const [data, setData] = useState(Object.assign({}, originalData));
+  const dataCopy = { ...originalData };
+  const [data, setData] = useState(dataCopy);
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
 
