@@ -32,7 +32,7 @@ const Histogram = (props) => {
   const data = {
     datasets: [
       {
-        label: 'Aantal studenten',
+        label: 'Aantal leerlingen',
         data: gradeDistribution,
       },
     ],
