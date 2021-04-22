@@ -42,8 +42,6 @@ const MultipleChoice = (props) => {
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
 
-  // TODO WFT-72: Sometimes multiple choice questions have multiple nested multiple choice questions inside.. for now only show the first one
-
   const addOption = () => {
     const newOption = { isCorrect: false, value: 'testValue' };
     const newOptions = [...data.options, newOption];
