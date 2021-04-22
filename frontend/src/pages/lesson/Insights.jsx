@@ -11,12 +11,12 @@ import PageContainer from '../_shared/PageContainer';
 
 const calculateProgress = (questionGroupAttempts = []) => {
   const total = questionGroupAttempts.length;
-  const completed = questionGroupAttempts.reduce((prev, curr) => {
+  const completed = questionGroupAttempts.reduce((acc, curr) => {
     if (curr.isCompleted) {
-      prev += 1;
+      acc += 1;
     }
 
-    return prev;
+    return acc;
   }, 0);
 
   return total !== 0 ? Math.floor((completed / total) * 100) : 100;
