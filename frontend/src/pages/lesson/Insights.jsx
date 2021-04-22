@@ -5,41 +5,44 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { observer } from 'mobx-react-lite';
-import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import Doughnut from './Doughnut';
 import Histogram from './Histogram';
 import PageContainer from '../_shared/PageContainer';
+
+const calculateProgress = (questionGroupAttempts = []) => {
+  const total = questionGroupAttempts.length;
+  const completed = questionGroupAttempts.reduce((acc, curr) => {
+    if (curr.isCompleted) {
+      acc += 1;
+    }
+
+    return acc;
+  }, 0);
+
+  return total !== 0 ? Math.floor((completed / total) * 100) : 100;
+};
 
 const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    width: 130,
+    flex: 0.3,
     valueGetter: (params) => params.row.student.name,
   },
   {
-    field: 'isStarted',
-    headerName: 'Gestart',
-    width: 130,
-    renderCell: (params) =>
-      params.row.isStarted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
-  },
-  {
-    field: 'isCompleted',
-    headerName: 'Voltooid',
-    width: 130,
-    renderCell: (params) =>
-      params.row.isCompleted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
+    field: 'progress',
+    headerName: 'Voortgang (%)',
+    flex: 0.15,
+    valueGetter: (params) => calculateProgress(params.row.questionGroupAttempts),
   },
   {
     field: 'duration',
     headerName: 'Duratie (minuten)',
-    width: 165,
+    flex: 0.15,
   },
-  { field: 'correct', headerName: 'Correct', width: 100, type: 'number' },
-  { field: 'incorrect', headerName: 'Incorrect', width: 110, type: 'number' },
-  { field: 'performance', headerName: 'Prestatie', width: 130, type: 'number' },
+  { field: 'correct', headerName: 'Correct', flex: 0.1, type: 'number' },
+  { field: 'incorrect', headerName: 'Incorrect', flex: 0.1, type: 'number' },
+  { field: 'performance', headerName: 'Prestatie', flex: 0.1, type: 'number' },
 ];
 
 const Lesson = (props) => {

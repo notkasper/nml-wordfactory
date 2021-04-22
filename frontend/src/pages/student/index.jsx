@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -8,8 +10,29 @@ import service from '../../service';
 import Courses from './Courses';
 import ProfileHeader from './ProfileHeader';
 
+import PaperWithHeader from '../_shared/PaperWithHeader';
+import ProgressBar from '../_shared/ProgressBar';
+
+const useStyles = makeStyles((theme) => ({
+	widget: {
+    height: 230,
+    padding: theme.spacing(3),
+		marginBottom: theme.spacing(12),
+  },
+	paper: {
+		borderBottomLeftRadius: 4,
+		borderBottomRightRadius: 4,
+		borderTopLeftRadius: 0,
+		borderTopRightRadius: 0,
+		height: 230,
+		padding: theme.spacing(3),
+	},
+}));
+
 const Student = () => {
+  const classes = useStyles();
   const params = useParams();
+  const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const [student, setStudent] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -52,6 +75,22 @@ const Student = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <ProfileHeader {...student} />
+        </Grid>
+        <Grid container spacing={3} className={classes.widget}>
+          <PaperWithHeader headercolor={theme.widget.secondary.main} headertitle="Probleem categorieën">
+            <Paper className={classes.paper}>
+              <ProgressBar title="1. Herken morfemen in woorden" value={38}/>
+              <ProgressBar title="2. Herken morfemen in een zin" value={48}/>
+              <ProgressBar title="3. Verwisselen morfemen" value={55}/>
+            </Paper>
+          </PaperWithHeader>
+          <PaperWithHeader headercolor={theme.widget.secondary.main} headertitle="Top categorieën">
+            <Paper className={classes.paper}>
+              <ProgressBar title="1. Betekenis morfemen" value={97}/>
+              <ProgressBar title="2. Splits morfemen" value={83}/>
+              <ProgressBar title="3. Alternatieve betekenis morfemen" value={74}/>
+            </Paper>
+          </PaperWithHeader>
         </Grid>
         <Grid item xs={12}>
           <Courses courses={courses} />
