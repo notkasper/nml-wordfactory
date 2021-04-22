@@ -42,6 +42,15 @@ const ErrorPopup = observer((props) => {
   );
 });
 
+const SuccessPopup = observer((props) => {
+  const { authStore } = props;
+  return (
+    <Snackbar open={!!authStore.success}>
+      <Alert severity="success">{authStore.success}</Alert>
+    </Snackbar>
+  );
+});
+
 const LoginPage = () => <Login authStore={authStore} />;
 
 const Dashboard = () => {
@@ -70,6 +79,7 @@ const App = () => {
           </Switch>
         </Router>
         <ErrorPopup authStore={authStore} />
+        <SuccessPopup authStore={authStore} />
       </div>
     </ThemeProvider>
   );

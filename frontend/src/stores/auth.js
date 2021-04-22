@@ -7,6 +7,7 @@ class AuthStore {
   constructor() {
     makeObservable(this, {
       error: observable,
+      success: observable,
       login: action,
       logout: action,
       setError: action,
@@ -14,11 +15,19 @@ class AuthStore {
   }
 
   error = null;
+  success = null;
 
   setError = (error) => {
     this.error = error;
     setTimeout(() => {
       this.error = null;
+    }, 4000);
+  };
+
+  setSuccess = (success) => {
+    this.success = success;
+    setTimeout(() => {
+      this.success = null;
     }, 4000);
   };
 

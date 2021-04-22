@@ -2,14 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
-import CancelIcon from '@material-ui/icons/Cancel';
-import EditIcon from '@material-ui/icons/Edit';
 import PageContainer from '../_shared/PageContainer';
 import QuestionGroup from '../_shared/QuestionGroup';
 import service from '../../service';
 
 const Question = (props) => {
+  const { authStore } = props;
   const [questionGroup, setQuestionGroup] = useState(null);
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -29,9 +27,15 @@ const Question = (props) => {
     loadQuestionGroup();
   }, [loadQuestionGroup]);
 
-  const save = (newData) => {
-    console.log(newData);
-    console.log('saving new data...');
+  const save = async (questionId, newData) => {
+    setLoading(true);
+    const response = await service.updateQuestion(questionId, newData);
+    setLoading(false);
+    if (!response) {
+      return;
+    }
+    authStore.setSuccess('Vraag succesvol geüpdatet');
+    await loadQuestionGroup();
   };
 
   if (loading || !questionGroup) {

@@ -23,6 +23,18 @@ const Question = (props) => {
 const QuestionGroup = (props) => {
   const { questions, save } = props;
 
+  questions.sort((el1, el2) => {
+    if (el1.index > el2.index) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+
+  const saveQuestion = async (id, newData) => {
+    save(id, newData);
+  };
+
   return (
     <Paper>
       <List
@@ -34,7 +46,11 @@ const QuestionGroup = (props) => {
       >
         {questions.map((question, index) => (
           <ListItem key={question.id}>
-            <Question {...question} index={index} save={save} />
+            <Question
+              {...question}
+              index={index}
+              save={(newData) => saveQuestion(question.id, newData)}
+            />
           </ListItem>
         ))}
       </List>

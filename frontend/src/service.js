@@ -89,6 +89,12 @@ const loadQuestionGroup = async (id) => {
   return response;
 };
 
+const updateQuestion = async (id, data) => {
+  const req = request.patch(`/api/v1/question/${id}`).send({ data });
+  const response = await handleResponse(req);
+  return response;
+};
+
 const service = {
   loadStudents,
   loadStudent,
@@ -101,6 +107,7 @@ const service = {
   login,
   loadQuestionGroupAttempts,
   loadQuestionGroup,
+  updateQuestion,
 };
 
 export default service;
