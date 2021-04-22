@@ -36,7 +36,7 @@ const loadCourses = async (query) => {
   return response;
 };
 
-const loadClassList = async () => {
+const loadClasses = async () => {
   const req = request.get('/api/v1/classes');
   const response = await handleResponse(req);
   return response;
@@ -94,7 +94,7 @@ const service = {
   loadStudent,
   loadClass,
   loadCourses,
-  loadClassList,
+  loadClasses,
   loadLessonAttempts,
   loadQuestionAttempts,
   loadLesson,

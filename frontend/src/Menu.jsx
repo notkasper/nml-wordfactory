@@ -119,9 +119,9 @@ const Menu = (props) => {
   const [classList, setClassList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadClassList = async () => {
+  const loadClasses = async () => {
     setLoading(true);
-    const response = await service.loadClassList();
+    const response = await service.loadClasses();
     if (response) {
       setClassList(response.body.data);
     }
@@ -129,7 +129,7 @@ const Menu = (props) => {
   };
 
   useEffect(() => {
-    loadClassList();
+    loadClasses();
   }, []);
 
   const onNodeSelect = (event, value) => history.push(value);

@@ -13,7 +13,18 @@ const getStudents = async (req, res) => {
 
   const classes = await req.teacher.getClasses({
     where,
-    include: [{ model: db.Student, as: 'students' }],
+    include: [
+      {
+        model: db.Student,
+        as: 'students',
+        include: [
+          {
+            model: db.Class,
+            as: 'classes',
+          },
+        ],
+      },
+    ],
   });
 
   const students = classes.reduce((acc, curr) => {

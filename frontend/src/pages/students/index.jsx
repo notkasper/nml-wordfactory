@@ -14,12 +14,18 @@ const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    width: 130,
+    width: 300,
   },
   {
-    field: 'Bekijken',
+    field: 'classes',
+    headerName: 'Klas',
+    width: 200,
+    valueGetter: (params) => params.row.classes[0].name, // TODO: Make this column not hardcoded to the first class
+  },
+  {
+    field: 'Leerling bekijken',
     headerName: '',
-    width: 150,
+    width: 200,
     renderCell: (data) => <ViewIcon id={data.getValue('id')} />,
   },
 ];
@@ -27,7 +33,7 @@ const columns = [
 const ViewIcon = (props) => {
   const { id } = props;
   const history = useHistory();
-  const goToStats = () => history.push(`/dashboard/student/${id}`);
+  const goToStats = () => history.push(`/dashboard/students/${id}`);
   return (
     <IconButton onClick={goToStats}>
       <VisibilityIcon color="primary" />
@@ -67,7 +73,6 @@ const Students = () => {
               rows={students}
               columns={columns}
               pageSize={24}
-              checkboxSelection
             />
           </Paper>
         </Grid>
