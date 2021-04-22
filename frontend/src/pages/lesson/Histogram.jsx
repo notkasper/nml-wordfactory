@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
-import Title from '../home/Title';
+import Title from '../_shared/Title';
 import { Bar } from 'react-chartjs-2';
 
 const useStyles = makeStyles((theme) => ({

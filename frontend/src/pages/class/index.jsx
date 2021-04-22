@@ -10,7 +10,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import PeopleIcon from '@material-ui/icons/People';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import service from '../../service';
+import Insight from './Insight';
 import Courses from './Courses';
 import Students from './Students';
 import PageContainer from '../_shared/PageContainer';
@@ -74,6 +76,7 @@ const Lesson = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
+          <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
           <Tab label="Cursussen" icon={<MenuBookIcon />} />
           <Tab label="Studenten" icon={<PeopleIcon />} />
         </Tabs>
@@ -85,9 +88,12 @@ const Lesson = (props) => {
           </Typography>
         </Grid>
         <TabContent index={0} value={value}>
-          <Courses courses={courses} />
+          <Insight />
         </TabContent>
         <TabContent index={1} value={value}>
+          <Courses courses={courses} />
+        </TabContent>
+        <TabContent index={2} value={value}>
           <Students students={students} />
         </TabContent>
       </PageContainer>
