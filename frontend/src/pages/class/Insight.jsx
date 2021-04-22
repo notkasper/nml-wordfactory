@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { DataGrid } from '@material-ui/data-grid';
 
 import PaperWithHeader from '../_shared/PaperWithHeader';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../_shared/ProgressBar';
 
 const useStyles = makeStyles((theme) => ({
 	widget: {
