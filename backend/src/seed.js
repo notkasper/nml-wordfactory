@@ -55,7 +55,6 @@ const seed = async () => {
     });
 
     await class1.addCourse(course);
-    await class2.addCourse(course);
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({
