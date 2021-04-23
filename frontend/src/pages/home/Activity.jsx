@@ -11,32 +11,32 @@ import service from '../../service';
 
 const convertDateToReadableString = (date) => {
   return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
-}
+};
 
 const columns = [
   {
     field: 'updatedAt',
     headerName: 'Datum',
     width: 200,
-    renderCell: (params) => convertDateToReadableString(params.row.updatedAt)
+    renderCell: (params) => convertDateToReadableString(params.row.updatedAt),
   },
   {
     field: 'student',
     headerName: 'Leerling',
     width: 400,
-    valueGetter: (params) => params.row.LessonAttempt.student.name
+    valueGetter: (params) => params.row.LessonAttempt.student.name,
   },
   {
     field: 'lesson',
     headerName: 'Les',
     width: 200,
-    valueGetter: (params) => params.row.QuestionGroup.questionGroups.prefix
+    valueGetter: (params) => params.row.QuestionGroup.questionGroups.prefix,
   },
   {
     field: 'question',
     headerName: 'Vraag',
     width: 100,
-    valueGetter: (params) => params.row.QuestionGroup.index + 1
+    valueGetter: (params) => params.row.QuestionGroup.index + 1,
   },
   {
     field: 'isCompleted',
@@ -47,15 +47,7 @@ const columns = [
   },
 ];
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 const Activity = (props) => {
   const classes = useStyles();
@@ -86,21 +78,16 @@ const Activity = (props) => {
     <React.Fragment>
       <Title>Recente leerlingen activiteit</Title>
       <Grid item xs={12}>
-            <DataGrid
-              autoHeight
-              rows={questionAttempts}
-              columns={columns}
-              pageSize={5}
-              checkboxSelection
-            />
-        </Grid>
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          See more activity
-        </Link>
-      </div>
+        <DataGrid
+          autoHeight
+          rows={questionAttempts}
+          columns={columns}
+          pageSize={5}
+          checkboxSelection
+        />
+      </Grid>
     </React.Fragment>
   );
-}
+};
 
 export default Activity;
