@@ -113,7 +113,6 @@ const Activity = (props) => {
           rows={questionAttempts}
           columns={columns}
           pageSize={5}
-          checkboxSelection
         />
       </Grid>
       <div className={classes.seeMore}>
