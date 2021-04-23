@@ -69,15 +69,7 @@ const ViewIcon = (props) => {
   );
 };
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 const Activity = (props) => {
   const classes = useStyles();
@@ -115,11 +107,6 @@ const Activity = (props) => {
           pageSize={5}
         />
       </Grid>
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          See more activity
-        </Link>
-      </div>
     </React.Fragment>
   );
 };
