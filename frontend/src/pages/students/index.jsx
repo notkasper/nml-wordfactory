@@ -9,6 +9,10 @@ import PageContainer from '../_shared/PageContainer';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import service from '../../service';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
+
+const PAGE_SIZE = 20;
 
 const columns = [
   {
@@ -26,7 +30,7 @@ const columns = [
     field: 'Leerling bekijken',
     headerName: '',
     width: 200,
-    renderCell: (data) => <ViewIcon id={data.getValue('id')} />,
+    renderCell: (params) => <ViewIcon id={params.row.id} />,
   },
 ];
 
@@ -44,6 +48,9 @@ const ViewIcon = (props) => {
 const Students = () => {
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
+  const [page] = useState(0);
+  const [studentFilterValue, setStudentFilterValue] = useState(null);
+  const [studentFilterInputValue, setStudentFilterInputValue] = useState('');
 
   const loadStudents = async () => {
     setLoading(true);
@@ -55,6 +62,20 @@ const Students = () => {
     setStudents(response.body.data);
   };
 
+  const onStudentFilterInputChange = (event, newInputValue) => {
+    setStudentFilterInputValue(newInputValue);
+  };
+
+  const onStudentFilterChange = (event, newValue) => {
+    setStudentFilterValue(newValue);
+  };
+
+  const start = page * PAGE_SIZE;
+
+  const shownStudents = studentFilterValue
+    ? [studentFilterValue]
+    : students.slice(start, start + PAGE_SIZE);
+
   useEffect(() => {
     loadStudents();
   }, []);
@@ -65,12 +86,25 @@ const Students = () => {
 
   return (
     <PageContainer>
+      <Autocomplete
+        value={studentFilterValue}
+        onChange={onStudentFilterChange}
+        inputValue={studentFilterInputValue}
+        onInputChange={onStudentFilterInputChange}
+        id="combo-box-demo"
+        options={students}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => (
+          <TextField {...params} label="Leerling zoeken" variant="outlined" />
+        )}
+      />
+
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper>
             <DataGrid
               autoHeight
-              rows={students}
+              rows={shownStudents}
               columns={columns}
               pageSize={24}
               components={{

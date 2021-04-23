@@ -32,13 +32,13 @@ const seed = async () => {
 
     const class1 = await db.Class.create({
       id: 'b5fb3711-1157-4f9b-b387-d9e549561012',
-      name: 'Oefen klas 1',
+      name: 'Klas 1',
       level: 'HAVO',
     });
 
     const class2 = await db.Class.create({
       id: 'b3b104a3-c54a-4bc9-bd72-015e4af41717',
-      name: 'Oefen klas 2',
+      name: 'Klas 2',
       level: 'VWO',
     });
 
@@ -55,7 +55,6 @@ const seed = async () => {
     });
 
     await class1.addCourse(course);
-    await class2.addCourse(course);
 
     for (const lesson of lessons) {
       const createdLesson = await db.Lesson.create({
