@@ -21,45 +21,43 @@ const Course = (props) => {
     history.push(`/dashboard/lessons/${lessonId}/questions`);
 
   return (
-    <div key={id}>
-      <List
-        subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            {name}
-          </ListSubheader>
-        }
-      >
-        {lessons.map((lesson) => (
-          <ListItem
-            alignItems="flex-start"
-            key={lesson.id}
-            button
-            onClick={() => goToLesson(lesson.id)}
-          >
-            <ListItemText
-              primary={`${lesson.prefix} - ${lesson.name}`}
-              secondary={
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary"
-                ></Typography>
-              }
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="comments"
-                onClick={() => goToLesson(lesson.id)}
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
-    </div>
+    <List
+      subheader={
+        <ListSubheader component="div" id="nested-list-subheader">
+          {name}
+        </ListSubheader>
+      }
+    >
+      {lessons.map((lesson) => (
+        <ListItem
+          alignItems="flex-start"
+          key={lesson.id}
+          button
+          onClick={() => goToLesson(lesson.id)}
+        >
+          <ListItemText
+            primary={`${lesson.prefix} - ${lesson.name}`}
+            secondary={
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.inline}
+                color="textPrimary"
+              ></Typography>
+            }
+          />
+          <ListItemSecondaryAction>
+            <IconButton
+              edge="end"
+              aria-label="comments"
+              onClick={() => goToLesson(lesson.id)}
+            >
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+      ))}
+    </List>
   );
 };
 

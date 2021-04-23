@@ -25,10 +25,10 @@ const Dashboard = (props) => {
   const [, setClassList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadClassList = useCallback(async () => {
+  const loadClasses = useCallback(async () => {
     setLoading(true);
-    
-    const response = await service.loadClassList();
+
+    const response = await service.loadClasses();
     if (!response) {
       return;
     }
@@ -38,8 +38,8 @@ const Dashboard = (props) => {
   }, []);
 
   useEffect(() => {
-    loadClassList();
-  }, [loadClassList]);
+    loadClasses();
+  }, [loadClasses]);
 
   if (loading) {
     return <CircularProgress />;
@@ -49,14 +49,11 @@ const Dashboard = (props) => {
     datasets: [
       {
         data: [27, 73],
-        backgroundColor: [
-          'rgb(0, 0, 0, 0)',
-          color,
-        ]
+        backgroundColor: ['rgb(0, 0, 0, 0)', color],
       },
     ],
   });
-  
+
   const options = ({ color }) => ({
     cutoutPercentage: 75,
     tooltips: { enabled: false },
@@ -66,8 +63,8 @@ const Dashboard = (props) => {
       center: {
         text: '73%',
         color: color || '#FFFFFF',
-      }
-    }
+      },
+    },
   });
 
   return (
@@ -75,12 +72,32 @@ const Dashboard = (props) => {
       <Grid container spacing={3}>
         {/* Widgets with general information */}
         <Widget left={6} right="lessen" color={theme.widget.primary.main} />
-        <Widget left={104} right="leerlingen" color={theme.widget.secondary.main} />
-        <Widget left={25} right="na te kijken opdrachten" color={theme.widget.tertiary.main} />
+        <Widget
+          left={104}
+          right="leerlingen"
+          color={theme.widget.secondary.main}
+        />
+        <Widget
+          left={25}
+          right="na te kijken opdrachten"
+          color={theme.widget.tertiary.main}
+        />
         {/* Average percentage statistics */}
-        <PercentageDoughnut title="Gemiddelde correctheid" data={data({ color: theme.widget.primary.main })} options={options({ color: theme.widget.primary.main })}/>
-        <PercentageDoughnut title="Gemiddelde voortgang" data={data({ color: theme.widget.secondary.main })} options={options({ color: theme.widget.secondary.main })}/>
-        <PercentageDoughnut title="Gemiddelde tijdsduur" data={data({ color: theme.widget.tertiary.main })} options={options({ color: theme.widget.tertiary.main })}/>
+        <PercentageDoughnut
+          title="Gemiddelde correctheid"
+          data={data({ color: theme.widget.primary.main })}
+          options={options({ color: theme.widget.primary.main })}
+        />
+        <PercentageDoughnut
+          title="Gemiddelde voortgang"
+          data={data({ color: theme.widget.secondary.main })}
+          options={options({ color: theme.widget.secondary.main })}
+        />
+        <PercentageDoughnut
+          title="Gemiddelde tijdsduur"
+          data={data({ color: theme.widget.tertiary.main })}
+          options={options({ color: theme.widget.tertiary.main })}
+        />
         {/* Recent activity */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>

@@ -35,9 +35,10 @@ const Lesson = (props) => {
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+  const classId = params.classId;
 
   const loadStudents = useCallback(async () => {
-    const response = await service.loadStudents(params.classId);
+    const response = await service.loadStudents({ classId });
     if (!response) return;
     setStudents(response.body.data);
   }, [params.classId]);
@@ -49,7 +50,6 @@ const Lesson = (props) => {
   }, [params.classId]);
 
   const loadCourses = useCallback(async () => {
-    const classId = params.classId;
     const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
