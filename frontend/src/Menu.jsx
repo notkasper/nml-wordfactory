@@ -13,6 +13,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded';
 import ImportContactsRoundedIcon from '@material-ui/icons/ImportContactsRounded';
+import NoMeetingRoomRoundedIcon from '@material-ui/icons/NoMeetingRoomRounded';
 import service from './service';
 
 const drawerWidth = 245;
@@ -114,6 +115,7 @@ const StyledTreeItem = (props) => {
 const useStyles = makeStyles({});
 
 const Menu = (props) => {
+  const { authStore } = props;
   const classes = useStyles();
   const history = useHistory();
   const [classList, setClassList] = useState([]);
@@ -132,7 +134,12 @@ const Menu = (props) => {
     loadClasses();
   }, []);
 
-  const onNodeSelect = (event, value) => history.push(value);
+  const onNodeSelect = (event, value) => {
+    if (value === '/') {
+      authStore.logout(); // logout route
+    }
+    history.push(value);
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -181,6 +188,11 @@ const Menu = (props) => {
         nodeId="/dashboard/lessons"
         labelText="Lessen"
         labelIcon={ImportContactsRoundedIcon}
+      />
+      <StyledTreeItem
+        nodeId="/"
+        labelText="Uitloggen"
+        labelIcon={NoMeetingRoomRoundedIcon}
       />
     </TreeView>
   );
