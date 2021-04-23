@@ -23,7 +23,7 @@ const columns = [
   },
   {
     field: 'index',
-    headerName: 'Nummer',
+    headerName: 'Opdrachtnummer',
     width: 110,
     type: 'number',
     valueGetter: (params) => params.value + 1,
