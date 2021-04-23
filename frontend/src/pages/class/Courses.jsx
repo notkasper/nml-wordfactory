@@ -50,7 +50,7 @@ const Courses = (props) => {
           options={courses}
           getOptionLabel={(option) => option.name}
           renderInput={(params) => (
-            <TextField {...params} label="Cursus zoeken" variant="outlined" />
+            <TextField {...params} label="Les zoeken" variant="outlined" />
           )}
         />
         <Divider style={{ margin: '1rem 0' }} />
