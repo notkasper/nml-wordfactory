@@ -45,23 +45,23 @@ const Dashboard = (props) => {
     return <CircularProgress />;
   }
 
-  const data = ({ color }) => ({
+  const data = ({ color, variant }) => ({
     datasets: [
       {
-        data: [27, 73],
+        data: [100 - variant * 25, variant * 25],
         backgroundColor: ['rgb(0, 0, 0, 0)', color],
       },
     ],
   });
 
-  const options = ({ color }) => ({
+  const options = ({ color, text }) => ({
     cutoutPercentage: 75,
     tooltips: { enabled: false },
     hover: { mode: null },
     responsive: true,
     elements: {
       center: {
-        text: '73%',
+        text,
         color: color || '#FFFFFF',
       },
     },
@@ -85,18 +85,18 @@ const Dashboard = (props) => {
         {/* Average percentage statistics */}
         <PercentageDoughnut
           title="Gemiddelde correctheid"
-          data={data({ color: theme.widget.primary.main })}
-          options={options({ color: theme.widget.primary.main })}
+          data={data({ color: theme.widget.primary.main, variant: 1 })}
+          options={options({ color: theme.widget.primary.main, text: '25%' })}
         />
         <PercentageDoughnut
           title="Gemiddelde voortgang"
-          data={data({ color: theme.widget.secondary.main })}
-          options={options({ color: theme.widget.secondary.main })}
+          data={data({ color: theme.widget.secondary.main, variant: 2 })}
+          options={options({ color: theme.widget.secondary.main, text: '50%' })}
         />
         <PercentageDoughnut
           title="Gemiddelde tijdsduur"
-          data={data({ color: theme.widget.tertiary.main })}
-          options={options({ color: theme.widget.tertiary.main })}
+          data={data({ color: theme.widget.tertiary.main, variant: 3 })}
+          options={options({ color: theme.widget.tertiary.main, text: '75%' })}
         />
         {/* Recent activity */}
         <Grid item xs={12}>
