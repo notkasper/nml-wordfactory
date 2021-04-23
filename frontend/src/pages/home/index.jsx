@@ -73,7 +73,7 @@ const Dashboard = (props) => {
         {/* Widgets with general information */}
         <Widget left={6} right="lessen" color={theme.widget.primary.main} />
         <Widget
-          left={104}
+          left={206}
           right="leerlingen"
           color={theme.widget.secondary.main}
         />
