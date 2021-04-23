@@ -23,12 +23,12 @@ const QuestionStats = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
-          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
           <Tab
             label="Inzicht (opdracht)"
             icon={<EqualizerIcon />}
             value="insights"
           />
+          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
         </Tabs>
       </AppBar>
       <TabContent index="question" value={value}>
