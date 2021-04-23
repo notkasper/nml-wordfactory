@@ -33,7 +33,8 @@ const columns = [
     field: 'progress',
     headerName: 'Voortgang (%)',
     flex: 0.15,
-    valueGetter: (params) => calculateProgress(params.row.questionGroupAttempts),
+    valueGetter: (params) =>
+      calculateProgress(params.row.questionGroupAttempts),
   },
   {
     field: 'duration',
@@ -79,7 +80,6 @@ const Lesson = (props) => {
               rows={lessonStore.lessonAttempts}
               columns={columns}
               pageSize={12}
-              checkboxSelection
             />
           </Paper>
         </Grid>
