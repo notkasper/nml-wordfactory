@@ -125,6 +125,7 @@ const MultipleChoice = (props) => {
                           <TextField
                             value={option.value}
                             onChange={(event) => editOption(option, event)}
+                            placeholder="Nieuw antwoord"
                           />
                         ) : (
                           option.value
