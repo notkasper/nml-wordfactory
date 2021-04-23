@@ -69,7 +69,7 @@ const ViewIcon = (props) => {
   const { id } = props;
   const history = useHistory();
   const goToStats = () =>
-    history.push(`/dashboard/questionGroups/${id}/question`);
+    history.push(`/dashboard/questionGroups/${id}/insights`);
   return (
     <IconButton onClick={goToStats}>
       <VisibilityIcon color="primary" />
