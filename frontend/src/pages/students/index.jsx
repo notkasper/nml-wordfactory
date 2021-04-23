@@ -74,7 +74,7 @@ const Students = () => {
               columns={columns}
               pageSize={24}
               components={{
-                ColumnMenuIcon: () => <div />, // We dont want to show anything for now
+                ColumnMenuIcon: () => null, // We dont want to show anything for now
               }}
             />
           </Paper>
