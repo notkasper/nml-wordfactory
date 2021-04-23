@@ -73,6 +73,9 @@ const Students = () => {
               rows={students}
               columns={columns}
               pageSize={24}
+              components={{
+                ColumnMenuIcon: () => null, // We dont want to show anything for now
+              }}
             />
           </Paper>
         </Grid>

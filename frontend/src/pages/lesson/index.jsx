@@ -24,19 +24,19 @@ const Lesson = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
-          <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
           <Tab
             label="Inzicht (les)"
             icon={<EqualizerIcon />}
             value="insights"
           />
+          <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
         </Tabs>
       </AppBar>
-      <TabContent index="questions" value={value}>
-        <Questions {...props} />
-      </TabContent>
       <TabContent index="insights" value={value}>
         <Insights {...props} />
+      </TabContent>
+      <TabContent index="questions" value={value}>
+        <Questions {...props} />
       </TabContent>
     </>
   );

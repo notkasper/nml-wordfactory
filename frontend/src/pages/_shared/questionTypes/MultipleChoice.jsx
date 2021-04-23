@@ -43,7 +43,7 @@ const MultipleChoice = (props) => {
   const [editing, setEditing] = useState(false);
 
   const addOption = () => {
-    const newOption = { isCorrect: false, value: 'testValue' };
+    const newOption = { isCorrect: false, value: '' };
     const newOptions = [...data.options, newOption];
     const newData = { ...data, options: newOptions };
     setData(newData);
@@ -125,6 +125,7 @@ const MultipleChoice = (props) => {
                           <TextField
                             value={option.value}
                             onChange={(event) => editOption(option, event)}
+                            placeholder="Nieuw antwoord"
                           />
                         ) : (
                           option.value

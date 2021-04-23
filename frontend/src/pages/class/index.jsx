@@ -77,7 +77,7 @@ const Lesson = (props) => {
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
           <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
-          <Tab label="Cursussen" icon={<MenuBookIcon />} />
+          <Tab label="Lessen" icon={<MenuBookIcon />} />
           <Tab label="Leerlingen" icon={<PeopleIcon />} />
         </Tabs>
       </AppBar>
