@@ -69,6 +69,7 @@ const ViewIcon = (props) => {
   const { id } = props;
   const history = useHistory();
   const goToStats = () =>
+    // TODO: change to /insights AFTER the usability study
     history.push(`/dashboard/questionGroups/${id}/question`);
   return (
     <IconButton onClick={goToStats}>
