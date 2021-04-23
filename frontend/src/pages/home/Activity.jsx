@@ -2,9 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
+import { useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Grid from '@material-ui/core/Grid';
 import Title from '../_shared/Title';
 import service from '../../service';
@@ -23,7 +26,7 @@ const columns = [
   {
     field: 'student',
     headerName: 'Leerling',
-    width: 400,
+    width: 200,
     valueGetter: (params) => params.row.LessonAttempt.student.name,
   },
   {
@@ -45,7 +48,26 @@ const columns = [
     renderCell: (params) =>
       params.row.isCompleted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
   },
+  {
+    field: 'Leerling bekijken',
+    headerName: '',
+    width: 200,
+    renderCell: (params) => (
+      <ViewIcon id={params.row.LessonAttempt.student.id} />
+    ),
+  },
 ];
+
+const ViewIcon = (props) => {
+  const { id } = props;
+  const history = useHistory();
+  const goToStats = () => history.push(`/dashboard/students/${id}`);
+  return (
+    <IconButton onClick={goToStats}>
+      <VisibilityIcon color="primary" />
+    </IconButton>
+  );
+};
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -83,7 +105,6 @@ const Activity = (props) => {
           rows={questionAttempts}
           columns={columns}
           pageSize={5}
-          checkboxSelection
         />
       </Grid>
     </React.Fragment>
