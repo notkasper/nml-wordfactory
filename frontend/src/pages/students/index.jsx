@@ -13,8 +13,6 @@ import service from '../../service';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 
-const PAGE_SIZE = 20;
-
 const columns = [
   {
     field: 'name',
@@ -54,7 +52,6 @@ const Students = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
-  const [page] = useState(0);
   const [studentFilterValue, setStudentFilterValue] = useState(null);
   const [studentFilterInputValue, setStudentFilterInputValue] = useState('');
 
@@ -76,11 +73,7 @@ const Students = () => {
     setStudentFilterValue(newValue);
   };
 
-  const start = page * PAGE_SIZE;
-
-  const shownStudents = studentFilterValue
-    ? [studentFilterValue]
-    : students.slice(start, start + PAGE_SIZE);
+  const shownStudents = studentFilterValue ? [studentFilterValue] : students;
 
   useEffect(() => {
     loadStudents();

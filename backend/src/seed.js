@@ -51,7 +51,7 @@ const seed = async () => {
     const course = await db.Course.create({
       id: '94e8e1fc-dd2d-448d-a829-f7cc4369fd24',
       classId: class1.id,
-      name: 'Morphologie cursus 1',
+      name: 'Morfologie cursus 1',
     });
 
     await class1.addCourse(course);
