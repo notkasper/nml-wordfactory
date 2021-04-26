@@ -5,8 +5,6 @@ import { useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import IconButton from '@material-ui/core/IconButton';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import Grid from '@material-ui/core/Grid';
 import Title from '../_shared/Title';
 import service from '../../service';
@@ -19,59 +17,48 @@ const columns = [
   {
     field: 'updatedAt',
     headerName: 'Datum',
-    width: 200,
+    flex: 0.2,
     renderCell: (params) => convertDateToReadableString(params.row.updatedAt),
   },
   {
     field: 'student',
     headerName: 'Leerling',
-    width: 200,
+    flex: 0.2,
     valueGetter: (params) => params.row.LessonAttempt.student.name,
   },
   {
     field: 'lesson',
     headerName: 'Les',
-    width: 200,
+    flex: 0.2,
     valueGetter: (params) => params.row.QuestionGroup.questionGroups.prefix,
   },
   {
     field: 'question',
     headerName: 'Vraag',
-    width: 100,
+    flex: 0.2,
     valueGetter: (params) => params.row.QuestionGroup.index + 1,
   },
   {
     field: 'isCompleted',
     headerName: 'Voltooid',
-    width: 125,
+    flex: 0.2,
     renderCell: (params) =>
       params.row.isCompleted ? <DoneRoundedIcon /> : <CloseRoundedIcon />,
   },
-  {
-    field: 'Leerling bekijken',
-    headerName: '',
-    width: 200,
-    renderCell: (params) => (
-      <ViewIcon id={params.row.LessonAttempt.student.id} />
-    ),
-  },
 ];
 
-const ViewIcon = (props) => {
-  const { id } = props;
-  const history = useHistory();
-  const goToStats = () => history.push(`/dashboard/students/${id}`);
-  return (
-    <IconButton onClick={goToStats}>
-      <VisibilityIcon color="primary" />
-    </IconButton>
-  );
-};
-
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  datagrid: {
+    marginTop: '1rem',
+    '& .MuiDataGrid-row:hover': {
+      cursor: 'pointer',
+    },
+  },
+}));
 
 const Activity = (props) => {
   const classes = useStyles();
+  const history = useHistory();
   const [questionAttempts, setQuestionAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -95,15 +82,20 @@ const Activity = (props) => {
     return <CircularProgress />;
   }
 
+  const onClickStudent = (event) =>
+    history.push(`/dashboard/students/${event.row.LessonAttempt.student.id}`);
+
   return (
     <React.Fragment>
       <Title>Recente leerlingen activiteit</Title>
       <Grid item xs={12}>
         <DataGrid
+          className={classes.datagrid}
           autoHeight
           rows={questionAttempts}
           columns={columns}
           pageSize={5}
+          onRowClick={onClickStudent}
         />
       </Grid>
     </React.Fragment>
