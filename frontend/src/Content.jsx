@@ -46,7 +46,7 @@ const ContentRouter = (props) => {
         />
         <Route
           exact
-          path="/dashboard/lessons/:lessonId/:tab"
+          path="/dashboard/lessons/:lessonId"
           render={(props) => (
             <Lesson
               {...props}
@@ -67,7 +67,7 @@ const ContentRouter = (props) => {
         />
         <Route
           exact
-          path="/dashboard/questionGroups/:questionGroupId/:tab"
+          path="/dashboard/questionGroups/:questionGroupId"
           render={(props) => <QuestionGroup {...props} authStore={authStore} />}
         />
         <Route
