@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
+import BreadCrumbs from './pages/_shared/BreadCrumbs';
+
 const drawerWidth = 245;
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +57,7 @@ const CustomAppBar = () => {
           noWrap
           className={classes.title}
         >
-          Dashboard
+          <BreadCrumbs />
         </Typography>
         <IconButton color="inherit" onClick={goToProfile}>
           <AccountCircle />
