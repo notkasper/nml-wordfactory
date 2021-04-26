@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { observer } from 'mobx-react-lite';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -34,6 +35,10 @@ const columns = [
   },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  marginTop: { marginTop: '1rem' },
+}));
+
 const ViewIcon = (props) => {
   const { id } = props;
   const history = useHistory();
@@ -46,6 +51,7 @@ const ViewIcon = (props) => {
 };
 
 const Students = () => {
+  const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
   const [page] = useState(0);
@@ -98,11 +104,11 @@ const Students = () => {
           <TextField {...params} label="Leerling zoeken" variant="outlined" />
         )}
       />
-
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper>
             <DataGrid
+              className={classes.marginTop}
               autoHeight
               rows={shownStudents}
               columns={columns}
