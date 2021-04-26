@@ -103,7 +103,7 @@ const Dashboard = (props) => {
           options={options({ color: theme.widget.secondary.main, text: '50%' })}
         />
         <PercentageDoughnut
-          title="Gemiddelde tijdsduur"
+          title="Opdrachten nagekeken"
           data={data({ color: theme.widget.tertiary.main, variant: 3 })}
           options={options({ color: theme.widget.tertiary.main, text: '75%' })}
         />
