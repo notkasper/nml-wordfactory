@@ -116,6 +116,7 @@ const MultipleChoice = (props) => {
                       value={option.value}
                       control={
                         <Radio
+                          color="primary"
                           checked={option.isCorrect}
                           onClick={(event) => editCorrect(option, event)}
                         />
