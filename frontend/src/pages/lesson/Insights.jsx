@@ -38,7 +38,7 @@ const columns = [
   },
   {
     field: 'duration',
-    headerName: 'Tijdsverloop (minuten)',
+    headerName: 'Tijdsduur (minuten)',
     flex: 0.15,
   },
   { field: 'correct', headerName: 'Correct', flex: 0.1, type: 'number' },
