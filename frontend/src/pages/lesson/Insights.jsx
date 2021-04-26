@@ -26,19 +26,19 @@ const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    flex: 0.3,
+    flex: 0.2,
     valueGetter: (params) => params.row.student.name,
   },
   {
     field: 'progress',
     headerName: 'Voortgang (%)',
-    flex: 0.15,
+    flex: 0.1,
     valueGetter: (params) =>
       calculateProgress(params.row.questionGroupAttempts),
   },
   {
     field: 'duration',
-    headerName: 'Duratie (minuten)',
+    headerName: 'Tijdsverloop (minuten)',
     flex: 0.15,
   },
   { field: 'correct', headerName: 'Correct', flex: 0.1, type: 'number' },
