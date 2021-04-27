@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Prompt } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -37,9 +36,8 @@ const RemoveButton = ({ onClick }) => (
 );
 
 const MultipleChoice = (props) => {
-  const { id, instruction, data: originalData, save } = props;
+  const { id, instruction, data: originalData, save, setIsBlocking } = props;
   const dataCopy = { ...originalData };
-  const [isBlocking, setIsBlocking] = useState(false);
   const [data, setData] = useState(dataCopy);
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
@@ -101,12 +99,6 @@ const MultipleChoice = (props) => {
 
   return (
     <>
-      <Prompt
-        when={isBlocking}
-        message={(location) =>
-          'Je hebt je aanpassingen niet opgeslagen, weet je zeker dat je deze pagina wilt verlaten? (Uw aanpassingen zullen NIET opgeslagen worden!)'
-        }
-      />
       <ListItem alignItems="flex-start" key={id}>
         <Grid container>
           <Grid item xs={12}>
