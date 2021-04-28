@@ -15,10 +15,17 @@ import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import TextField from '@material-ui/core/TextField';
+import Popover from '@material-ui/core/Popover';
 
 const useStyles = makeStyles((theme) => ({
   fullWidth: {
     width: '100%',
+  },
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
   },
 }));
 
@@ -36,10 +43,12 @@ const RemoveButton = ({ onClick }) => (
 );
 
 const MultipleChoice = (props) => {
+  const classes = useStyles();
   const { id, instruction, data: originalData, save, setIsBlocking } = props;
   const dataCopy = { ...originalData };
   const [data, setData] = useState(dataCopy);
-  const classes = useStyles();
+  const [popoverText, setPopoverText] = useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [editing, setEditing] = useState(false);
 
   const addOption = () => {
@@ -86,19 +95,53 @@ const MultipleChoice = (props) => {
   const enableEdit = () => setEditing(true);
 
   const saveEdit = () => {
+    handlePopoverClose();
     setEditing(false);
     save(data);
     setIsBlocking(false);
   };
 
   const cancelEdit = () => {
+    handlePopoverClose();
     setEditing(false);
     setData(originalData);
     setIsBlocking(false);
   };
 
+  const handlePopoverOpen = (event, message) => {
+    setPopoverText(message);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   return (
     <>
+      <Popover
+        id="mouse-over-popover"
+        className={classes.popover}
+        classes={{
+          paper: classes.paper,
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography>{popoverText}</Typography>
+      </Popover>
       <ListItem alignItems="flex-start" key={id}>
         <Grid container>
           <Grid item xs={12}>
@@ -169,6 +212,12 @@ const MultipleChoice = (props) => {
                   aria-label="upload picture"
                   component="span"
                   onClick={saveEdit}
+                  onMouseEnter={(e) =>
+                    handlePopoverOpen(e, 'Aanpassingen opslaan')
+                  }
+                  onMouseLeave={handlePopoverClose}
+                  aria-owns={open ? 'mouse-over-popover' : undefined}
+                  aria-haspopup="true"
                 >
                   <CheckCircleRoundedIcon />
                 </IconButton>
@@ -176,9 +225,14 @@ const MultipleChoice = (props) => {
               <Grid item xs={1}>
                 <IconButton
                   color="secondary"
-                  aria-label="upload picture"
                   component="span"
                   onClick={cancelEdit}
+                  onMouseEnter={(e) =>
+                    handlePopoverOpen(e, 'Aanpassingen ongedaan maken')
+                  }
+                  onMouseLeave={handlePopoverClose}
+                  aria-owns={open ? 'mouse-over-popover' : undefined}
+                  aria-haspopup="true"
                 >
                   <CancelRoundedIcon />
                 </IconButton>
@@ -188,9 +242,11 @@ const MultipleChoice = (props) => {
             <Grid item xs={2}>
               <IconButton
                 color="primary"
-                aria-label="upload picture"
-                component="span"
                 onClick={enableEdit}
+                onMouseEnter={(e) => handlePopoverOpen(e, 'Vraag aanpassen')}
+                onMouseLeave={handlePopoverClose}
+                aria-owns={open ? 'mouse-over-popover' : undefined}
+                aria-haspopup="true"
               >
                 <EditIcon />
               </IconButton>
