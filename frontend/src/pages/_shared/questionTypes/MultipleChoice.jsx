@@ -36,13 +36,14 @@ const RemoveButton = ({ onClick }) => (
 );
 
 const MultipleChoice = (props) => {
-  const { id, instruction, data: originalData, save } = props;
+  const { id, instruction, data: originalData, save, setIsBlocking } = props;
   const dataCopy = { ...originalData };
   const [data, setData] = useState(dataCopy);
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
 
   const addOption = () => {
+    setIsBlocking(true);
     const newOption = { isCorrect: false, value: '' };
     const newOptions = [...data.options, newOption];
     const newData = { ...data, options: newOptions };
@@ -50,6 +51,7 @@ const MultipleChoice = (props) => {
   };
 
   const removeOption = (optionToRemove) => {
+    setIsBlocking(true);
     const newOptions = data.options.filter(
       (option) => option !== optionToRemove
     );
@@ -58,6 +60,7 @@ const MultipleChoice = (props) => {
   };
 
   const editOption = (optionToEdit, event) => {
+    setIsBlocking(true);
     const newOptions = data.options.map((option) => {
       if (option === optionToEdit) {
         return { ...option, value: event.target.value };
@@ -69,6 +72,7 @@ const MultipleChoice = (props) => {
   };
 
   const editCorrect = (newCorrectOption, event) => {
+    setIsBlocking(true);
     const newOptions = data.options.map((option) => {
       if (option === newCorrectOption) {
         return { ...newCorrectOption, isCorrect: !option.isCorrect };
@@ -84,11 +88,13 @@ const MultipleChoice = (props) => {
   const saveEdit = () => {
     setEditing(false);
     save(data);
+    setIsBlocking(false);
   };
 
   const cancelEdit = () => {
     setEditing(false);
     setData(originalData);
+    setIsBlocking(false);
   };
 
   return (
