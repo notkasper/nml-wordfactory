@@ -94,6 +94,12 @@ const LessonContent = (props) => {
         columns={columns}
         pageSize={12}
         onRowClick={onClickStudent}
+        sortModel={[
+          {
+            field: 'index',
+            sort: 'asc',
+          },
+        ]}
       />
     </PageContainer>
   );
