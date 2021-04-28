@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ClickTheRightWords = (props) => {
+const Open = (props) => {
   const { id } = props;
   const classes = useStyles();
 
@@ -34,4 +34,4 @@ const ClickTheRightWords = (props) => {
   );
 };
 
-export default ClickTheRightWords;
+export default Open;
