@@ -48,8 +48,8 @@ const MultipleChoice = (props) => {
   const dataCopy = { ...originalData };
   const [data, setData] = useState(dataCopy);
   const [popoverText, setPopoverText] = useState('');
-  const [editing, setEditing] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [editing, setEditing] = useState(false);
 
   const addOption = () => {
     const newOption = { isCorrect: false, value: '' };
@@ -91,11 +91,13 @@ const MultipleChoice = (props) => {
   const enableEdit = () => setEditing(true);
 
   const saveEdit = () => {
+    handlePopoverClose();
     setEditing(false);
     save(data);
   };
 
   const cancelEdit = () => {
+    handlePopoverClose();
     setEditing(false);
     setData(originalData);
   };
