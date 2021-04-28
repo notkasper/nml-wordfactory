@@ -13,7 +13,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 const useStyles = makeStyles((theme) => ({}));
 
 const Course = (props) => {
-  const { id, name, lessons } = props;
+  const { name, lessons } = props;
   const classes = useStyles();
   const history = useHistory();
 

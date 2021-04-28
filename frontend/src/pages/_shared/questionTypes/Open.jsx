@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
   fullWidth: {
-    width: '60%',
+    width: '100%',
   },
 }));
 
@@ -18,15 +18,15 @@ const ClickTheRightWords = (props) => {
   return (
     <ListItem alignItems="flex-start" key={id}>
       <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="body1" className={classes.fullWidth}>
+        <Grid item xs={12} md={6} className={classes.fullWidth}>
+          <Typography variant="body1">
             {`${props.index + 1}. ${props.instruction}`}
           </Typography>
           <TextField
             disabled
-            className={classes.fullWidth}
             multiline
             rows={4}
+            className={classes.fullWidth}
           />
         </Grid>
       </Grid>
