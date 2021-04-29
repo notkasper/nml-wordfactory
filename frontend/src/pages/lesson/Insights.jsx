@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import { observer } from 'mobx-react-lite';
 import Doughnut from './Doughnut';
 import Histogram from './Histogram';
-import PageContainer from '../_shared/PageContainer';
 
 const calculateProgress = (questionGroupAttempts = []) => {
   const total = questionGroupAttempts.length;
@@ -59,32 +58,30 @@ const Lesson = (props) => {
   }
 
   return (
-    <PageContainer maxWidth="lg">
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Doughnut
-            lessonAttempts={lessonStore.lessonAttempts}
-            title="Algemene voortgang"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Histogram
-            lessonAttempts={lessonStore.lessonAttempts}
-            title="Cijfer verdeling"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Paper>
-            <DataGrid
-              autoHeight
-              rows={lessonStore.lessonAttempts}
-              columns={columns}
-              pageSize={12}
-            />
-          </Paper>
-        </Grid>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <Doughnut
+          lessonAttempts={lessonStore.lessonAttempts}
+          title="Algemene voortgang"
+        />
       </Grid>
-    </PageContainer>
+      <Grid item xs={12} md={6}>
+        <Histogram
+          lessonAttempts={lessonStore.lessonAttempts}
+          title="Cijfer verdeling"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Paper>
+          <DataGrid
+            autoHeight
+            rows={lessonStore.lessonAttempts}
+            columns={columns}
+            pageSize={12}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 

@@ -8,8 +8,11 @@ import { observer } from 'mobx-react-lite';
 import Insights from './Insights';
 import Questions from './LessonContent';
 import TabContent from '../_shared/TabContent';
+import Breadcrumbs from '../_shared/Breadcrumbs';
+import PageContainer from '../_shared/PageContainer';
 
 const Lesson = (props) => {
+  const { crumbs } = props;
   const [value, setValue] = useState('insights');
 
   const onChangeTab = (event, newValue) => {
@@ -28,12 +31,15 @@ const Lesson = (props) => {
           <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
         </Tabs>
       </AppBar>
-      <TabContent index="insights" value={value}>
-        <Insights {...props} />
-      </TabContent>
-      <TabContent index="questions" value={value}>
-        <Questions {...props} />
-      </TabContent>
+      <PageContainer maxWidth="lg">
+        <Breadcrumbs crumbs={crumbs} />
+        <TabContent index="insights" value={value}>
+          <Insights {...props} />
+        </TabContent>
+        <TabContent index="questions" value={value}>
+          <Questions {...props} />
+        </TabContent>
+      </PageContainer>
     </>
   );
 };

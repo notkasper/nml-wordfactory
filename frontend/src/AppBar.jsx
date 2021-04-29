@@ -54,9 +54,7 @@ const CustomAppBar = (props) => {
           color="inherit"
           noWrap
           className={classes.title}
-        >
-          Dashboard
-        </Typography>
+        ></Typography>
         <IconButton color="inherit" onClick={goToProfile}>
           <AccountCircle />
         </IconButton>

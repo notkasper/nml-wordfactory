@@ -47,7 +47,8 @@ const routes = [
   },
   {
     exact: true,
-    path: '/dashboard/questionGroups/:questionGroupId',
+    path:
+      '/dashboard/classes/:classId/lessons/:lessonId/questionGroups/:questionGroupId',
     Component: QuestionGroup,
     name: 'vraag groep',
   },

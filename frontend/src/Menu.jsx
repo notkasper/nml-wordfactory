@@ -183,11 +183,11 @@ const Menu = (props) => {
         labelText="Leerlingen"
         labelIcon={GroupRoundedIcon}
       />
-      <StyledTreeItem
+      {/* <StyledTreeItem
         nodeId="/dashboard/lessons"
         labelText="Lessen"
         labelIcon={ImportContactsRoundedIcon}
-      />
+      /> */}
       <StyledTreeItem
         nodeId="/"
         labelText="Uitloggen"
