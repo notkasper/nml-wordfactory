@@ -17,6 +17,7 @@ import Courses from './Courses';
 import Students from './Students';
 import PageContainer from '../_shared/PageContainer';
 import TabContent from '../_shared/TabContent';
+import Breadcrumbs from '../_shared/Breadcrumbs';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Lesson = (props) => {
+  const { crumbs } = props;
   const classes = useStyles();
   const params = useParams();
   const [loading, setLoading] = useState(false);
@@ -82,6 +84,7 @@ const Lesson = (props) => {
         </Tabs>
       </AppBar>
       <PageContainer>
+        <Breadcrumbs crumbs={crumbs} />
         <Grid item xs={12}>
           <Typography variant="h4" className={classes.marginBottom}>
             {theClass.name}

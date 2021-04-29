@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomAppBar = () => {
+const CustomAppBar = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
