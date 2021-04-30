@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { observer } from 'mobx-react-lite';
-import PageContainer from '../_shared/PageContainer';
 import { DataGrid } from '@material-ui/data-grid';
 
 const typeLabels = {
@@ -70,12 +69,13 @@ const useStyles = makeStyles((theme) => ({
 
 const LessonContent = (props) => {
   const { lessonStore } = props;
+  const location = useLocation();
   const classes = useStyles();
   const params = useParams();
   const history = useHistory();
 
   const onClickStudent = (event) =>
-    history.push(`/dashboard/questionGroups/${event.row.id}`);
+    history.push(`${location.pathname}/questionGroups/${event.row.id}`);
 
   useEffect(() => {
     lessonStore.loadLesson(params.lessonId);
@@ -86,22 +86,20 @@ const LessonContent = (props) => {
   }
 
   return (
-    <PageContainer>
-      <DataGrid
-        className={classes.datagrid}
-        autoHeight
-        rows={lessonStore.lesson.questionGroups}
-        columns={columns}
-        pageSize={12}
-        onRowClick={onClickStudent}
-        sortModel={[
-          {
-            field: 'index',
-            sort: 'asc',
-          },
-        ]}
-      />
-    </PageContainer>
+    <DataGrid
+      className={classes.datagrid}
+      autoHeight
+      rows={lessonStore.lesson.questionGroups}
+      columns={columns}
+      pageSize={12}
+      onRowClick={onClickStudent}
+      sortModel={[
+        {
+          field: 'index',
+          sort: 'asc',
+        },
+      ]}
+    />
   );
 };
 

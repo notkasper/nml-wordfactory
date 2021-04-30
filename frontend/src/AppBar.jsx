@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomAppBar = () => {
+const CustomAppBar = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -54,9 +54,7 @@ const CustomAppBar = () => {
           color="inherit"
           noWrap
           className={classes.title}
-        >
-          Dashboard
-        </Typography>
+        ></Typography>
         <IconButton color="inherit" onClick={goToProfile}>
           <AccountCircle />
         </IconButton>
