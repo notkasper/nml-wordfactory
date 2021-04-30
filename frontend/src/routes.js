@@ -13,50 +13,50 @@ const routes = [
     exact: true,
     path: '/dashboard/home',
     Component: LessonView,
-    name: 'home',
+    name: 'Home',
   },
   {
     exact: true,
     path: '/dashboard/profile',
     Component: Profile,
-    name: 'profile',
+    name: 'Profile',
   },
   {
     exact: true,
     path: '/dashboard/classes/:classId',
     Component: Class,
-    name: 'klas',
+    name: 'Klas',
   },
   {
     exact: true,
     path: '/dashboard/classes/:classId/lessons/:lessonId',
     Component: Lesson,
-    name: 'les',
+    name: 'Les',
   },
   {
     exact: true,
     path: '/dashboard/students/:studentId',
     Component: Student,
-    name: 'leerling',
+    name: 'Leerling',
   },
   {
     exact: true,
     path: '/dashboard/students/:studentId/lessons/:lessonId',
     Component: StudentLesson,
-    name: 'les inzicht',
+    name: 'Les Inzicht',
   },
   {
     exact: true,
     path:
       '/dashboard/classes/:classId/lessons/:lessonId/questionGroups/:questionGroupId',
     Component: QuestionGroup,
-    name: 'vraag groep',
+    name: 'Vraag Groep',
   },
   {
     exact: true,
     path: '/dashboard/students',
     Component: Students,
-    name: 'leerlingen',
+    name: 'Leerlingen',
   },
 ];
 
