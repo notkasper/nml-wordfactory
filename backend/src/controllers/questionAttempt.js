@@ -56,4 +56,5 @@ const getQuestionAttempts = async (req, res) => {
   res.status(200).send({ data: questionAttempts });
 };
 
+
 module.exports = { getQuestionAttempts };
