@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import TabContent from '../_shared/TabContent';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import Details from './Insights';
 import Question from './Question';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
+import TabContent from '../_shared/TabContent';
+import Breadcrumbs from '../_shared/Breadcrumbs';
+import PageContainer from '../_shared/PageContainer';
 
 const QuestionStats = (props) => {
-  const params = useParams();
-  const history = useHistory();
-  const [value, setValue] = useState(params.tab);
+  const { crumbs } = props;
+  const [value, setValue] = useState('question');
 
   const onChangeTab = (event, newValue) => {
-    history.push(newValue);
     setValue(newValue);
   };
 
@@ -23,20 +22,23 @@ const QuestionStats = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={value} onChange={onChangeTab}>
-          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
           <Tab
             label="Inzicht (opdracht)"
             icon={<EqualizerIcon />}
             value="insights"
           />
+          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
         </Tabs>
       </AppBar>
-      <TabContent index="question" value={value}>
-        <Question {...props} />
-      </TabContent>
-      <TabContent index="insights" value={value}>
-        <Details {...props} />
-      </TabContent>
+      <PageContainer maxWidth="lg">
+        <Breadcrumbs crumbs={crumbs} />
+        <TabContent index="question" value={value}>
+          <Question {...props} />
+        </TabContent>
+        <TabContent index="insights" value={value}>
+          <Details {...props} />
+        </TabContent>
+      </PageContainer>
     </>
   );
 };

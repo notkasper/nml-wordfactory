@@ -11,9 +11,7 @@ import 'chartjs-plugin-colorschemes';
 
 import extendChart from './config/extendChart';
 import theme from './theme';
-import Menu from './Menu';
-import AppBar from './AppBar';
-import Content from './Content';
+import Dashboard from './Dashboard';
 import Login from './pages/login';
 
 // STORES
@@ -53,16 +51,6 @@ const SuccessPopup = observer((props) => {
 
 const LoginPage = () => <Login authStore={authStore} />;
 
-const Dashboard = () => {
-  return (
-    <>
-      <AppBar />
-      <Menu authStore={authStore} />
-      <Content authStore={authStore} lessonStore={lessonStore} />
-    </>
-  );
-};
-
 const App = () => {
   const classes = useStyles();
   return (
@@ -75,7 +63,16 @@ const App = () => {
         Else -> Show login page */}
           <Switch>
             <Route path="/" exact component={LoginPage} />
-            <Route path="/dashboard" component={Dashboard} />
+            <Route
+              path="/dashboard"
+              component={(props) => (
+                <Dashboard
+                  authStore={authStore}
+                  lessonStore={lessonStore}
+                  {...props}
+                />
+              )}
+            />
           </Switch>
         </Router>
         <ErrorPopup authStore={authStore} />

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import PageContainer from '../_shared/PageContainer';
 import QuestionGroup from '../_shared/QuestionGroup';
 import service from '../../service';
 
@@ -43,14 +42,12 @@ const Question = (props) => {
   }
 
   return (
-    <PageContainer>
-      <Grid container spacing={2}>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={12}>
-          <QuestionGroup {...questionGroup} save={save} />
-        </Grid>
+    <Grid container spacing={2}>
+      <Grid item xs={12}></Grid>
+      <Grid item xs={12}>
+        <QuestionGroup {...questionGroup} save={save} />
       </Grid>
-    </PageContainer>
+    </Grid>
   );
 };
 

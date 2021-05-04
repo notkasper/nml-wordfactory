@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import { observer } from 'mobx-react-lite';
 import Doughnut from './Doughnut';
 import Histogram from './Histogram';
-import PageContainer from '../_shared/PageContainer';
 
 const calculateProgress = (questionGroupAttempts = []) => {
   const total = questionGroupAttempts.length;
@@ -26,19 +25,19 @@ const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    flex: 0.3,
+    flex: 0.2,
     valueGetter: (params) => params.row.student.name,
   },
   {
     field: 'progress',
     headerName: 'Voortgang (%)',
-    flex: 0.15,
+    flex: 0.1,
     valueGetter: (params) =>
       calculateProgress(params.row.questionGroupAttempts),
   },
   {
     field: 'duration',
-    headerName: 'Duratie (minuten)',
+    headerName: 'Tijdsduur (minuten)',
     flex: 0.15,
   },
   { field: 'correct', headerName: 'Correct', flex: 0.1, type: 'number' },
@@ -59,32 +58,30 @@ const Lesson = (props) => {
   }
 
   return (
-    <PageContainer maxWidth="lg">
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Doughnut
-            lessonAttempts={lessonStore.lessonAttempts}
-            title="Algemene voortgang"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Histogram
-            lessonAttempts={lessonStore.lessonAttempts}
-            title="Cijfer verdeling"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Paper>
-            <DataGrid
-              autoHeight
-              rows={lessonStore.lessonAttempts}
-              columns={columns}
-              pageSize={12}
-            />
-          </Paper>
-        </Grid>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <Doughnut
+          lessonAttempts={lessonStore.lessonAttempts}
+          title="Algemene voortgang"
+        />
       </Grid>
-    </PageContainer>
+      <Grid item xs={12} md={6}>
+        <Histogram
+          lessonAttempts={lessonStore.lessonAttempts}
+          title="Cijfer verdeling"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Paper>
+          <DataGrid
+            autoHeight
+            rows={lessonStore.lessonAttempts}
+            columns={columns}
+            pageSize={12}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 

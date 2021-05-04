@@ -3,6 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useHistory } from 'react-router-dom';
 
 import Activity from './Activity';
 import Widget from './Widget';
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = (props) => {
   const theme = useTheme();
   const classes = useStyles();
+  const history = useHistory();
   const [, setClassList] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -71,16 +73,23 @@ const Dashboard = (props) => {
     <PageContainer>
       <Grid container spacing={3}>
         {/* Widgets with general information */}
-        <Widget left={6} right="lessen" color={theme.widget.primary.main} />
         <Widget
-          left={104}
+          left={6}
+          right="lessen"
+          color={theme.widget.primary.main}
+          onClick={() => history.push('/dashboard/lessons')}
+        />
+        <Widget
+          left={206}
           right="leerlingen"
           color={theme.widget.secondary.main}
+          onClick={() => history.push('/dashboard/students')}
         />
         <Widget
           left={25}
           right="na te kijken opdrachten"
           color={theme.widget.tertiary.main}
+          onClick={() => history.push('/dashboard/tasks')}
         />
         {/* Average percentage statistics */}
         <PercentageDoughnut
@@ -94,7 +103,7 @@ const Dashboard = (props) => {
           options={options({ color: theme.widget.secondary.main, text: '50%' })}
         />
         <PercentageDoughnut
-          title="Gemiddelde tijdsduur"
+          title="Opdrachten nagekeken"
           data={data({ color: theme.widget.tertiary.main, variant: 3 })}
           options={options({ color: theme.widget.tertiary.main, text: '75%' })}
         />

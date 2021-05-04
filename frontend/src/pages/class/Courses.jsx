@@ -39,7 +39,7 @@ const Courses = (props) => {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h5" className={classes.marginBottom}>
-          Cursussen
+          Lessen
         </Typography>
         <Autocomplete
           value={courseFilterValue}

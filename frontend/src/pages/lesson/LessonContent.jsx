@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { observer } from 'mobx-react-lite';
-import IconButton from '@material-ui/core/IconButton';
-import PageContainer from '../_shared/PageContainer';
 import { DataGrid } from '@material-ui/data-grid';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const typeLabels = {
   open: 'Open',
@@ -19,26 +17,27 @@ const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    width: 300,
+
+    flex: 0.2,
   },
   {
     field: 'index',
-    headerName: 'Nummer',
-    width: 110,
+    headerName: 'Opdrachtnummer',
+    flex: 0.1,
     type: 'number',
     valueGetter: (params) => params.value + 1,
   },
   {
     field: 'questionGroups',
     headerName: 'Vragen',
-    width: 130,
+    flex: 0.1,
     valueGetter: (params) => params.row.questions.length,
     type: 'number',
   },
   {
     field: 'type',
     headerName: 'Type',
-    width: 175,
+    flex: 0.2,
     valueGetter: (params) => {
       const type = params.row.questions[0].type;
       const label = typeLabels[type] || type;
@@ -48,38 +47,35 @@ const columns = [
   {
     field: 'averageScore',
     headerName: 'Gem. score (%)',
-    width: 150,
+    flex: 0.1,
     type: 'number',
   },
   {
     field: 'completions',
     headerName: 'Klaar',
-    width: 100,
+    flex: 0.1,
     type: 'number',
-  },
-  {
-    field: 'Bekijken',
-    headerName: '',
-    width: 150,
-    renderCell: (params) => <ViewIcon id={params.row.id} />,
   },
 ];
 
-const ViewIcon = (props) => {
-  const { id } = props;
-  const history = useHistory();
-  const goToStats = () =>
-    history.push(`/dashboard/questionGroups/${id}/question`);
-  return (
-    <IconButton onClick={goToStats}>
-      <VisibilityIcon color="primary" />
-    </IconButton>
-  );
-};
+const useStyles = makeStyles((theme) => ({
+  datagrid: {
+    marginTop: '1rem',
+    '& .MuiDataGrid-row:hover': {
+      cursor: 'pointer',
+    },
+  },
+}));
 
 const LessonContent = (props) => {
   const { lessonStore } = props;
+  const location = useLocation();
+  const classes = useStyles();
   const params = useParams();
+  const history = useHistory();
+
+  const onClickStudent = (event) =>
+    history.push(`${location.pathname}/questionGroups/${event.row.id}`);
 
   useEffect(() => {
     lessonStore.loadLesson(params.lessonId);
@@ -90,14 +86,20 @@ const LessonContent = (props) => {
   }
 
   return (
-    <PageContainer>
-      <DataGrid
-        autoHeight
-        rows={lessonStore.lesson.questionGroups}
-        columns={columns}
-        pageSize={12}
-      />
-    </PageContainer>
+    <DataGrid
+      className={classes.datagrid}
+      autoHeight
+      rows={lessonStore.lesson.questionGroups}
+      columns={columns}
+      pageSize={12}
+      onRowClick={onClickStudent}
+      sortModel={[
+        {
+          field: 'index',
+          sort: 'asc',
+        },
+      ]}
+    />
   );
 };
 

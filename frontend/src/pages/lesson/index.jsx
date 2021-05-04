@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -11,14 +10,14 @@ import Insights from './Insights';
 import Questions from './LessonContent';
 import QuestionGroupAttempt from './QuestionGroupAttempt';
 import TabContent from '../_shared/TabContent';
+import Breadcrumbs from '../_shared/Breadcrumbs';
+import PageContainer from '../_shared/PageContainer';
 
 const Lesson = (props) => {
-  const params = useParams();
-  const history = useHistory();
-  const [value, setValue] = useState(params.tab);
+  const { crumbs } = props;
+  const [value, setValue] = useState('insights');
 
   const onChangeTab = (event, newValue) => {
-    history.push(newValue);
     setValue(newValue);
   };
 
@@ -39,15 +38,19 @@ const Lesson = (props) => {
           />
         </Tabs>
       </AppBar>
-      <TabContent index="insights" value={value}>
-        <Insights {...props} />
-      </TabContent>
-      <TabContent index="questions" value={value}>
-        <Questions {...props} />
-      </TabContent>
-      <TabContent index="questionGroupAttempt" value={value}>
-        <QuestionGroupAttempt />
-      </TabContent>
+
+      <PageContainer maxWidth="lg">
+        <Breadcrumbs crumbs={crumbs} />
+        <TabContent index="insights" value={value}>
+          <Insights {...props} />
+        </TabContent>
+        <TabContent index="questions" value={value}>
+          <Questions {...props} />
+        </TabContent>
+        <TabContent index="questionGroupAttempt" value={value}>
+          <QuestionGroupAttempt />
+        </TabContent>
+      </PageContainer>
     </>
   );
 };
