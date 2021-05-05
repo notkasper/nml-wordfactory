@@ -4,11 +4,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import EditIcon from '@material-ui/icons/Edit';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import { observer } from 'mobx-react-lite';
 import Insights from './Insights';
 import Questions from './LessonContent';
-import QuestionGroupAttempt from './QuestionGroupAttempt';
 import TabContent from '../_shared/TabContent';
 import Breadcrumbs from '../_shared/Breadcrumbs';
 import PageContainer from '../_shared/PageContainer';
@@ -31,11 +29,6 @@ const Lesson = (props) => {
             value="insights"
           />
           <Tab label="Opdrachten" icon={<EditIcon />} value="questions" />
-          <Tab
-            label="Antwoorden"
-            icon={<AssignmentTurnedInIcon />}
-            value="questionGroupAttempt"
-          />
         </Tabs>
       </AppBar>
 
@@ -46,9 +39,6 @@ const Lesson = (props) => {
         </TabContent>
         <TabContent index="questions" value={value}>
           <Questions {...props} />
-        </TabContent>
-        <TabContent index="questionGroupAttempt" value={value}>
-          <QuestionGroupAttempt />
         </TabContent>
       </PageContainer>
     </>

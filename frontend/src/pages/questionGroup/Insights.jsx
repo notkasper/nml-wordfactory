@@ -1,36 +1,31 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import service from '../../service';
 import Doughnut from './Doughnut';
+import Tile from './Tile';
 
 const Details = (props) => {
-  const [questionGroupAttempts, setQuestionGroupAttempts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { questionStore } = props;
+  const theme = useTheme();
+  const [loading, setLoading] = useState(true);
   const params = useParams();
 
-  const loadQuestionGroupAttempts = useCallback(async () => {
+  const loadAll = useCallback(async () => {
     setLoading(true);
-
-    const response = await service.loadQuestionGroupAttempts(
-      params.questionGroupId
-    );
-
-    if (!response) {
-      return;
-    }
-
-    const data = response.body.data.filter((attempt) => attempt.isCompleted);
-    setQuestionGroupAttempts(data);
+    const promises = [
+      questionStore.loadQuestionGroupAttempts(params.questionGroupId),
+      questionStore.loadQuestionGroup(params.questionGroupId),
+    ];
+    await Promise.all(promises);
     setLoading(false);
-  }, [params.questionGroupId]);
+  }, [params.questionGroupId, params.questionGroupId]);
 
   useEffect(() => {
-    loadQuestionGroupAttempts();
-  }, [loadQuestionGroupAttempts]);
+    loadAll();
+  }, [loadAll]);
 
   if (loading) {
     return <CircularProgress />;
@@ -40,24 +35,27 @@ const Details = (props) => {
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
         <Doughnut
-          questionGroupAttempts={questionGroupAttempts}
-          title="Correctheid verdeling van de vraag"
+          questionGroupAttempts={questionStore.questionGroupAttempts}
+          title="Correctheid verdeling van de vragen"
         />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>
-          <Typography>Meer data visualisatie</Typography>
-        </Paper>
+
+      <Grid container xs={12} md={6} style={{ padding: '1rem' }}>
+        <Tile
+          questionGroup={questionStore.questionGroup}
+          title="Totaal aantal vragen: "
+          number={1}
+          color={theme.widget.tertiary.main}
+        />
+        <Tile
+          questionGroup={questionStore.questionGroup}
+          title="Gemiddelde tijdsduur: "
+          number={2}
+          color={theme.widget.secondary.main}
+        />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>
-          <Typography>Meer data visualisatie</Typography>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>
-          <Typography>Meer data visualisatie</Typography>
-        </Paper>
+      <Grid item xs={12} md={12}>
+        <Paper style={{ padding: '2rem', height: '100%' }}>Meer dninge</Paper>
       </Grid>
     </Grid>
   );

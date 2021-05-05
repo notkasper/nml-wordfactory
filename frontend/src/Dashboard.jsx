@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = (props) => {
-  const { authStore, lessonStore } = props;
+  const { authStore, lessonStore, questionStore } = props;
   const classes = useStyles();
 
   return (
@@ -52,6 +52,7 @@ const Dashboard = (props) => {
                   <Component
                     authStore={authStore}
                     lessonStore={lessonStore}
+                    questionStore={questionStore}
                     crumbs={crumbs}
                     {...props}
                   />

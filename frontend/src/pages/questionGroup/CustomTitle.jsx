@@ -1,0 +1,38 @@
+import Paper from '@material-ui/core/Paper';
+import Title from '../_shared/Title';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Box } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
+import Tab from '@material-ui/core/Tab';
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    //padding: theme.spacing(),
+    display: 'flex',
+    textAlign: 'center',
+    overflow: 'auto',
+    justifyContent: 'center',
+    backgroundColor: theme.widget.secondary.main,
+    color: 'white',
+    alignItems: 'baseline',
+  },
+  fixedHeight: {
+    height: 400,
+  },
+}));
+
+const CustomTitle = (props) => {
+  const { name, label } = props;
+  const classes = useStyles();
+
+  return (
+    <Paper className={classes.paper}>
+      <Typography variant="h5">{name} </Typography>
+      <Box paddingLeft={2}>
+        <Typography variant="h6">({label})</Typography>
+      </Box>
+    </Paper>
+  );
+};
+
+export default CustomTitle;

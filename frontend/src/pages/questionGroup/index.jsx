@@ -9,6 +9,8 @@ import Question from './Question';
 import TabContent from '../_shared/TabContent';
 import Breadcrumbs from '../_shared/Breadcrumbs';
 import PageContainer from '../_shared/PageContainer';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import AnswersMultipleChoice from './AnswersMultipleChoice';
 
 const QuestionStats = (props) => {
   const { crumbs } = props;
@@ -28,6 +30,11 @@ const QuestionStats = (props) => {
             value="insights"
           />
           <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
+          <Tab
+            label="Antwoorden"
+            icon={<AssignmentTurnedInIcon />}
+            value="answers"
+          />
         </Tabs>
       </AppBar>
       <PageContainer maxWidth="lg">
@@ -37,6 +44,9 @@ const QuestionStats = (props) => {
         </TabContent>
         <TabContent index="insights" value={value}>
           <Details {...props} />
+        </TabContent>
+        <TabContent index="answers" value={value}>
+          <AnswersMultipleChoice {...props} />
         </TabContent>
       </PageContainer>
     </>

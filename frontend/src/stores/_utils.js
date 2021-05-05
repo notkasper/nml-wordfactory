@@ -1,3 +1,5 @@
+import { setGridPaginationModeActionCreator } from '@material-ui/data-grid';
+
 const addDuration = (lessonAttempts) => {
   return lessonAttempts.map((lessonAttempt) => {
     const duration = lessonAttempt.questionGroupAttempts.reduce(
@@ -27,7 +29,31 @@ const addPerformance = (lessonAttempts) => {
   });
 };
 
-const addQuestionGroupAverages = (lesson) => {
+const addQuestionGroupStats = (questionGroup) => {
+  let questionTitles = [];
+  for (var i = 0; i < questionGroup.questions.length; i++) {
+    questionTitles.push('Vraag ' + parseInt(i + 1));
+  }
+  questionGroup.questionTitles = questionTitles;
+  return questionGroup;
+};
+const addQuestionGroupAttemptStats = (questionGroup, questionGroupAttempts) => {
+  const amountLessons = questionGroup.questions.length;
+
+  const { elapsedTime } = questionGroupAttempts.reduce(
+    (acc, curr) => {
+      if (curr.isCompleted) {
+        acc.elapsedTime += curr.timeElapsedSeconds;
+      }
+      return acc;
+    },
+    { elapsedTime: 0 }
+  );
+  questionGroup.averageElapsedTime = elapsedTime / amountLessons; //totaal aantal
+  return questionGroup;
+};
+
+const addQuestionGroupAverages = (lesson, questionGroup) => {
   lesson.questionGroups = lesson.questionGroups.map((questionGroup) => {
     const {
       correct,
@@ -58,4 +84,10 @@ const addQuestionGroupAverages = (lesson) => {
   return lesson;
 };
 
-export default { addDuration, addPerformance, addQuestionGroupAverages };
+export default {
+  addDuration,
+  addPerformance,
+  addQuestionGroupAverages,
+  addQuestionGroupAttemptStats,
+  addQuestionGroupStats,
+};
