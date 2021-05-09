@@ -30,6 +30,7 @@ const Course = (props) => {
     >
       {lessons.map((lesson) => (
         <ListItem
+          component="div"
           alignItems="flex-start"
           key={lesson.id}
           button

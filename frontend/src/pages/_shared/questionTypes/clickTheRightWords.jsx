@@ -15,7 +15,7 @@ const ClickTheRightWords = (props) => {
   const classes = useStyles();
 
   return (
-    <ListItem alignItems="flex-start" key={id}>
+    <ListItem component="div" alignItems="flex-start" key={id}>
       <Grid container>
         <Grid item xs={12}>
           <Typography variant="body1" className={classes.marginBottom}>

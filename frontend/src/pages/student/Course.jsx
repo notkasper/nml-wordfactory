@@ -22,7 +22,7 @@ const Course = (props) => {
   const [expanded, setExpanded] = useState(true);
   const onChange = () => setExpanded(!expanded);
   return (
-    <ListItem alignItems="flex-start" key={id}>
+    <ListItem component="div" alignItems="flex-start" key={id}>
       <Accordion
         className={classes.fullWidth}
         TransitionProps={{ unmountOnExit: true }}

@@ -63,7 +63,7 @@ const QuestionGroup = (props) => {
           }
         >
           {questions.map((question, index) => (
-            <ListItem key={question.id}>
+            <ListItem component="div" key={question.id}>
               <Question
                 {...question}
                 setIsBlocking={setIsBlocking}

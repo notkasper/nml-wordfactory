@@ -9,7 +9,6 @@ const Question = (props) => {
   const { authStore } = props;
   const [questionGroup, setQuestionGroup] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [editing, setEditing] = useState(false);
   const params = useParams();
 
   const loadQuestionGroup = useCallback(async () => {

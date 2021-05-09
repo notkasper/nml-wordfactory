@@ -12,10 +12,14 @@ const Lesson = (props) => {
   const location = useLocation();
   const onClick = () => history.push(`${location.pathname}/lessons/${id}`);
 
-  console.log(props);
-
   return (
-    <ListItem alignItems="flex-start" key={id} button onClick={onClick}>
+    <ListItem
+      component="div"
+      alignItems="flex-start"
+      key={id}
+      button
+      onClick={onClick}
+    >
       <ListItemText primary={`${prefix} - ${name}`} />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="comments">
