@@ -12,7 +12,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded';
-import ImportContactsRoundedIcon from '@material-ui/icons/ImportContactsRounded';
 import NoMeetingRoomRoundedIcon from '@material-ui/icons/NoMeetingRoomRounded';
 import service from './service';
 
