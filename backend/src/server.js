@@ -6,7 +6,6 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
 const expressRateLimit = require('express-rate-limit');
@@ -40,8 +39,8 @@ const start = async () => {
   }
 
   // Body parser
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   // Cookie parser
   app.use(cookieParser());
