@@ -32,7 +32,7 @@ const columns = [
   },
   {
     field: 'correctness',
-    headerName: 'Gem. correctheid (%)',
+    headerName: 'Gem. correctheid',
     flex: 0.35,
     valueGetter: (params) => params.row.correctness,
   },

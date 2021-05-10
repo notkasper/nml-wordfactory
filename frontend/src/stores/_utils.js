@@ -31,25 +31,28 @@ const addPerformance = (lessonAttempts) => {
 
 const addQuestionGroupStats = (questionGroup) => {
   let questionTitles = [];
+  let questionIds = [];
   for (var i = 0; i < questionGroup.questions.length; i++) {
     questionTitles.push('Vraag ' + parseInt(i + 1));
+    questionIds.push(questionGroup.questions[i].id);
   }
   questionGroup.questionTitles = questionTitles;
+  questionGroup.questionIds = questionIds;
   return questionGroup;
 };
-const addQuestionGroupAttemptStats = (questionGroup, questionGroupAttempts) => {
-  const amountLessons = questionGroup.questions.length;
 
-  const { elapsedTime } = questionGroupAttempts.reduce(
+const addQuestionGroupAttemptStats = (questionGroup, questionGroupAttempts) => {
+  const { elapsedTime, total } = questionGroupAttempts.reduce(
     (acc, curr) => {
       if (curr.isCompleted) {
         acc.elapsedTime += curr.timeElapsedSeconds;
+        acc.total += 1;
       }
       return acc;
     },
-    { elapsedTime: 0 }
+    { elapsedTime: 0, total: 0 }
   );
-  questionGroup.averageElapsedTime = elapsedTime / amountLessons; //totaal aantal
+  questionGroup.averageElapsedTime = Math.round(elapsedTime / total);
   return questionGroup;
 };
 

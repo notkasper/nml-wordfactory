@@ -10,7 +10,7 @@ class QuestionStore {
       questionAttempts: observable,
       questionGroupAttempts: observable,
       loadQuestionGroup: action,
-      loadQuestionAttempts: action,
+      loadQuestionAttemptsGroupId: action,
       loadQuestionGroupAttempts: action,
       setQuestionGroup: action,
       setNumber: action,
@@ -30,32 +30,80 @@ class QuestionStore {
   setQuestionGroupAttempts = (questionGroupAttempts) =>
     (this.questionGroupAttempts = questionGroupAttempts);
 
-  loadQuestionGroupAttempts = async (questiongroupId) => {
-    if (this.questionGroupAttempts?.id === questiongroupId) {
+  loadQuestionGroupAttempts = async (questionId) => {
+    if (this.questionGroupAttempts?.id === questionId) {
       return;
     }
-    const response = await service.loadQuestionGroupAttempts(questiongroupId);
+    const response = await service.loadQuestionGroupAttempts(questionId);
     if (!response) {
       return;
     }
+    // console.log(response.body.data);
     this.setQuestionGroupAttempts(response.body.data);
   };
 
-  loadQuestionAttempts = async (questionId) => {
-    if (this.questionAttempts?.id === questionId) {
-      return;
-    }
-    const response = await service.loadQuestionAttempts(questionId);
-    if (!response) {
-      return;
-    }
-    this.questionAttempts = response.body.data;
+  loadQuestionAttemptsGroupId = async (questionGroupId) => {
+    console.log(questionGroupId);
+    // if (this.questionAttempts?.id === questionGroupId) {
+    //   return;
+    // }
+
+    // const responseQG = await service.loadQuestionGroup(questionGroupId);
+
+    // if (!responseQG) {
+    //   return;
+    // }
+    // const questionGroup = responseQG.body.data;
+    // console.log(questionGroup);
+    // let questionIds = [];
+    // questionGroup.questions.map((question) => {
+    //   questionIds.push(question.id);
+    // });
+    // console.log(questionIds);
+    // let questionAttempts = [];
+    // questionIds = ['8fa3c647-a4bf-4ebb-a2db-1546b9e56afd'];
+    // let qid = '8fa3c647-a4bf-4ebb-a2db-1546b9e56afd';
+    // // const getQA = async (id) => {
+    // //   return service.loadQuestionAttempts(id);
+    // // };
+    // // const testData = async () => {
+    // //   return Promise.all(questionIds.map((id) => getQA(id)));
+    // // };
+    // // let res = testData().then((data) => {
+    // //   console.log(data);
+    // //   return data;
+    // // });
+
+    // const getQA = await service.loadQuestionAttemptsID(qid);
+
+    // console.log(getQA.body.data);
+    // console.log('YAAAAAAAAAAAAAS');
+    // questionIds.map((id) => {
+    //   const response =
+    //     await service.loadQuestionAttempts(id);
+
+    //   if (!response) {
+    //     return;
+    //   }
+    //   questionAttempts.push(response.body.data);
+    // });
+
+    //console.log(response.body.data);
+    // let questionAttempts = utils.addQuestionGroupAttemptStats(
+    //   responseQG.body.data,
+    //   responseQA.body.data
+    // );
+    // questionGroup = utils.addQuestionGroupStats(responseQG.body.data);
+    // this.setQuestionGroup(questionGroup);
+    //this.questionAttempts = response.body.data;
+    //this.setQuestionAttempts(questionAttempts);
   };
 
   loadQuestionGroup = async (questionGroupId) => {
     if (this.questionGroup?.id === questionGroupId) {
       return;
     }
+    console.log(questionGroupId);
     const responseQA = await service.loadQuestionGroupAttempts(questionGroupId);
     if (!responseQA) {
       return;
