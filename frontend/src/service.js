@@ -48,12 +48,6 @@ const loadLessonAttempts = async (lessonId) => {
   return response;
 };
 
-const loadQuestionAttempts = async () => {
-  const req = request.get(`/api/v1/questionAttempts`).query({ pageSize: 10 });
-  const response = await handleResponse(req);
-  return response;
-};
-
 const loadLesson = async (lessonId) => {
   const req = request.get(`/api/v1/lessons/${lessonId}`);
   const response = await handleResponse(req);
@@ -75,10 +69,18 @@ const loadStudent = async (id) => {
   return response;
 };
 
-const loadQuestionGroupAttempts = async (id) => {
+const loadAllQuestionGroupAttempts = async () => {
   const req = request
     .get(`/api/v1/questionGroupAttempts`)
-    .query({ questionGroupId: id });
+    .query({ pageSize: 10 });
+  const response = await handleResponse(req);
+  return response;
+};
+
+const loadQuestionGroupAttempts = async (id) => {
+  const req = request.get(
+    `/api/v1/questionGroupAttempts/questionGroupId/${id}`
+  );
   const response = await handleResponse(req);
   return response;
 };
@@ -102,9 +104,9 @@ const service = {
   loadCourses,
   loadClasses,
   loadLessonAttempts,
-  loadQuestionAttempts,
   loadLesson,
   login,
+  loadAllQuestionGroupAttempts,
   loadQuestionGroupAttempts,
   loadQuestionGroup,
   updateQuestion,

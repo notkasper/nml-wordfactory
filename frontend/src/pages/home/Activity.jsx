@@ -65,7 +65,7 @@ const Activity = (props) => {
   const loadQuestionAttempts = useCallback(async () => {
     setLoading(true);
 
-    const response = await service.loadQuestionAttempts();
+    const response = await service.loadAllQuestionGroupAttempts();
     if (!response) {
       return;
     }
