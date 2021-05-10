@@ -16,7 +16,7 @@ const Open = (props) => {
   const classes = useStyles();
 
   return (
-    <ListItem alignItems="flex-start" key={id}>
+    <ListItem component="div" alignItems="flex-start" key={id}>
       <Grid container>
         <Grid item xs={12} md={6} className={classes.fullWidth}>
           <Typography variant="body1">

@@ -43,7 +43,7 @@ const Lesson = (props) => {
     const response = await service.loadStudents({ classId });
     if (!response) return;
     setStudents(response.body.data);
-  }, [params.classId]);
+  }, [classId]);
 
   const loadClass = useCallback(async () => {
     const response = await service.loadClass(params.classId);
@@ -55,7 +55,7 @@ const Lesson = (props) => {
     const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
-  }, [params.classId]);
+  }, [classId]);
 
   const loadAll = useCallback(async () => {
     setLoading(true);

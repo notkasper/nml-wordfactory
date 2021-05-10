@@ -23,6 +23,7 @@ const Dashboard = (props) => {
     <Switch>
       {routes.map(({ exact, path, name, Component }) => (
         <Route
+          key={path}
           exact={exact}
           path={path}
           render={(props) => {
@@ -41,8 +42,7 @@ const Dashboard = (props) => {
                   : path,
                 ...rest,
               }));
-            console.log(`Generated crumbs for ${props.match.path}`);
-            crumbs.map(({ name, path }) => console.log({ name, path }));
+
             return (
               <>
                 <AppBar />

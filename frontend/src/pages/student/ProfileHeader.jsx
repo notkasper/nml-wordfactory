@@ -14,7 +14,7 @@ const ProfileHeader = (props) => {
         </ListSubheader>
       }
     >
-      <ListItem alignItems="flex-start" key={id}>
+      <ListItem component="div" alignItems="flex-start" key={id}>
         <ListItemText primary={name} />
       </ListItem>
     </List>
