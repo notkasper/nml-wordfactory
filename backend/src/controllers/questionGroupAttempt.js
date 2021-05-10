@@ -1,3 +1,5 @@
+const uuid = require('uuid');
+
 const db = require('../db');
 
 const getQuestionGroupAttempts = async (req, res) => {
@@ -26,21 +28,9 @@ const getAllQuestionGroupAttempts = async (req, res) => {
     query: { pageSize },
   } = req;
 
-  const classes = await teacher.getClasses();
-  let questionGroups = [];
-  for (const theClass of classes) {
-    const courses = await theClass.getCourses();
-    for (const course of courses) {
-      const lessons = await course.getLessons();
-      for (const lesson of lessons) {
-        questionGroups = await lesson.getQuestionGroups();
-      }
-    }
-  }
-
-  const questionAttempts = await db.QuestionGroupAttempt.findAll({
+  const questionGroupAttempts = await db.QuestionGroupAttempt.findAll({
     where: {
-      questionGroupId: questionGroups.map((e) => e.id),
+      '$QuestionGroup.questionGroups.Course.Class.teachers.id$': teacher.id,
     },
     attributes: ['id', 'isCompleted', 'updatedAt'],
     include: [
@@ -53,6 +43,27 @@ const getAllQuestionGroupAttempts = async (req, res) => {
             model: db.Lesson,
             as: 'questionGroups',
             attributes: ['id', 'index', 'prefix', 'instruction', 'name'],
+            include: [
+              {
+                model: db.Course,
+                as: 'Course',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: db.Class,
+                    as: 'Class',
+                    attributes: ['id'],
+                    include: [
+                      {
+                        model: db.Teacher,
+                        as: 'teachers',
+                        attributes: ['id'],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
@@ -71,9 +82,10 @@ const getAllQuestionGroupAttempts = async (req, res) => {
     ],
     order: [['updatedAt', 'DESC']],
     limit: pageSize || 50,
+    subQuery: false,
   });
 
-  res.status(200).send({ data: questionAttempts });
+  res.status(200).send({ data: questionGroupAttempts });
 };
 
 module.exports = { getQuestionGroupAttempts, getAllQuestionGroupAttempts };
