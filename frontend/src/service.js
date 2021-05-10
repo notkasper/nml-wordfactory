@@ -54,11 +54,13 @@ const loadQuestionAttempts = async () => {
   return response;
 };
 
-// const loadQuestionAttemptsID = async (id) => {
-//   const req = request.get(`/api/v1/questionAttempts`).query({ questionId: id });
-//   const response = await handleResponse(req);
-//   return response;
-// };
+const loadQuestionAttemptsID = async (questionId, groupAttemptId) => {
+  const req = request
+    .get(`/api/v1/questionAttempts/${questionId}`)
+    .query({ questionGroupAttemptId: groupAttemptId });
+  const response = await handleResponse(req);
+  return response;
+};
 
 const loadLesson = async (lessonId) => {
   const req = request.get(`/api/v1/lessons/${lessonId}`);
@@ -109,7 +111,7 @@ const service = {
   loadClasses,
   loadLessonAttempts,
   loadQuestionAttempts,
-  //loadQuestionAttemptsID,
+  loadQuestionAttemptsID,
   loadLesson,
   login,
   loadQuestionGroupAttempts,

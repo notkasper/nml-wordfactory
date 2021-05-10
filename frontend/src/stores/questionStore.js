@@ -30,54 +30,67 @@ class QuestionStore {
   setQuestionGroupAttempts = (questionGroupAttempts) =>
     (this.questionGroupAttempts = questionGroupAttempts);
 
-  loadQuestionGroupAttempts = async (questionId) => {
-    if (this.questionGroupAttempts?.id === questionId) {
+  loadQuestionGroupAttempts = async (questionGroupId) => {
+    if (this.questionGroupAttempts?.id === questionGroupId) {
       return;
     }
-    const response = await service.loadQuestionGroupAttempts(questionId);
+    const response = await service.loadQuestionGroupAttempts(questionGroupId);
     if (!response) {
       return;
     }
-    // console.log(response.body.data);
     this.setQuestionGroupAttempts(response.body.data);
   };
 
   loadQuestionAttemptsGroupId = async (questionGroupId) => {
     console.log(questionGroupId);
-    // if (this.questionAttempts?.id === questionGroupId) {
-    //   return;
-    // }
+    if (this.questionAttempts?.id === questionGroupId) {
+      return;
+    }
 
-    // const responseQG = await service.loadQuestionGroup(questionGroupId);
+    const responseQGA = await service.loadQuestionAttempts(questionGroupId);
+    if (!responseQGA) {
+      return;
+    }
+    const questionGroupAttempts = responseQGA.body.data;
 
-    // if (!responseQG) {
-    //   return;
-    // }
-    // const questionGroup = responseQG.body.data;
-    // console.log(questionGroup);
-    // let questionIds = [];
-    // questionGroup.questions.map((question) => {
-    //   questionIds.push(question.id);
+    let questionGroupAttemptsIds = [];
+    questionGroupAttempts.map((questionGroupAttempt) => {
+      questionGroupAttemptsIds.push(questionGroupAttempt.id);
+    });
+
+    const testId = questionGroupAttemptsIds[0];
+    console.log(testId);
+    const responseQG = await service.loadQuestionGroup(questionGroupId);
+
+    if (!responseQG) {
+      return;
+    }
+    const questionGroup = responseQG.body.data;
+
+    let questionIds = [];
+    questionGroup.questions.map((question) => {
+      questionIds.push(question.id);
+    });
+    console.log(questionIds);
+    let questionAttempts = [];
+    questionIds = ['8fa3c647-a4bf-4ebb-a2db-1546b9e56afd'];
+    let qid = '8fa3c647-a4bf-4ebb-a2db-1546b9e56afd';
+
+    // const getQA = async (id) => {
+    //   return service.loadQuestionAttempts(id);
+    // };
+    // const testData = async () => {
+    //   return Promise.all(questionIds.map((id) => getQA(id)));
+    // };
+    // let res = testData().then((data) => {
+    //   console.log(data);
+    //   return data;
     // });
-    // console.log(questionIds);
-    // let questionAttempts = [];
-    // questionIds = ['8fa3c647-a4bf-4ebb-a2db-1546b9e56afd'];
-    // let qid = '8fa3c647-a4bf-4ebb-a2db-1546b9e56afd';
-    // // const getQA = async (id) => {
-    // //   return service.loadQuestionAttempts(id);
-    // // };
-    // // const testData = async () => {
-    // //   return Promise.all(questionIds.map((id) => getQA(id)));
-    // // };
-    // // let res = testData().then((data) => {
-    // //   console.log(data);
-    // //   return data;
-    // // });
 
-    // const getQA = await service.loadQuestionAttemptsID(qid);
+    const getQA = await service.loadQuestionAttemptsID(qid, testId);
 
-    // console.log(getQA.body.data);
-    // console.log('YAAAAAAAAAAAAAS');
+    console.log(getQA.body.data);
+    console.log('YAAAAAAAAAAAAAS');
     // questionIds.map((id) => {
     //   const response =
     //     await service.loadQuestionAttempts(id);

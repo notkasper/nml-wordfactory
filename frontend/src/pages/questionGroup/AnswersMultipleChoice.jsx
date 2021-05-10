@@ -57,35 +57,15 @@ const Answers = (props) => {
     const promises = [
       questionStore.loadQuestionGroupAttempts(params.questionGroupId),
       questionStore.loadQuestionGroup(params.questionGroupId),
-      //questionStore.loadQuestionAttemptsGroupId(params.questionGroupId),
+      questionStore.loadQuestionAttemptsGroupId(params.questionGroupId),
     ];
     await Promise.all(promises);
     setLoading(false);
-  }, [params.questionGroupId, params.questionGroupId]); //params.questionGroupId]);
+  }, [params.questionGroupId, params.questionGroupId, params.questionGroupId]);
 
   useEffect(() => {
     loadAll();
   }, [loadAll]);
-
-  // if (!loading1) {
-  //   const questionIds = questionStore.questionGroup.questionIds;
-  //   const loadAllQA = useCallback((async) => {
-  //     setLoading(false);
-  //     questionIds.map(
-  //       (id, index) => {
-  //         const { promises } = promises.push(
-  //           questionStore.loadQuestionGroup(id)
-  //         );
-  //       },
-  //       {
-  //         promises: [],
-  //       }
-  //     );
-  //   });
-  //   useEffect(() => {
-  //     loadAllQA();
-  //   }, [loadAllQA]);
-  // }
 
   if (loading) {
     return <CircularProgress />;

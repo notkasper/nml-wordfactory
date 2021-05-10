@@ -59,9 +59,10 @@ const getQuestionAttempts = async (req, res) => {
 const getQuestionAttemptsID = async (req, res) => {
   const {
     teacher,
-    query: { questionId },
+    query: { questionGroupAttemptId },
   } = req;
-
+  console.log(questionGroupAttemptId);
+  const questionId = req.params.id;
   const classes = await teacher.getClasses();
   let questionGroups = [];
   for (const theClass of classes) {
@@ -74,39 +75,33 @@ const getQuestionAttemptsID = async (req, res) => {
     }
   }
 
-  const questionAttemptsID = await db.QuestionGroupAttempt.findAll({
+  const questionAttemptsID = await db.QuestionAttempt.findAll({
     where: {
-      questionGroupId: questionGroups.map((e) => e.id),
       questionId: questionId,
+
+      questionGroupAttemptId: questionGroupAttemptId, //questionGroups.map((e) => e.id),
     },
-    attributes: ['id', 'isCompleted', 'updatedAt'],
-    include: [
-      {
-        model: db.QuestionGroup,
-        as: 'QuestionGroup',
-        attributes: ['id', 'index', 'name'],
-        include: [
-          {
-            model: db.Lesson,
-            as: 'questionGroups',
-            attributes: ['id', 'index', 'prefix', 'instruction', 'name'],
-          },
-        ],
-      },
-      {
-        model: db.LessonAttempt,
-        as: 'LessonAttempt',
-        attributes: ['id'],
-        include: [
-          {
-            model: db.Student,
-            as: 'student',
-            attributes: ['id', 'name'],
-          },
-        ],
-      },
+    attributes: [
+      'id',
+      'questionGroupAttemptId',
+      'updatedAt',
+      'questionId',
+      'content',
     ],
-    order: [['updatedAt', 'DESC']],
+    // include: [
+    //   {
+    //     model: db.LessonAttempt,
+    //     as: 'LessonAttempt',
+    //     attributes: ['id'],
+    //     include: [
+    //       {
+    //         model: db.Student,
+    //         as: 'student',
+    //         attributes: ['id', 'name'],
+    //       },
+    //     ],
+    //   },
+    // ],
   });
 
   res.status(200).send({ data: questionAttemptsID });
