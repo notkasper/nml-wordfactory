@@ -23,6 +23,8 @@ const addPerformance = (lessonAttempts) => {
     lessonAttempt.incorrect = incorrect;
 
     const unroundedGrade = ((correct / (correct + incorrect)) * 100) / 10;
+
+    // unroundedGrade could be NaN if both correct and incorrect are 0
     lessonAttempt.performance = Math.max(1, Math.round(unroundedGrade || 1));
     return lessonAttempt;
   });
@@ -56,4 +58,10 @@ const addQuestionGroupAverages = (lesson) => {
   return lesson;
 };
 
-module.exports = { addDuration, addPerformance, addQuestionGroupAverages };
+const utils = {
+  addDuration,
+  addPerformance,
+  addQuestionGroupAverages,
+};
+
+export default utils;
