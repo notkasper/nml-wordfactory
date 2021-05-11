@@ -9,11 +9,8 @@ const getQuestionGroupAttempts = async (req, res) => {
   let questionGroupAttempts;
 
   if (questionGroupId) {
-    const questionGroupAttemptWhere = questionGroupId
-      ? { questionGroupId }
-      : {};
     questionGroupAttempts = await db.QuestionGroupAttempt.findAll({
-      where: questionGroupAttemptWhere,
+      where: { questionGroupId },
     });
   } else {
     questionGroupAttempts = await db.QuestionGroupAttempt.findAll({
