@@ -21,33 +21,33 @@ const addPerformance = (lessonAttempts) => {
     );
     lessonAttempt.correct = correct;
     lessonAttempt.incorrect = incorrect;
-    lessonAttempt.performance =
-      Math.round((correct / (correct + incorrect)) * 100) / 10 || 0;
+
+    const unroundedGrade = ((correct / (correct + incorrect)) * 100) / 10;
+
+    // unroundedGrade could be NaN if both correct and incorrect are 0
+    lessonAttempt.performance = Math.max(1, Math.round(unroundedGrade || 1));
     return lessonAttempt;
   });
 };
 
 const addQuestionGroupAverages = (lesson) => {
   lesson.questionGroups = lesson.questionGroups.map((questionGroup) => {
-    const {
-      correct,
-      total,
-      completions,
-    } = questionGroup.questionGroupAttempts.reduce(
-      (acc, curr) => {
-        if (curr.isCompleted) {
-          acc.correct += curr.correct;
-          acc.total += curr.correct + curr.incorrect + curr.missed;
-          acc.completions += 1;
+    const { correct, total, completions } =
+      questionGroup.questionGroupAttempts.reduce(
+        (acc, curr) => {
+          if (curr.isCompleted) {
+            acc.correct += curr.correct;
+            acc.total += curr.correct + curr.incorrect + curr.missed;
+            acc.completions += 1;
+          }
+          return acc;
+        },
+        {
+          correct: 0,
+          total: 0,
+          completions: 0,
         }
-        return acc;
-      },
-      {
-        correct: 0,
-        total: 0,
-        completions: 0,
-      }
-    );
+      );
     let averageScore = Math.round((correct / total) * 100) / 10;
     if (!averageScore) {
       averageScore = 0;
@@ -58,4 +58,10 @@ const addQuestionGroupAverages = (lesson) => {
   return lesson;
 };
 
-export default { addDuration, addPerformance, addQuestionGroupAverages };
+const utils = {
+  addDuration,
+  addPerformance,
+  addQuestionGroupAverages,
+};
+
+export default utils;
