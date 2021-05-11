@@ -15,9 +15,9 @@ const Details = (props) => {
   const loadQuestionGroupAttempts = useCallback(async () => {
     setLoading(true);
 
-    const response = await service.loadQuestionGroupAttempts(
-      params.questionGroupId
-    );
+    const response = await service.loadQuestionGroupAttempts({
+      questionGroupId: params.questionGroupId,
+    });
 
     if (!response) {
       return;
