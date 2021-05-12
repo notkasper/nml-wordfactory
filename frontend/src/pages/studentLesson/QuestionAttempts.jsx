@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Activity = (props) => {
+const QuestionAttempts = (props) => {
   const classes = useStyles();
   const params = useParams();
   const [questionAttempts, setQuestionAttempts] = useState([]);
@@ -137,4 +137,4 @@ const Activity = (props) => {
   );
 };
 
-export default Activity;
+export default QuestionAttempts;
