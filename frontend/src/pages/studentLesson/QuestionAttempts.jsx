@@ -52,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, -50%)',
   },
+  datagrid: {
+    marginTop: '1rem',
+    '& .MuiDataGrid-row:hover': {
+      cursor: 'pointer',
+    },
+  },
 }));
 
 const Activity = (props) => {
