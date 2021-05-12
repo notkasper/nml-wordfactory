@@ -6,28 +6,32 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Doughnut from './Doughnut';
 import Tile from './Tile';
+import { observer } from 'mobx-react-lite';
 
 const Details = (props) => {
   const { questionStore } = props;
   const theme = useTheme();
-  const [loading, setLoading] = useState(true);
   const params = useParams();
 
   const loadAll = useCallback(async () => {
-    setLoading(true);
     const promises = [
       questionStore.loadQuestionGroupAttempts(params.questionGroupId),
-      questionStore.loadQuestionGroup(params.questionGroupId),
+      questionStore.loadQuestionGroupWithAttempts(params.questionGroupId),
     ];
     await Promise.all(promises);
-    setLoading(false);
   }, [params.questionGroupId, params.questionGroupId]);
 
   useEffect(() => {
     loadAll();
   }, [loadAll]);
 
-  if (loading) {
+  if (
+    questionStore.isLoading ||
+    !questionStore.questionGroupAttempts ||
+    !questionStore.questionGroupWithAttempts
+  ) {
+    console.log(questionStore.questionGroupAttempts);
+    console.log(questionStore.questionGroupWithAttempts);
     return <CircularProgress />;
   }
 
@@ -61,4 +65,4 @@ const Details = (props) => {
   );
 };
 
-export default Details;
+export default observer(Details);

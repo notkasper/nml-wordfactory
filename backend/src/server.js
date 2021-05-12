@@ -96,7 +96,7 @@ const start = async () => {
   app.use('/api/v1/courses', courseRouter);
   app.use('/api/v1/classes', classRouter);
   app.use('/api/v1/students', studentRouter);
-  app.use('//lessonAttempts', lessonAttemptRouter);
+  app.use('/api/v1/lessonAttempts', lessonAttemptRouter);
   app.use('/api/v1/questionAttempts', questionAttemptRouter);
   app.use('/api/v1/questionGroupAttempts', questionGroupAttemptRouter);
   app.use('/api/v1/questionGroup', questionGroupRouter);

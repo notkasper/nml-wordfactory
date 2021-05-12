@@ -54,10 +54,8 @@ const loadQuestionAttempts = async () => {
   return response;
 };
 
-const loadQuestionAttemptsID = async (questionId, groupAttemptId) => {
-  const req = request
-    .get(`/api/v1/questionAttempts/${questionId}`)
-    .query({ questionGroupAttemptId: groupAttemptId });
+const loadQuestionAttemptsID = async (questionId) => {
+  const req = request.get(`/api/v1/questionAttempts/${questionId}`);
   const response = await handleResponse(req);
   return response;
 };

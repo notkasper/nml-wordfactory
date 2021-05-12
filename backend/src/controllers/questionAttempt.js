@@ -50,7 +50,7 @@ const getQuestionAttempts = async (req, res) => {
       },
     ],
     order: [['updatedAt', 'DESC']],
-    limit: pageSize || 50,
+    //limit: pageSize || 50,
   });
 
   res.status(200).send({ data: questionAttempts });
@@ -59,9 +59,9 @@ const getQuestionAttempts = async (req, res) => {
 const getQuestionAttemptsID = async (req, res) => {
   const {
     teacher,
-    query: { questionGroupAttemptId },
+    //query: { questionGroupAttemptId },
   } = req;
-  console.log(questionGroupAttemptId);
+  // console.log(questionGroupAttemptId);
   const questionId = req.params.id;
   const classes = await teacher.getClasses();
   let questionGroups = [];
@@ -79,7 +79,7 @@ const getQuestionAttemptsID = async (req, res) => {
     where: {
       questionId: questionId,
 
-      questionGroupAttemptId: questionGroupAttemptId, //questionGroups.map((e) => e.id),
+      //questionGroupAttemptId: questionGroupAttemptId, //questionGroups.map((e) => e.id),
     },
     attributes: [
       'id',
