@@ -97,7 +97,7 @@ const Activity = (props) => {
     return <CircularProgress />;
   }
 
-  const body = (
+  const Body = () => (
     <div className={classes.paper}>
       <h2 id="simple-modal-title">Antwoord</h2>
       <p id="simple-modal-description">
@@ -114,7 +114,7 @@ const Activity = (props) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        {body}
+        <Body />
       </Modal>
       <Title>Antwoorden</Title>
       <Grid item xs={12}>
