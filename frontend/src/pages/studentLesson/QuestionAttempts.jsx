@@ -52,9 +52,15 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, -50%)',
   },
+  datagrid: {
+    marginTop: '1rem',
+    '& .MuiDataGrid-row:hover': {
+      cursor: 'pointer',
+    },
+  },
 }));
 
-const Activity = (props) => {
+const QuestionAttempts = (props) => {
   const classes = useStyles();
   const params = useParams();
   const [questionAttempts, setQuestionAttempts] = useState([]);
@@ -131,4 +137,4 @@ const Activity = (props) => {
   );
 };
 
-export default Activity;
+export default QuestionAttempts;
