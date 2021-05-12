@@ -22,6 +22,7 @@ const courseRouter = require('./routes/course');
 const classRouter = require('./routes/class');
 const studentRouter = require('./routes/students');
 const lessonAttemptRouter = require('./routes/lessonAttempt');
+const questionAttemptRouter = require('./routes/questionAttempt');
 const questionGroupAttemptRouter = require('./routes/questionGroupAttempt');
 const questionGroupRouter = require('./routes/questionGroup');
 const questionRouter = require('./routes/question');
@@ -96,6 +97,7 @@ const start = async () => {
   app.use('/api/v1/classes', classRouter);
   app.use('/api/v1/students', studentRouter);
   app.use('/api/v1/lessonAttempts', lessonAttemptRouter);
+  app.use('/api/v1/questionAttempts', questionAttemptRouter);
   app.use('/api/v1/questionGroupAttempts', questionGroupAttemptRouter);
   app.use('/api/v1/questionGroup', questionGroupRouter);
   app.use('/api/v1/question', questionRouter);

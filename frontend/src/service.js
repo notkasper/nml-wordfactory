@@ -69,6 +69,14 @@ const loadStudent = async (id) => {
   return response;
 };
 
+const loadQuestionAttempts = async ({ studentId, lessonId }) => {
+  const req = request
+    .get('/api/v1/questionAttempts')
+    .query({ studentId, lessonId });
+  const response = await handleResponse(req);
+  return response;
+};
+
 const loadQuestionGroupAttempts = async ({ questionGroupId, pageSize }) => {
   const req = request
     .get('/api/v1/questionGroupAttempts')
@@ -98,6 +106,7 @@ const service = {
   loadLessonAttempts,
   loadLesson,
   login,
+  loadQuestionAttempts,
   loadQuestionGroupAttempts,
   loadQuestionGroup,
   updateQuestion,
