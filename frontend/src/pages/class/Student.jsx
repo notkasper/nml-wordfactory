@@ -24,7 +24,7 @@ const Student = (props) => {
       onClick={onClick}
     >
       <ListItemAvatar>
-        <Avatar alt="Travis Howard" src="/static/images/avatar.png" />
+        <Avatar alt="Travis Howard" />
       </ListItemAvatar>
       <ListItemText
         primary={name}

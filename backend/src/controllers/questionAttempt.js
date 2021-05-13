@@ -14,15 +14,15 @@ const getQuestionAttempts = async (req, res) => {
 
   const questionAttempts = await db.QuestionAttempt.findAll({
     where: {
-      '$Question.questions.questionGroups.Course.Class.teachers.id$':
+      '$question.questions.questionGroups.Course.Class.teachers.id$':
         teacher.id,
-      '$Question.questions.questionGroups.id$': lessonId,
-      '$QuestionGroupAttempt.LessonAttempt.student.id$': studentId,
+      '$question.questions.questionGroups.id$': lessonId,
+      '$questionGroupAttempts.lessonAttempts.student.id$': studentId,
     },
     include: [
       {
         model: db.Question,
-        as: 'Question',
+        as: 'question',
         include: [
           {
             model: db.QuestionGroup,
@@ -61,11 +61,11 @@ const getQuestionAttempts = async (req, res) => {
       },
       {
         model: db.QuestionGroupAttempt,
-        as: 'QuestionGroupAttempt',
+        as: 'questionGroupAttempts',
         include: [
           {
             model: db.LessonAttempt,
-            as: 'LessonAttempt',
+            as: 'lessonAttempts',
             include: [
               {
                 model: db.Student,

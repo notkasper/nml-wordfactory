@@ -24,7 +24,7 @@ const columns = [
     field: 'student',
     headerName: 'Leerling',
     flex: 0.2,
-    valueGetter: (params) => params.row.LessonAttempt.student.name,
+    valueGetter: (params) => params.row.lessonAttempts.student.name,
   },
   {
     field: 'lesson',
@@ -76,6 +76,10 @@ const Activity = (props) => {
 
   useEffect(() => {
     loadQuestionGroupAttempts();
+
+    return () => {
+      setQuestionGroupAttempts([]);
+    };
   }, [loadQuestionGroupAttempts]);
 
   if (loading) {
@@ -83,10 +87,10 @@ const Activity = (props) => {
   }
 
   const onClickStudent = (event) =>
-    history.push(`/dashboard/students/${event.row.LessonAttempt.student.id}`);
+    history.push(`/dashboard/students/${event.row.lessonAttempts.student.id}`);
 
   return (
-    <React.Fragment>
+    <div>
       <Title>Recente leerlingen activiteit</Title>
       <Grid item xs={12}>
         <DataGrid
@@ -98,7 +102,7 @@ const Activity = (props) => {
           onRowClick={onClickStudent}
         />
       </Grid>
-    </React.Fragment>
+    </div>
   );
 };
 

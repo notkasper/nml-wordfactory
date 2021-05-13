@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -15,7 +15,7 @@ const Insights = (props) => {
 
   const loadAll = useCallback(async () => {
     await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
-  }, [params.questionGroupId]);
+  }, [questionStore, params.questionGroupId]);
 
   useEffect(() => {
     loadAll();
