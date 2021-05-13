@@ -1,11 +1,9 @@
 import Paper from '@material-ui/core/Paper';
-import Title from '../_shared/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    //padding: theme.spacing(),
     display: 'flex',
     textAlign: 'center',
     overflow: 'auto',

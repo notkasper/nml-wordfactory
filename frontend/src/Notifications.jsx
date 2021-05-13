@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,12 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import SendIcon from '@material-ui/icons/Send';
-
-import Paper from '@material-ui/core/Paper';
-//import service from '../../service';
 import Grid from '@material-ui/core/Grid';
-
-import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   topGrid: {
@@ -97,7 +91,6 @@ const Notifications = (props) => {
       >
         <StyledMenuItem>
           <ListItemIcon>
-            //
             <SendIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Sent mail" />
