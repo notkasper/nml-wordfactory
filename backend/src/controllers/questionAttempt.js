@@ -77,12 +77,9 @@ const getQuestionAttempts = async (req, res) => {
       },
     ],
     order: [['updatedAt', 'DESC']],
-    subQuery: false,
   });
 
   res.status(200).send({ data: questionAttempts });
 };
 
-module.exports = {
-  getQuestionAttempts,
-};
+module.exports = { getQuestionAttempts };

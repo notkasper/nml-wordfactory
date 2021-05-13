@@ -1,3 +1,5 @@
+import { setGridPaginationModeActionCreator } from '@material-ui/data-grid';
+
 const addDuration = (lessonAttempts) => {
   return lessonAttempts.map((lessonAttempt) => {
     const duration = lessonAttempt.questionGroupAttempts.reduce(
@@ -30,7 +32,63 @@ const addPerformance = (lessonAttempts) => {
   });
 };
 
-const addQuestionGroupAverages = (lesson) => {
+const addQuestionGroupAttemptStats = (questionGroup) => {
+  const { elapsedTime, total } = questionGroup.questionGroupAttempts.reduce(
+    (acc, curr) => {
+      if (curr.isCompleted) {
+        acc.elapsedTime += curr.timeElapsedSeconds;
+        acc.total += 1;
+      }
+      return acc;
+    },
+    { elapsedTime: 0, total: 0 }
+  );
+  questionGroup.averageElapsedTime = Math.round(elapsedTime / total);
+  return questionGroup;
+};
+
+const addQuestionAttemptInformation = (questionGroup) => {
+  let answers = [];
+  questionGroup.questions.map((q) => {
+    answers.push(q.data.options);
+  });
+  let answer = null;
+  let correct = null;
+
+  let acc = 0;
+  questionGroup.questionGroupAttempts.map((qga) => {
+    const studentName = qga.lessonAttempts.student.name;
+    const studentId = qga.lessonAttempts.student.id;
+
+    qga.questionAttempts.map((qa) => {
+      const answerAttempt = qa.content;
+      if (answerAttempt.length != 0) {
+        answer =
+          answers[acc % qga.questionAttempts.length][answerAttempt].value;
+
+        if (
+          answers[acc % qga.questionAttempts.length][answerAttempt].isCorrect
+        ) {
+          correct = true;
+        } else {
+          correct = false;
+        }
+      } else {
+        correct = false;
+        answer = '';
+      }
+
+      qa.studentName = studentName;
+      qa.studentId = studentId;
+      qa.answer = answer;
+      qa.correct = correct;
+    });
+    acc += 1;
+  });
+  return questionGroup;
+};
+
+const addQuestionGroupAverages = (lesson, questionGroup) => {
   lesson.questionGroups = lesson.questionGroups.map((questionGroup) => {
     const { correct, total, completions } =
       questionGroup.questionGroupAttempts.reduce(
@@ -62,6 +120,8 @@ const utils = {
   addDuration,
   addPerformance,
   addQuestionGroupAverages,
+  addQuestionGroupAttemptStats,
+  addQuestionAttemptInformation,
 };
 
 export default utils;
