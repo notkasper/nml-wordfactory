@@ -30,7 +30,6 @@ class QuestionStore {
       let questionGroup = response.body.data;
       questionGroup = utils.addQuestionGroupAttemptStats(questionGroup);
       questionGroup = utils.addQuestionAttemptInformation(questionGroup);
-      console.log(questionGroup);
       this.questionGroup = questionGroup;
     }
 

@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
   }),
 }));
 
-const getColor = (value) => {
-  if (value) {
+const getColor = (isCorrect) => {
+  if (isCorrect) {
     return '#C5E6A6';
   } else {
     return 'white';

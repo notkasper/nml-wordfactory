@@ -8,7 +8,6 @@ import CustomTitle from './CustomTitle';
 import AnswerHighlight from './AnswerHighlight';
 import Accordion from '@material-ui/core/Accordion';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
@@ -27,11 +26,8 @@ import { useHistory } from 'react-router-dom';
 
 import Divider from '@material-ui/core/Divider';
 
-//import question from '../../../../backend/src/models/question';
-
 const useStyles = makeStyles((theme) => ({
   questionName: {
-    //padding: theme.spacing(),
     display: 'flex',
     flexGrow: 0,
     backgroundColor: theme.widget.primary.main,
@@ -117,7 +113,6 @@ const Answers = (props) => {
 
   const getRowsFilter = (questionId, filterValue) => {
     let rows = [];
-    console.log(filterValue);
     questionStore.questionGroup.questionGroupAttempts.map((qga) => {
       qga.questionAttempts.map((qa) => {
         if (qa.questionId == questionId && qa.answer == filterValue.answer) {
@@ -142,7 +137,6 @@ const Answers = (props) => {
         });
       }
     });
-    console.log(options);
     return options;
   };
 
@@ -172,8 +166,8 @@ const Answers = (props) => {
     {
       field: 'answer',
       headerName: 'Antwoord',
-      flex: 1.0, // 0.5
-      valueGetter: (params) => params.row.answer, //value, // Adding.value doesn't work?
+      flex: 1.0,
+      valueGetter: (params) => params.row.answer,
     },
   ];
 

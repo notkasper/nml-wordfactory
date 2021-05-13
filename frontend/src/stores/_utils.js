@@ -1,6 +1,4 @@
 import { setGridPaginationModeActionCreator } from '@material-ui/data-grid';
-//import questionGroup from '../../../backend/src/models/questionGroup';
-//import questionAttempt from '../../backend/src/models/questionAttempt';
 
 const addDuration = (lessonAttempts) => {
   return lessonAttempts.map((lessonAttempt) => {
