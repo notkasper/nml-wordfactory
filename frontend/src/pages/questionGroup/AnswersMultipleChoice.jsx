@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { useTheme } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -51,11 +50,9 @@ const useStyles = makeStyles((theme) => ({
 const Answers = (props) => {
   const history = useHistory();
   const { questionStore } = props;
-  const [values, setValues] = useState([]);
   const [filterValue, setFilterValue] = useState(null);
   const [filterInputValue, setFilterInputValue] = useState('');
   const classes = useStyles();
-  const theme = useTheme();
   const params = useParams();
   const typeLabels = {
     open: 'Open',
@@ -67,7 +64,7 @@ const Answers = (props) => {
 
   const loadAll = useCallback(async () => {
     await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
-  }, [params.questionGroupId]);
+  }, [questionStore, params.questionGroupId]);
 
   useEffect(() => {
     loadAll();
@@ -80,11 +77,11 @@ const Answers = (props) => {
   const calculateDistribution = (questionId, index) => {
     let acc = 0;
     let total = 0;
-    questionStore.questionGroup.questionGroupAttempts.map((qga) => {
-      qga.questionAttempts.map((qa) => {
-        if (qa.questionId == questionId) {
+    questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
+      qga.questionAttempts.forEach((qa) => {
+        if (qa.questionId === questionId) {
           total += 1;
-          if (qa.content == index) {
+          if (qa.content === index) {
             acc += 1;
           }
         }
@@ -96,9 +93,9 @@ const Answers = (props) => {
 
   const getRows = (questionId) => {
     let rows = [];
-    questionStore.questionGroup.questionGroupAttempts.map((qga) => {
-      qga.questionAttempts.map((qa) => {
-        if (qa.questionId == questionId) {
+    questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
+      qga.questionAttempts.forEach((qa) => {
+        if (qa.questionId === questionId) {
           rows.push({
             id: qa.id,
             studentName: qa.studentName,
@@ -113,9 +110,9 @@ const Answers = (props) => {
 
   const getRowsFilter = (questionId, filterValue) => {
     let rows = [];
-    questionStore.questionGroup.questionGroupAttempts.map((qga) => {
-      qga.questionAttempts.map((qa) => {
-        if (qa.questionId == questionId && qa.answer == filterValue.answer) {
+    questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
+      qga.questionAttempts.forEach((qa) => {
+        if (qa.questionId === questionId && qa.answer === filterValue.answer) {
           rows.push({
             id: qa.id,
             studentName: qa.studentName,
@@ -130,9 +127,9 @@ const Answers = (props) => {
 
   const getOptions = (questionId) => {
     let options = [];
-    questionStore.questionGroup.questions.map((q) => {
-      if (q.id == questionId) {
-        q.data.options.map((option) => {
+    questionStore.questionGroup.questions.forEach((q) => {
+      if (q.id === questionId) {
+        q.data.options.forEach((option) => {
           options.push({ answer: option.value });
         });
       }

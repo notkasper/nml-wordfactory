@@ -1,5 +1,3 @@
-import { setGridPaginationModeActionCreator } from '@material-ui/data-grid';
-
 const addDuration = (lessonAttempts) => {
   return lessonAttempts.map((lessonAttempt) => {
     const duration = lessonAttempt.questionGroupAttempts.reduce(
@@ -49,20 +47,20 @@ const addQuestionGroupAttemptStats = (questionGroup) => {
 
 const addQuestionAttemptInformation = (questionGroup) => {
   let answers = [];
-  questionGroup.questions.map((q) => {
+  questionGroup.questions.forEach((q) => {
     answers.push(q.data.options);
   });
   let answer = null;
   let correct = null;
 
   let acc = 0;
-  questionGroup.questionGroupAttempts.map((qga) => {
+  questionGroup.questionGroupAttempts.forEach((qga) => {
     const studentName = qga.lessonAttempts.student.name;
     const studentId = qga.lessonAttempts.student.id;
 
-    qga.questionAttempts.map((qa) => {
+    qga.questionAttempts.forEach((qa) => {
       const answerAttempt = qa.content;
-      if (answerAttempt.length != 0) {
+      if (answerAttempt.length !== 0) {
         answer =
           answers[acc % qga.questionAttempts.length][answerAttempt].value;
 
