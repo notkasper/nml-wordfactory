@@ -1,4 +1,5 @@
 import { setGridPaginationModeActionCreator } from '@material-ui/data-grid';
+//import questionGroup from '../../../backend/src/models/questionGroup';
 //import questionAttempt from '../../backend/src/models/questionAttempt';
 
 const addDuration = (lessonAttempts) => {
@@ -33,21 +34,8 @@ const addPerformance = (lessonAttempts) => {
   });
 };
 
-const addQuestionGroupStats = (questionGroup) => {
-  let questionTitles = [];
-  let questionIds = [];
-  for (var i = 0; i < questionGroup.questions.length; i++) {
-    questionTitles.push('Vraag ' + parseInt(i + 1));
-    questionIds.push(questionGroup.questions[i].id);
-  }
-  questionGroup.questionTitles = questionTitles;
-  questionGroup.questionIds = questionIds;
-
-  return questionGroup;
-};
-
-const addQuestionGroupAttemptStats = (questionGroup, questionGroupAttempts) => {
-  const { elapsedTime, total } = questionGroupAttempts.reduce(
+const addQuestionGroupAttemptStats = (questionGroup) => {
+  const { elapsedTime, total } = questionGroup.questionGroupAttempts.reduce(
     (acc, curr) => {
       if (curr.isCompleted) {
         acc.elapsedTime += curr.timeElapsedSeconds;
@@ -61,67 +49,47 @@ const addQuestionGroupAttemptStats = (questionGroup, questionGroupAttempts) => {
   return questionGroup;
 };
 
-const addquestionAttemptInformation = (
-  questionAttemptID,
-  questionGroupAttempts,
-  questions,
-  lessonAttempts,
-  students,
-  questionGroupName
-) => {
-  const questionGroupAttemptId = questionAttemptID.questionGroupAttemptId;
-  let lessonAttemptId = null;
-  questionGroupAttempts.map((questionGroupAttempt) => {
-    if (questionGroupAttempt.id == questionGroupAttemptId) {
-      lessonAttemptId = questionGroupAttempt.lessonAttemptId;
-    }
+const addQuestionAttemptInformation = (questionGroup) => {
+  let answers = [];
+  questionGroup.questions.map((q) => {
+    answers.push(q.data.options);
   });
-  let studentId = null;
-  lessonAttempts.map((lessonAttempt) => {
-    if (lessonAttempt.id == lessonAttemptId) {
-      studentId = lessonAttempt.studentId;
-    }
-  });
-  let studentName = null;
-  students.map((student) => {
-    if (student.id == studentId) {
-      studentName = student.name;
-    }
-  });
+  let answer = null;
+  let correct = null;
 
-  let question = null;
+  let acc = 0;
+  questionGroup.questionGroupAttempts.map((qga) => {
+    const studentName = qga.lessonAttempts.student.name;
+    const studentId = qga.lessonAttempts.student.id;
 
-  questions.map((q) => {
-    if (q.id == questionAttemptID.questionId) {
-      question = q;
-    }
+    qga.questionAttempts.map((qa) => {
+      const answerAttempt = qa.content;
+      if (answerAttempt.length != 0) {
+        answer =
+          answers[acc % qga.questionAttempts.length][answerAttempt].value;
+
+        if (
+          answers[acc % qga.questionAttempts.length][answerAttempt].isCorrect
+        ) {
+          correct = true;
+        } else {
+          correct = false;
+        }
+      } else {
+        correct = false;
+        answer = '';
+      }
+
+      qa.studentName = studentName;
+      qa.studentId = studentId;
+      qa.answer = answer;
+      qa.correct = correct;
+    });
+    acc += 1;
   });
-  questionAttemptID.studentId = studentId;
-  questionAttemptID.studentName = studentName;
-  questionAttemptID.questionGroupAttemptId = questionGroupAttemptId;
-  questionAttemptID.lessonAttemptId = lessonAttemptId;
-  questionAttemptID.question = question;
-  questionAttemptID.questionGroupName = questionGroupName;
-  return questionAttemptID;
+  return questionGroup;
 };
 
-const addQuestionAttemptsStats = (questionGroup) => {
-  const questionIds = questionGroup.questionIds;
-  let answers = []; //Array(questionIds.length).fill(0);
-  for (var i = 0; i < questionIds.length; i++) {
-    answers.push([]);
-  }
-
-  questionGroup.questionAttempts.map((qa) => {
-    const questionId = qa.questionId;
-    const index = questionIds.findIndex((id) => id == questionId);
-
-    let answer = qa.content;
-
-    answers[index].push(answer);
-  });
-  questionGroup.answers = answers;
-};
 const addQuestionGroupAverages = (lesson, questionGroup) => {
   lesson.questionGroups = lesson.questionGroups.map((questionGroup) => {
     const { correct, total, completions } =
@@ -150,21 +118,12 @@ const addQuestionGroupAverages = (lesson, questionGroup) => {
   return lesson;
 };
 
-export default {
-  addDuration,
-  addPerformance,
-  addQuestionGroupAverages,
-  addQuestionGroupAttemptStats,
-  addQuestionGroupStats,
-  addquestionAttemptInformation,
-  addQuestionAttemptsStats,
-};
-
 const utils = {
   addDuration,
   addPerformance,
   addQuestionGroupAverages,
+  addQuestionGroupAttemptStats,
+  addQuestionAttemptInformation,
 };
 
 export default utils;
-

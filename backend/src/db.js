@@ -143,6 +143,7 @@ db.setupModels = async () => {
     // QuestionGroupAttempt relationships
     db.QuestionGroupAttempt.belongsTo(db.LessonAttempt, {
       foreignKey: 'lessonAttemptId',
+      as: 'lessonAttempts',
     });
 
     db.QuestionGroupAttempt.belongsTo(db.QuestionGroup, {

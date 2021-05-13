@@ -10,7 +10,22 @@ const getQuestionGroup = async (req, res) => {
       {
         model: db.QuestionGroupAttempt,
         as: 'questionGroupAttempts',
-        include: [{ model: db.QuestionAttempt, as: 'questionAttempts' }],
+        include: [
+          {
+            model: db.QuestionAttempt,
+            as: 'questionAttempts',
+          },
+          {
+            model: db.LessonAttempt,
+            as: 'lessonAttempts',
+            include: [
+              {
+                model: db.Student,
+                as: 'student',
+              },
+            ],
+          },
+        ],
       },
       {
         model: db.Question,

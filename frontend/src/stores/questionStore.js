@@ -27,10 +27,14 @@ class QuestionStore {
     this.pushLoad();
     const response = await service.loadQuestionGroup(questionGroupId);
     if (response) {
-      this.questionGroup = response.body.data;
+      let questionGroup = response.body.data;
+      questionGroup = utils.addQuestionGroupAttemptStats(questionGroup);
+      questionGroup = utils.addQuestionAttemptInformation(questionGroup);
+      console.log(questionGroup);
+      this.questionGroup = questionGroup;
     }
+
     this.popLoad();
-    console.log(this.questionGroup);
   };
 
   get isLoading() {
