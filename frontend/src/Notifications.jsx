@@ -12,11 +12,25 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import SendIcon from '@material-ui/icons/Send';
 import Grid from '@material-ui/core/Grid';
+import Badge from '@material-ui/core/Badge';
+import { observer } from 'mobx-react-lite';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   topGrid: {
-    alignItems: 'right',
-    marginLeft: 100,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-end',
+    marginRight: '-1%',
+  },
+
+  notification: {
+    color: 'white',
+    backgroundColor: 'red',
+    marginLeft: '-35%',
+    marginTop: '-60%',
+    width: '50%',
+    height: '70%',
+    fontSize: 15,
   },
 }));
 
@@ -30,11 +44,11 @@ const StyledMenu = withStyles({
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
-      horizontal: 'center',
+      horizontal: 'left',
     }}
     transformOrigin={{
       vertical: 'top',
-      horizontal: 'center',
+      horizontal: 'left',
     }}
     {...props}
   />
@@ -52,13 +66,23 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 const Notifications = (props) => {
+  const { notificationStore } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const classes = useStyles();
+  const [amountNotifications, setAmountNotifications] = useState(0);
   const history = useHistory();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('This will run every second!');
+      console.log(notificationStore.isNotificationDisplay);
+
+      const boolNotification = isNotification(notificationStore.accumulator);
+
+      if (boolNotification) {
+        notificationStore.setNotificationDisplay('');
+        console.log(notificationStore.isNotificationDisplay);
+        console.log(notificationStore.accumulator);
+      }
+      notificationStore.pushAccumulator();
     }, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -73,16 +97,30 @@ const Notifications = (props) => {
 
   const { lessonStore } = props;
 
-  const constCheckNotifications = (lessonAttempts) => {
-    lessonStore.lessonAttempts.map((la) => {});
+  const checkNotifications = (counter) => {
+    return counter === 10;
   };
 
-  return (
-    <Grid container xs={1} md={1} className={classes.topGrid}>
-      <IconButton color="inherit" onClick={handleClick}>
-        <NotificationsIcon />
-      </IconButton>
+  const isNotification = (acc) => {
+    return acc === 10;
+  };
 
+  const classes = useStyles();
+  return (
+    <Grid container xs={3} md={3} className={classes.topGrid}>
+      <Grid item xs={3} md={3}>
+        <IconButton color="inherit" onClick={handleClick}>
+          <Badge badgeContent={4} color="secondary">
+            <NotificationsIcon />
+            {/* <Avatar
+            className={classes.notification}
+            style={{ display: notificationStore.isNotificationDisplay }}
+          >
+            {amountNotifications}
+          </Avatar> */}
+          </Badge>
+        </IconButton>
+      </Grid>
       <StyledMenu
         anchorEl={anchorEl}
         keepMounted
@@ -111,4 +149,4 @@ const Notifications = (props) => {
     </Grid>
   );
 };
-export default Notifications;
+export default observer(Notifications);
