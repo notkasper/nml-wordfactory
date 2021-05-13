@@ -15,12 +15,12 @@ const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    width: 300,
+    flex: 0.25,
   },
   {
     field: 'classes',
     headerName: 'Klas',
-    width: 200,
+    flex: 0.75,
     valueGetter: (params) => params.row.classes[0].name, // TODO: Make this column not hardcoded to the first class
   },
 ];
@@ -96,10 +96,10 @@ const Students = () => {
               rows={shownStudents}
               columns={columns}
               pageSize={24}
+              onRowClick={onClickStudent}
               components={{
                 ColumnMenuIcon: () => null, // We dont want to show anything for now
               }}
-              onRowClick={onClickStudent}
             />
           </Paper>
         </Grid>

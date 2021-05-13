@@ -6,6 +6,7 @@ import { DataGrid } from '@material-ui/data-grid';
 
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
+import PageContainer from '../_shared/PageContainer';
 
 const useStyles = makeStyles((theme) => ({
   widget: {
@@ -43,7 +44,7 @@ const Insight = () => {
   const theme = useTheme();
 
   return (
-    <div>
+    <PageContainer>
       <Grid container spacing={3} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.primary.main}
@@ -101,7 +102,7 @@ const Insight = () => {
           </Paper>
         </PaperWithHeader>
       </Grid>
-    </div>
+    </PageContainer>
   );
 };
 
