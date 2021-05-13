@@ -24,8 +24,11 @@ const addPerformance = (lessonAttempts) => {
     );
     lessonAttempt.correct = correct;
     lessonAttempt.incorrect = incorrect;
-    lessonAttempt.performance =
-      Math.round((correct / (correct + incorrect)) * 100) / 10 || 0;
+
+    const unroundedGrade = ((correct / (correct + incorrect)) * 100) / 10;
+
+    // unroundedGrade could be NaN if both correct and incorrect are 0
+    lessonAttempt.performance = Math.max(1, Math.round(unroundedGrade || 1));
     return lessonAttempt;
   });
 };
@@ -156,3 +159,12 @@ export default {
   addquestionAttemptInformation,
   addQuestionAttemptsStats,
 };
+
+const utils = {
+  addDuration,
+  addPerformance,
+  addQuestionGroupAverages,
+};
+
+export default utils;
+

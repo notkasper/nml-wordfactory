@@ -59,24 +59,24 @@ const useStyles = makeStyles((theme) => ({
 const Activity = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const [questionAttempts, setQuestionAttempts] = useState([]);
+  const [questionGroupAttempts, setQuestionGroupAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadQuestionAttempts = useCallback(async () => {
+  const loadQuestionGroupAttempts = useCallback(async () => {
     setLoading(true);
 
-    const response = await service.loadQuestionAttempts();
+    const response = await service.loadQuestionGroupAttempts({ pageSize: 10 });
     if (!response) {
       return;
     }
 
-    setQuestionAttempts(response.body.data);
+    setQuestionGroupAttempts(response.body.data);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    loadQuestionAttempts();
-  }, [loadQuestionAttempts]);
+    loadQuestionGroupAttempts();
+  }, [loadQuestionGroupAttempts]);
 
   if (loading) {
     return <CircularProgress />;
@@ -92,7 +92,7 @@ const Activity = (props) => {
         <DataGrid
           className={classes.datagrid}
           autoHeight
-          rows={questionAttempts}
+          rows={questionGroupAttempts}
           columns={columns}
           pageSize={5}
           onRowClick={onClickStudent}
