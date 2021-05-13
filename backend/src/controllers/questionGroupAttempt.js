@@ -54,7 +54,7 @@ const getQuestionGroupAttempts = async (req, res) => {
         },
         {
           model: db.LessonAttempt,
-          as: 'LessonAttempt',
+          as: 'lessonAttempts',
           attributes: ['id'],
           include: [
             {

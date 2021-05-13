@@ -6,8 +6,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import Grid from '@material-ui/core/Grid';
+
 import Title from '../_shared/Title';
 import service from '../../service';
+import PageContainer from '../_shared/PageContainer';
 
 const convertDateToReadableString = (date) => {
   return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
@@ -24,7 +26,7 @@ const columns = [
     field: 'student',
     headerName: 'Leerling',
     flex: 0.2,
-    valueGetter: (params) => params.row.LessonAttempt.student.name,
+    valueGetter: (params) => params.row.lessonAttempts.student.name,
   },
   {
     field: 'lesson',
@@ -76,6 +78,10 @@ const Activity = (props) => {
 
   useEffect(() => {
     loadQuestionGroupAttempts();
+
+    return () => {
+      setQuestionGroupAttempts([]);
+    };
   }, [loadQuestionGroupAttempts]);
 
   if (loading) {
@@ -83,10 +89,10 @@ const Activity = (props) => {
   }
 
   const onClickStudent = (event) =>
-    history.push(`/dashboard/students/${event.row.LessonAttempt.student.id}`);
+    history.push(`/dashboard/students/${event.row.lessonAttempts.student.id}`);
 
   return (
-    <React.Fragment>
+    <PageContainer>
       <Title>Recente leerlingen activiteit</Title>
       <Grid item xs={12}>
         <DataGrid
@@ -98,7 +104,7 @@ const Activity = (props) => {
           onRowClick={onClickStudent}
         />
       </Grid>
-    </React.Fragment>
+    </PageContainer>
   );
 };
 

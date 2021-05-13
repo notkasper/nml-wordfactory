@@ -6,7 +6,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import Paper from '@material-ui/core/Paper';
-import PageContainer from '../_shared/PageContainer';
 import service from '../../service';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -15,17 +14,20 @@ const columns = [
   {
     field: 'name',
     headerName: 'Naam',
-    width: 300,
+    flex: 0.25,
   },
   {
     field: 'classes',
     headerName: 'Klas',
-    width: 200,
+    flex: 0.75,
     valueGetter: (params) => params.row.classes[0].name, // TODO: Make this column not hardcoded to the first class
   },
 ];
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    padding: theme.spacing(4, 12, 4, 12),
+  },
   datagrid: {
     marginTop: '1rem',
     '& .MuiDataGrid-row:hover': {
@@ -74,7 +76,7 @@ const Students = () => {
   }
 
   return (
-    <PageContainer>
+    <div className={classes.container}>
       <Autocomplete
         value={studentFilterValue}
         onChange={onStudentFilterChange}
@@ -96,15 +98,15 @@ const Students = () => {
               rows={shownStudents}
               columns={columns}
               pageSize={24}
+              onRowClick={onClickStudent}
               components={{
                 ColumnMenuIcon: () => null, // We dont want to show anything for now
               }}
-              onRowClick={onClickStudent}
             />
           </Paper>
         </Grid>
       </Grid>
-    </PageContainer>
+    </div>
   );
 };
 

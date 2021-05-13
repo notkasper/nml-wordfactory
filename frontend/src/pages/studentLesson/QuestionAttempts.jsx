@@ -24,19 +24,19 @@ const columns = [
     field: 'questionGroup',
     headerName: 'Vraag groep',
     flex: 0.4,
-    valueGetter: (params) => params.row.Question.questions.name,
+    valueGetter: (params) => params.row.question.questions.name,
   },
   {
     field: 'questionGroupIndex',
     headerName: 'Vraag groep index',
     flex: 0.2,
-    valueGetter: (params) => params.row.Question.questions.index + 1,
+    valueGetter: (params) => params.row.question.questions.index + 1,
   },
   {
     field: 'question',
     headerName: 'Vraag nummer',
     flex: 0.2,
-    valueGetter: (params) => params.row.Question.index + 1,
+    valueGetter: (params) => params.row.question.index + 1,
   },
 ];
 
@@ -103,14 +103,14 @@ const QuestionAttempts = (props) => {
     return <CircularProgress />;
   }
 
-  const Body = () => (
-    <div className={classes.paper}>
+  const Body = React.forwardRef((props, ref) => (
+    <div {...props} className={classes.paper} ref={ref}>
       <h2 id="simple-modal-title">Antwoord</h2>
       <p id="simple-modal-description">
         {JSON.stringify(modalContent.content)}
       </p>
     </div>
-  );
+  ));
 
   return (
     <React.Fragment>
