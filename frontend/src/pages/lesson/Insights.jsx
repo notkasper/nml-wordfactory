@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { useParams, useHistory } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -45,9 +46,21 @@ const columns = [
   { field: 'performance', headerName: 'Prestatie', flex: 0.1, type: 'number' },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  datagrid: {
+    marginTop: '1rem',
+    '& .MuiDataGrid-row:hover': {
+      cursor: 'pointer',
+    },
+  },
+}));
+
 const Lesson = (props) => {
-  const { lessonStore } = props;
+  const classes = useStyles();
+  const history = useHistory();
   const params = useParams();
+
+  const { lessonStore } = props;
 
   useEffect(() => {
     lessonStore.loadLessonAttempts(params.lessonId);
@@ -56,6 +69,9 @@ const Lesson = (props) => {
   if (lessonStore.isLoading) {
     return <CircularProgress />;
   }
+
+  const onClickStudent = (event) =>
+    history.push(`/dashboard/students/${event.row.student.id}`);
 
   return (
     <Grid container spacing={2}>
@@ -74,10 +90,12 @@ const Lesson = (props) => {
       <Grid item xs={12}>
         <Paper>
           <DataGrid
+            className={classes.datagrid}
             autoHeight
             rows={lessonStore.lessonAttempts}
             columns={columns}
             pageSize={12}
+            onRowClick={onClickStudent}
           />
         </Paper>
       </Grid>

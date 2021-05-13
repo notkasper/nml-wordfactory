@@ -6,8 +6,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import Grid from '@material-ui/core/Grid';
+
 import Title from '../_shared/Title';
 import service from '../../service';
+import PageContainer from '../_shared/PageContainer';
 
 const convertDateToReadableString = (date) => {
   return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
@@ -90,7 +92,7 @@ const Activity = (props) => {
     history.push(`/dashboard/students/${event.row.lessonAttempts.student.id}`);
 
   return (
-    <div>
+    <PageContainer>
       <Title>Recente leerlingen activiteit</Title>
       <Grid item xs={12}>
         <DataGrid
@@ -102,7 +104,7 @@ const Activity = (props) => {
           onRowClick={onClickStudent}
         />
       </Grid>
-    </div>
+    </PageContainer>
   );
 };
 
