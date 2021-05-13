@@ -8,30 +8,20 @@ import Doughnut from './Doughnut';
 import Tile from './Tile';
 import { observer } from 'mobx-react-lite';
 
-const Details = (props) => {
+const Insights = (props) => {
   const { questionStore } = props;
   const theme = useTheme();
   const params = useParams();
 
   const loadAll = useCallback(async () => {
-    const promises = [
-      questionStore.loadQuestionGroupAttempts(params.questionGroupId),
-      questionStore.loadQuestionGroupWithAttempts(params.questionGroupId),
-    ];
-    await Promise.all(promises);
-  }, [params.questionGroupId, params.questionGroupId]);
+    await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
+  }, [params.questionGroupId]);
 
   useEffect(() => {
     loadAll();
   }, [loadAll]);
 
-  if (
-    questionStore.isLoading ||
-    !questionStore.questionGroupAttempts ||
-    !questionStore.questionGroupWithAttempts
-  ) {
-    console.log(questionStore.questionGroupAttempts);
-    console.log(questionStore.questionGroupWithAttempts);
+  if (questionStore.isLoading || !questionStore.questionGroup) {
     return <CircularProgress />;
   }
 
@@ -39,11 +29,12 @@ const Details = (props) => {
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
         <Doughnut
-          questionGroupAttempts={questionStore.questionGroupAttempts}
+          questionGroupAttempts={
+            questionStore.questionGroup.questionGroupAttempts
+          }
           title="Correctheid verdeling van de vragen"
         />
       </Grid>
-
       <Grid container xs={12} md={6} style={{ padding: '1rem' }}>
         <Tile
           questionGroup={questionStore.questionGroup}
@@ -65,4 +56,4 @@ const Details = (props) => {
   );
 };
 
-export default observer(Details);
+export default observer(Insights);
