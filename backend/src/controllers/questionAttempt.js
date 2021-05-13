@@ -77,7 +77,6 @@ const getQuestionAttempts = async (req, res) => {
       },
     ],
     order: [['updatedAt', 'DESC']],
-    //limit: pageSize || 50,
   });
 
   res.status(200).send({ data: questionAttempts });

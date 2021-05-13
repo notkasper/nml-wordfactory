@@ -48,12 +48,6 @@ const loadLessonAttempts = async (lessonId) => {
   return response;
 };
 
-// const loadQuestionAttempts = async () => {
-//   const req = request.get(`/api/v1/questionAttempts`).query({ pageSize: 10 });
-//   const response = await handleResponse(req);
-//   return response;
-// };
-
 const loadQuestionAttemptsID = async (questionId) => {
   const req = request.get(`/api/v1/questionAttempts/${questionId}`);
   const response = await handleResponse(req);
