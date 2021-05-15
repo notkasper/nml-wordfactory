@@ -48,10 +48,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Answers = (props) => {
   const history = useHistory();
+  const classes = useStyles();
   const { questionStore } = props;
+
   const [filterValue, setFilterValue] = useState(null);
   const [filterInputValue, setFilterInputValue] = useState('');
-  const classes = useStyles();
 
   const typeLabels = {
     open: 'Open',
