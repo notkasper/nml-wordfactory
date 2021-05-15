@@ -21,12 +21,18 @@ class NotificationStore {
   notifications = [];
 
   pushAmountNotifications = () => (this.amountNotifications += 1);
+
   popAmountNotifications = () => (this.amountNotifications -= 1);
+
   pushAccumulator = () => (this.accumulator += 1);
+
   pushNotification = (notification) => this.notifications.push(notification);
+
   setAmountNotifications = (amountNotifications) =>
     (this.amountNotifications = amountNotifications);
+
   setNotifications = (notifications) => (this.notifications = notifications);
+
   deleteNotification = (notificationIndex) => {
     this.notifications.splice(notificationIndex, 1);
     this.restoreIndices();
@@ -34,7 +40,7 @@ class NotificationStore {
 
   restoreIndices = () => {
     let restoredNotifications = this.notifications;
-    for (var i = 0; i < this.notifications.length; i++) {
+    for (let i = 0; i < this.notifications.length; i++) {
       restoredNotifications[i].index = i;
     }
     this.setNotifications(restoredNotifications);

@@ -41,7 +41,6 @@ const StyledMenu = withStyles({
   },
 })((props) => (
   <Menu
-    //elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
@@ -151,7 +150,7 @@ const Notifications = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {notificationStore.notifications.length > 0 ? (
+        {(notificationStore.notifications || []).length > 0 ? (
           notificationStore.notifications.map((notification) => (
             <StyledMenuItem onClick={() => onClickNotification(notification)}>
               <ListItemIcon>
