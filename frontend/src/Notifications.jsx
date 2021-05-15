@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
@@ -8,10 +8,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
 import Grid from '@material-ui/core/Grid';
+import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded';
+import service from './service';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Badge from '@material-ui/core/Badge';
 import { observer } from 'mobx-react-lite';
 
@@ -40,7 +41,7 @@ const StyledMenu = withStyles({
   },
 })((props) => (
   <Menu
-    elevation={0}
+    //elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
@@ -68,24 +69,50 @@ const StyledMenuItem = withStyles((theme) => ({
 const Notifications = (props) => {
   const { notificationStore } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [amountNotifications, setAmountNotifications] = useState(0);
+  const [classes, setClasses] = useState(null);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const styleClasses = useStyles();
+
+  const loadClasses = useCallback(async () => {
+    setLoading(true);
+
+    const response = await service.loadClasses();
+    if (!response) {
+      return;
+    }
+    setClasses(response.body.data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadClasses();
+  }, [loadClasses]);
+
+  const isNotification = (acc) => {
+    return acc === 1;
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log(notificationStore.isNotificationDisplay);
-
-      const boolNotification = isNotification(notificationStore.accumulator);
-
-      if (boolNotification) {
-        notificationStore.setNotificationDisplay('');
-        console.log(notificationStore.isNotificationDisplay);
-        console.log(notificationStore.accumulator);
+      if (isNotification(notificationStore.accumulator)) {
+        notificationStore.pushNotification({
+          id: classes[0].id,
+          category: 'classes',
+          value: 'Klas 1 heeft nieuwe probleem categorieën',
+          index: notificationStore.notifications.length,
+        });
+        notificationStore.pushNotification({
+          id: classes[0].id,
+          category: 'classes',
+          value: 'Klas 1 heeft les 1 volledig afgerond',
+          index: notificationStore.notifications.length,
+        });
       }
       notificationStore.pushAccumulator();
-    }, 1000);
+    }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [notificationStore, classes]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -95,29 +122,26 @@ const Notifications = (props) => {
     setAnchorEl(null);
   };
 
-  const { lessonStore } = props;
-
-  const checkNotifications = (counter) => {
-    return counter === 10;
+  const onClickNotification = (notification) => {
+    if (notification.category === 'classes') {
+      notificationStore.deleteNotification(notification.index);
+      history.push(`/dashboard/${notification.category}/${classes[0].id}`);
+    }
   };
 
-  const isNotification = (acc) => {
-    return acc === 10;
-  };
+  if (loading || !classes) {
+    return <CircularProgress />;
+  }
 
-  const classes = useStyles();
   return (
-    <Grid container xs={3} md={3} className={classes.topGrid}>
+    <Grid container xs={3} md={3} className={styleClasses.topGrid}>
       <Grid item xs={3} md={3}>
         <IconButton color="inherit" onClick={handleClick}>
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-            {/* <Avatar
-            className={classes.notification}
-            style={{ display: notificationStore.isNotificationDisplay }}
+          <Badge
+            badgeContent={notificationStore.notifications.length}
+            color="secondary"
           >
-            {amountNotifications}
-          </Avatar> */}
+            <NotificationsIcon />
           </Badge>
         </IconButton>
       </Grid>
@@ -127,24 +151,20 @@ const Notifications = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <StyledMenuItem>
-          <ListItemIcon>
-            <SendIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Sent mail" />
-        </StyledMenuItem>
-        <StyledMenuItem>
-          <ListItemIcon>
-            <DraftsIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Drafts" />
-        </StyledMenuItem>
-        <StyledMenuItem>
-          <ListItemIcon>
-            <InboxIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Inbox" />
-        </StyledMenuItem>
+        {notificationStore.notifications.length > 0 ? (
+          notificationStore.notifications.map((notification) => (
+            <StyledMenuItem onClick={() => onClickNotification(notification)}>
+              <ListItemIcon>
+                <SchoolRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary={notification.value} />
+            </StyledMenuItem>
+          ))
+        ) : (
+          <StyledMenuItem onClick={handleClose}>
+            <ListItemText primary="Geen notificaties!" />
+          </StyledMenuItem>
+        )}
       </StyledMenu>
     </Grid>
   );

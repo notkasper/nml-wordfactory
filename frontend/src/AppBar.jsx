@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomAppBar = (props) => {
-  console.log(props);
   const classes = useStyles();
   const history = useHistory();
 
