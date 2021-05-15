@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tabs from '@material-ui/core/Tabs';
@@ -12,13 +13,36 @@ import PageContainer from '../_shared/PageContainer';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AnswersMultipleChoice from './AnswersMultipleChoice';
 
+const Answers = (props) => {
+  const { questionStore } = props;
+  const type = questionStore?.questionGroup?.questions?.[0]?.type;
+  switch (type) {
+    case 'multipleChoice':
+      return <AnswersMultipleChoice {...props} />;
+    default:
+      return (
+        <p>{`Er is iets fout gegaan, ${type} wordt niet herkend als vraag type`}</p>
+      );
+  }
+};
+
 const QuestionStats = (props) => {
-  const { crumbs } = props;
+  const params = useParams();
+
+  const { questionStore, crumbs } = props;
   const [value, setValue] = useState('question');
 
   const onChangeTab = (event, newValue) => {
     setValue(newValue);
   };
+
+  const loadAll = useCallback(async () => {
+    await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
+  }, [questionStore, params.questionGroupId]);
+
+  useEffect(() => {
+    loadAll();
+  }, [loadAll]);
 
   return (
     <>
@@ -46,7 +70,7 @@ const QuestionStats = (props) => {
           <Details {...props} />
         </TabContent>
         <TabContent index="answers" value={value}>
-          <AnswersMultipleChoice {...props} />
+          <Answers {...props} />
         </TabContent>
       </PageContainer>
     </>

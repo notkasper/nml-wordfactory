@@ -50,7 +50,7 @@ const Insights = (props) => {
         />
       </Grid>
       <Grid item xs={12} md={12}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>Meer dninge</Paper>
+        <Paper style={{ padding: '2rem', height: '100%' }}>Meer dingen</Paper>
       </Grid>
     </Grid>
   );

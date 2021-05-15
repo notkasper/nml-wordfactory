@@ -46,7 +46,6 @@ const Courses = (props) => {
           onChange={onCourseFilterChange}
           inputValue={courseFilterInputValue}
           onInputChange={onCourseFilterInputChange}
-          id="combo-box-demo"
           options={courses}
           getOptionLabel={(option) => option.name}
           renderInput={(params) => (

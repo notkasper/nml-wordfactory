@@ -62,7 +62,6 @@ const Students = (props) => {
           onChange={onStudentFilterChange}
           inputValue={studentFilterInputValue}
           onInputChange={onStudentFilterInputChange}
-          id="combo-box-demo"
           options={students}
           getOptionLabel={(option) => option.name}
           renderInput={(params) => (
@@ -73,7 +72,11 @@ const Students = (props) => {
         <Paper>
           <List className={classes.root}>
             {shownStudents.map((student) => (
-              <Student key={student.id} {...student} onClick={() => onClick(student.id)} />
+              <Student
+                key={student.id}
+                {...student}
+                onClick={() => onClick(student.id)}
+              />
             ))}
           </List>
         </Paper>
