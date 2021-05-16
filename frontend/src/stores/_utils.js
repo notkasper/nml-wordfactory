@@ -59,17 +59,17 @@ const addQuestionAttemptInformation = (questionGroup) => {
     const studentId = qga.lessonAttempts.student.id;
 
     qga.questionAttempts.forEach((qa) => {
+      console.log(qa);
       const answerAttempt = qa.content;
       if (answerAttempt.length !== 0) {
-        answer =
-          answers[acc % qga.questionAttempts.length][answerAttempt].value;
+        for (let i = 0; i < answerAttempt.length; i++) {
+          answer = answers[acc % qga.questionAttempts.length][i].value;
 
-        if (
-          answers[acc % qga.questionAttempts.length][answerAttempt].isCorrect
-        ) {
-          correct = true;
-        } else {
-          correct = false;
+          if (answers[acc % qga.questionAttempts.length][i].isCorrect) {
+            correct = true;
+          } else {
+            correct = false;
+          }
         }
       } else {
         correct = false;
