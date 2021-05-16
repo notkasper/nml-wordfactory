@@ -46,6 +46,11 @@ const addQuestionGroupAttemptStats = (questionGroup) => {
 };
 
 const addQuestionAttemptInformation = (questionGroup) => {
+  const questionType = questionGroup?.questions[0]?.type;
+  if (!questionType || questionType !== 'multipleChoice') {
+    return questionGroup;
+  }
+
   let answers = [];
   questionGroup.questions.forEach((q) => {
     answers.push(q.data.options);
@@ -83,6 +88,7 @@ const addQuestionAttemptInformation = (questionGroup) => {
     });
     acc += 1;
   });
+
   return questionGroup;
 };
 
