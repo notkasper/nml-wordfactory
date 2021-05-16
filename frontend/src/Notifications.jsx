@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
@@ -97,14 +97,14 @@ const Notifications = (props) => {
     const interval = setInterval(() => {
       if (isNotification(notificationStore.accumulator)) {
         notificationStore.pushNotification({
-          id: uuid.v4(),
+          id: uuidv4(),
           classId: classes[0].id,
           category: 'classes',
           value: 'Klas 1 heeft nieuwe probleem categorieën',
           index: notificationStore.notifications.length,
         });
         notificationStore.pushNotification({
-          id: uuid.v4(),
+          id: uuidv4(),
           classId: classes[0].id,
           category: 'classes',
           value: 'Klas 1 heeft les 1 volledig afgerond',
