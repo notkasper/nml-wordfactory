@@ -35,6 +35,8 @@ const Student = () => {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const [student, setStudent] = useState([]);
+  const [questionGroupWithAttempts, setQuestionGrouWithAttempts] = useState([]);
+
   const [courses, setCourses] = useState([]);
 
   const loadCourses = useCallback(async () => {
