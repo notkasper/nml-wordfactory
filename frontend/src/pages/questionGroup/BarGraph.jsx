@@ -19,26 +19,34 @@ const calculateDistribution = (
   amountQuestions,
   questionIds
 ) => {
-  let correctPerQuestion = Array.apply(null, Array(amountQuestions)).map(
-    Number.prototype.valueOf,
-    0
-  );
+  let correctPerQuestion = new Array(amountQuestions).fill(0);
+  let incorrectPerQuestion = new Array(amountQuestions).fill(0);
+
+  let missedPerQuestion = new Array(amountQuestions).fill(0);
 
   questionGroupAttempts.forEach((questionGroupAttempt) => {
     if (questionGroupAttempt.isCompleted) {
       questionGroupAttempt.questionAttempts.forEach((questionAttempt) => {
-        const index = questionIds.findIndex(
-          (el) => el === questionAttempt.questionId
+        const indexCorrect = questionIds.findIndex(
+          (el) => el === questionAttempt.questionId && questionAttempt.correct
         );
-        correctPerQuestion[index] += 1;
+        correctPerQuestion[indexCorrect] += 1;
+        const indexIncorrect = questionIds.findIndex(
+          (el) => el === questionAttempt.questionId && questionAttempt.incorrect
+        );
+        incorrectPerQuestion[indexIncorrect] += 1;
+        const indexMissed = questionIds.findIndex(
+          (el) => el === questionAttempt.questionId && questionAttempt.missed
+        );
+        missedPerQuestion[indexMissed] += 1;
       });
     }
   });
-  return correctPerQuestion;
+  return [correctPerQuestion, incorrectPerQuestion, missedPerQuestion];
 };
 
 const getLabels = (amountQuestions) => {
-  let labels = [];
+  const labels = [];
   for (let i = 0; i < amountQuestions; i++) {
     labels.push('Vraag ' + parseInt(i + 1));
   }
@@ -48,20 +56,29 @@ const getLabels = (amountQuestions) => {
 const BarGraph = (props) => {
   const { questionGroup, title } = props;
   const amountQuestions = questionGroup.questions.length;
-  let questionIds = [];
+  const questionIds = [];
   questionGroup.questions.forEach((question) => {
     questionIds.push(question.id);
   });
 
+  const distributions = calculateDistribution(
+    questionGroup.questionGroupAttempts,
+    amountQuestions,
+    questionIds
+  );
   const data = {
     datasets: [
       {
         label: 'Aantal juiste antwoorden',
-        data: calculateDistribution(
-          questionGroup.questionGroupAttempts,
-          amountQuestions,
-          questionIds
-        ),
+        data: distributions[0],
+      },
+      {
+        label: 'Aantal incorrect antwoorden',
+        data: distributions[1],
+      },
+      {
+        label: 'Aantal gemiste antwoorden',
+        data: distributions[2],
       },
     ],
     labels: getLabels(amountQuestions),

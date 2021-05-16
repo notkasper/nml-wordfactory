@@ -78,14 +78,18 @@ const Answers = (props) => {
     let acc = 0;
     let total = 0;
     questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
-      qga.questionAttempts.forEach((qa) => {
-        if (qa.questionId === questionId) {
-          total += 1;
-          if (qa.content === index) {
-            acc += 1;
+      if (qga.isCompleted) {
+        qga.questionAttempts.forEach((qa) => {
+          if (qa.questionId === questionId) {
+            qa.content.forEach((attempt) => {
+              total += 1;
+              if (attempt === index) {
+                acc += 1;
+              }
+            });
           }
-        }
-      });
+        });
+      }
     });
 
     return Math.round((acc / total) * 100);

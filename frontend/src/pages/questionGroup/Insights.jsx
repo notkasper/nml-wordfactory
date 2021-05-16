@@ -52,7 +52,7 @@ const Insights = (props) => {
       <Grid item xs={12} md={12}>
         <BarGraph
           questionGroup={questionStore.questionGroup}
-          title="Correcte antwoorden per vraag"
+          title="Correctheid verdeling per vraag"
         />
       </Grid>
     </Grid>
