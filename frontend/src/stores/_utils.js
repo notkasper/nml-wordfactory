@@ -59,7 +59,6 @@ const addQuestionAttemptInformation = (questionGroup) => {
     const studentId = qga.lessonAttempts.student.id;
 
     qga.questionAttempts.forEach((qa) => {
-      console.log(qa);
       const answerAttempt = qa.content;
       if (answerAttempt.length !== 0) {
         for (let i = 0; i < answerAttempt.length; i++) {
