@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = (props) => {
-  const { authStore, lessonStore, questionStore } = props;
+  const { authStore, lessonStore, questionStore, notificationStore } = props;
   const classes = useStyles();
 
   return (
@@ -45,7 +45,7 @@ const Dashboard = (props) => {
 
             return (
               <>
-                <AppBar />
+                <AppBar notificationStore={notificationStore} {...props} />
                 <Menu authStore={authStore} />
                 <main className={classes.content}>
                   <div className={classes.appBarSpacer} />
@@ -53,6 +53,7 @@ const Dashboard = (props) => {
                     authStore={authStore}
                     lessonStore={lessonStore}
                     questionStore={questionStore}
+                    notificationStore={notificationStore}
                     crumbs={crumbs}
                     {...props}
                   />
