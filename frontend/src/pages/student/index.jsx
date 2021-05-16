@@ -9,24 +9,24 @@ import PageContainer from '../_shared/PageContainer';
 import service from '../../service';
 import Courses from './Courses';
 import ProfileHeader from './ProfileHeader';
-
+import Progress from './Progress';
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 
 const useStyles = makeStyles((theme) => ({
-	widget: {
+  widget: {
     height: 230,
     padding: theme.spacing(3),
-		marginBottom: theme.spacing(12),
+    marginBottom: theme.spacing(12),
   },
-	paper: {
-		borderBottomLeftRadius: 4,
-		borderBottomRightRadius: 4,
-		borderTopLeftRadius: 0,
-		borderTopRightRadius: 0,
-		height: 230,
-		padding: theme.spacing(3),
-	},
+  paper: {
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    height: 230,
+    padding: theme.spacing(3),
+  },
 }));
 
 const Student = () => {
@@ -77,21 +77,35 @@ const Student = () => {
           <ProfileHeader {...student} />
         </Grid>
         <Grid container spacing={3} className={classes.widget}>
-          <PaperWithHeader headercolor={theme.widget.secondary.main} headertitle="Probleem categorieën">
+          <Grid item xs={12}>
+            <Progress courses={courses} />
+          </Grid>
+
+          <PaperWithHeader
+            headercolor={theme.widget.secondary.main}
+            headertitle="Probleem categorieën"
+          >
             <Paper className={classes.paper}>
-              <ProgressBar title="1. Herken morfemen in woorden" value={38}/>
-              <ProgressBar title="2. Herken morfemen in een zin" value={48}/>
-              <ProgressBar title="3. Verwisselen morfemen" value={55}/>
+              <ProgressBar title="1. Herken morfemen in woorden" value={38} />
+              <ProgressBar title="2. Herken morfemen in een zin" value={48} />
+              <ProgressBar title="3. Verwisselen morfemen" value={55} />
             </Paper>
           </PaperWithHeader>
-          <PaperWithHeader headercolor={theme.widget.secondary.main} headertitle="Top categorieën">
+          <PaperWithHeader
+            headercolor={theme.widget.secondary.main}
+            headertitle="Top categorieën"
+          >
             <Paper className={classes.paper}>
-              <ProgressBar title="1. Betekenis morfemen" value={97}/>
-              <ProgressBar title="2. Splits morfemen" value={83}/>
-              <ProgressBar title="3. Alternatieve betekenis morfemen" value={74}/>
+              <ProgressBar title="1. Betekenis morfemen" value={97} />
+              <ProgressBar title="2. Splits morfemen" value={83} />
+              <ProgressBar
+                title="3. Alternatieve betekenis morfemen"
+                value={74}
+              />
             </Paper>
           </PaperWithHeader>
         </Grid>
+
         <Grid item xs={12}>
           <Courses courses={courses} />
         </Grid>
