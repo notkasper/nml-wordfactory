@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Grid from '@material-ui/core/Grid';
 import Modal from '@material-ui/core/Modal';
 
 import Title from '../_shared/Title';
-import service from '../../service';
 
 const convertDateToReadableString = (date) => {
   return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
@@ -62,32 +60,9 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestionAttempts = (props) => {
   const classes = useStyles();
-  const params = useParams();
-  const [questionAttempts, setQuestionAttempts] = useState([]);
-  const [loading, setLoading] = useState(false);
-
+  const { questionAttempts } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({});
-
-  const loadQuestionAttempts = useCallback(async () => {
-    setLoading(true);
-
-    const response = await service.loadQuestionAttempts({
-      studentId: params.studentId,
-      lessonId: params.lessonId,
-    });
-
-    if (!response) {
-      return;
-    }
-
-    setQuestionAttempts(response.body.data);
-    setLoading(false);
-  }, [params.studentId, params.lessonId]);
-
-  useEffect(() => {
-    loadQuestionAttempts();
-  }, [loadQuestionAttempts]);
 
   const handleModalOpen = (event) => {
     setModalContent(event.row);
@@ -99,16 +74,10 @@ const QuestionAttempts = (props) => {
     setModalContent({});
   };
 
-  if (loading) {
-    return <CircularProgress />;
-  }
-
   const Body = React.forwardRef((props, ref) => (
     <div {...props} className={classes.paper} ref={ref}>
       <h2 id="simple-modal-title">Antwoord</h2>
-      <p id="simple-modal-description">
-        {JSON.stringify(modalContent.content)}
-      </p>
+      <p id="simple-modal-description">{JSON.stringify(modalContent.answer)}</p>
     </div>
   ));
 
