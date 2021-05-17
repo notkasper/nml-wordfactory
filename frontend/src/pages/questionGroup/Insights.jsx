@@ -35,7 +35,7 @@ const Insights = (props) => {
           title="Correctheid verdeling van de vragen"
         />
       </Grid>
-      <Grid container xs={12} md={6} style={{ padding: '1rem' }}>
+      <Grid item xs={12} md={6} style={{ padding: '1rem' }}>
         <Tile
           questionGroup={questionStore.questionGroup}
           title="Totaal aantal vragen: "

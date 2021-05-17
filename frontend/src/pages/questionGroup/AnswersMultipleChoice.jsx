@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -49,11 +48,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Answers = (props) => {
   const history = useHistory();
+  const classes = useStyles();
   const { questionStore } = props;
+
   const [filterValue, setFilterValue] = useState(null);
   const [filterInputValue, setFilterInputValue] = useState('');
-  const classes = useStyles();
-  const params = useParams();
+
   const typeLabels = {
     open: 'Open',
     clickTheRightWords: 'Selecteer het correcte antwoord',
@@ -61,14 +61,6 @@ const Answers = (props) => {
     divideTheWord: 'Verdeel het woord',
     combineAndFillInTheBlanks: 'Combineer en vul in',
   };
-
-  const loadAll = useCallback(async () => {
-    await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
-  }, [questionStore, params.questionGroupId]);
-
-  useEffect(() => {
-    loadAll();
-  }, [loadAll]);
 
   if (questionStore.isLoading || !questionStore.questionGroup) {
     return <CircularProgress />;
@@ -181,7 +173,7 @@ const Answers = (props) => {
       <Grid item xs={12} md={12}>
         {questionStore.questionGroup.questions.map((item, index) => {
           return (
-            <Accordion defaultExpanded>
+            <Accordion defaultExpanded key={item.id}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className={classes.questionName}
@@ -191,7 +183,7 @@ const Answers = (props) => {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Grid container xs={12} md={12} spacing={1}>
+                <Grid container spacing={1}>
                   <Grid item xs={12} md={12}>
                     <Typography key={index}>{item.instruction}</Typography>
                   </Grid>
@@ -199,7 +191,7 @@ const Answers = (props) => {
                     <List>
                       {item.data.options.map((item2, index2) => {
                         return (
-                          <ListItem>
+                          <ListItem key={index2}>
                             <ListItemIcon>
                               <FiberManualRecordOutlinedIcon />
                             </ListItemIcon>
@@ -233,7 +225,6 @@ const Answers = (props) => {
                         onChange={onFilterChange}
                         inputValue={filterInputValue}
                         onInputChange={onFilterInputChange}
-                        id="combo-box-demo"
                         options={getOptions(item.id)}
                         getOptionLabel={(option) => option.answer}
                         renderInput={(params) => (

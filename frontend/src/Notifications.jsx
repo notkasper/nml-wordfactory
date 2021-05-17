@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
@@ -10,11 +11,11 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded';
-import service from './service';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
 import Badge from '@material-ui/core/Badge';
 import { observer } from 'mobx-react-lite';
+
+import service from './service';
 
 const useStyles = makeStyles(() => ({
   topGrid: {
@@ -96,13 +97,15 @@ const Notifications = (props) => {
     const interval = setInterval(() => {
       if (isNotification(notificationStore.accumulator)) {
         notificationStore.pushNotification({
-          id: classes[0].id,
+          id: uuidv4(),
+          classId: classes[0].id,
           category: 'classes',
           value: 'Klas 1 heeft nieuwe probleem categorieën',
           index: notificationStore.notifications.length,
         });
         notificationStore.pushNotification({
-          id: classes[0].id,
+          id: uuidv4(),
+          classId: classes[0].id,
           category: 'classes',
           value: 'Klas 1 heeft les 1 volledig afgerond',
           index: notificationStore.notifications.length,
@@ -124,7 +127,9 @@ const Notifications = (props) => {
   const onClickNotification = (notification) => {
     if (notification.category === 'classes') {
       notificationStore.deleteNotification(notification.index);
-      history.push(`/dashboard/${notification.category}/${classes[0].id}`);
+      history.push(
+        `/dashboard/${notification.category}/${notification.classId}`
+      );
     }
   };
 
@@ -133,7 +138,7 @@ const Notifications = (props) => {
   }
 
   return (
-    <Grid container xs={3} md={3} className={styleClasses.topGrid}>
+    <Grid item xs={3} md={3} className={styleClasses.topGrid}>
       <Grid item xs={3} md={3}>
         <IconButton color="inherit" onClick={handleClick}>
           <Badge
@@ -150,9 +155,12 @@ const Notifications = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {(notificationStore.notifications || []).length > 0 ? (
+        {notificationStore.notifications.length ? (
           notificationStore.notifications.map((notification) => (
-            <StyledMenuItem onClick={() => onClickNotification(notification)}>
+            <StyledMenuItem
+              key={notification.id}
+              onClick={() => onClickNotification(notification)}
+            >
               <ListItemIcon>
                 <SchoolRoundedIcon fontSize="small" />
               </ListItemIcon>
