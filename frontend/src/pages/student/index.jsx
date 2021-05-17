@@ -29,15 +29,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Student = () => {
+const Student = (props) => {
+  const { lessonStore } = props;
   const classes = useStyles();
   const params = useParams();
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
+
   const [student, setStudent] = useState([]);
-  const [questionGroupWithAttempts, setQuestionGrouWithAttempts] =
-    useState(null);
-  const [lessonStore, setLessonStore] = useState(null);
+  // const [questionGroupWithAttempts, setQuestionGrouWithAttempts] =
+  //   useState(null);
   const [courses, setCourses] = useState([]);
 
   const loadCourses = useCallback(async () => {
@@ -58,12 +59,31 @@ const Student = () => {
     setStudent(response.body.data);
   }, [params.studentId]);
 
+  const loadLesson = useCallback(
+    async (lessonId, lessons) => {
+      await lessonStore.loadLesson(lessonId);
+      lessons.push(lessonStore.lesson);
+    },
+    [lessonStore]
+  );
+
   const loadAll = useCallback(async () => {
     setLoading(true);
     const promises = [loadCourses(), loadStudent()];
     await Promise.all(promises);
+
+    const lessons = [];
+    const promises2 = [];
+
+    if (courses[0]) {
+      console.log(courses[0]);
+      courses[0].lessons.forEach((lesson) => {
+        promises2.push(loadLesson(lesson.id, lessons));
+      });
+      await Promise.all(promises2);
+    }
     setLoading(false);
-  }, [loadCourses, loadStudent]);
+  }, [loadCourses, loadStudent, loadLesson, courses]);
 
   useEffect(() => {
     loadAll();

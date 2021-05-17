@@ -6,7 +6,7 @@ import { useTheme } from '@material-ui/core/styles';
 const computeProgress = (questionAttempts) => {};
 const Progress = (props) => {
   const { courses } = props;
-  console.log(courses);
+  //console.log(courses);
   const theme = useTheme();
   return <Paper></Paper>;
 };
