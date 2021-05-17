@@ -15,7 +15,7 @@ import AnswersMultipleChoice from './AnswersMultipleChoice';
 
 const Answers = (props) => {
   const { questionStore } = props;
-  const type = questionStore?.questionGroup?.questions?.[0]?.type;
+  const type = questionStore.questionGroup.questions[0].type;
   switch (type) {
     case 'multipleChoice':
       return <AnswersMultipleChoice {...props} />;
