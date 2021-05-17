@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  icons: {
+    display: 'flex',
+  },
 }));
 
 const CustomAppBar = (props) => {
@@ -56,10 +59,12 @@ const CustomAppBar = (props) => {
           noWrap
           className={classes.title}
         ></Typography>
-        <Notifications {...props} />
-        <IconButton color="inherit" onClick={goToProfile}>
-          <AccountCircle />
-        </IconButton>
+        <div className={classes.icons}>
+          <Notifications {...props} />
+          <IconButton color="inherit" onClick={goToProfile}>
+            <AccountCircle />
+          </IconButton>
+        </div>
       </Toolbar>
     </AppBar>
   );
