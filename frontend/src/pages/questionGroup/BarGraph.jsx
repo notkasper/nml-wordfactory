@@ -19,10 +19,10 @@ const calculateDistribution = (
   amountQuestions,
   questionIds
 ) => {
-  let correctPerQuestion = new Array(amountQuestions).fill(0);
-  let incorrectPerQuestion = new Array(amountQuestions).fill(0);
+  let correctPerQuestion = Array(amountQuestions).fill(0);
+  let incorrectPerQuestion = Array(amountQuestions).fill(0);
 
-  let missedPerQuestion = new Array(amountQuestions).fill(0);
+  let missedPerQuestion = Array(amountQuestions).fill(0);
 
   questionGroupAttempts.forEach((questionGroupAttempt) => {
     if (questionGroupAttempt.isCompleted) {
