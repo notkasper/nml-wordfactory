@@ -82,7 +82,6 @@ const Students = () => {
         onChange={onStudentFilterChange}
         inputValue={studentFilterInputValue}
         onInputChange={onStudentFilterInputChange}
-        id="combo-box-demo"
         options={students}
         getOptionLabel={(option) => option.name}
         renderInput={(params) => (
