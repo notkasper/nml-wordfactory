@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
@@ -28,12 +28,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const tabs = ['insights', 'lessons', 'students'];
+const mapTabToIndex = (tab) => tabs.indexOf(tab);
+const mapIndexToTab = (index) => tabs[index];
+
 const Lesson = (props) => {
   const { crumbs } = props;
   const classes = useStyles();
+  const history = useHistory();
   const params = useParams();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(mapTabToIndex(params.tab));
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -64,11 +70,21 @@ const Lesson = (props) => {
     setLoading(false);
   }, [loadClass, loadStudents, loadCourses]);
 
-  const onChangeTab = (event, newValue) => setValue(newValue);
+  const onClickTab = (event, tabIndex) => {
+    const currentTab = params.tab;
+    const newTab = mapIndexToTab(tabIndex);
+    const newPath = location.pathname.replace(currentTab, newTab);
+    history.push(newPath);
+  };
 
   useEffect(() => {
     loadAll();
   }, [loadAll]);
+
+  // for updating the current tab when the URL changes
+  useEffect(() => {
+    setValue(mapTabToIndex(params.tab));
+  }, [params.tab]);
 
   if (loading) {
     return <CircularProgress />;
@@ -77,7 +93,7 @@ const Lesson = (props) => {
   return (
     <>
       <AppBar position="static">
-        <Tabs value={value} onChange={onChangeTab}>
+        <Tabs value={value} onChange={onClickTab}>
           <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
           <Tab label="Lessen" icon={<MenuBookIcon />} />
           <Tab label="Leerlingen" icon={<PeopleIcon />} />

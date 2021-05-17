@@ -23,13 +23,13 @@ const routes = [
   },
   {
     exact: true,
-    path: '/dashboard/classes/:classId',
+    path: '/dashboard/classes/:classId/:tab',
     Component: Class,
     name: 'Klas',
   },
   {
     exact: true,
-    path: '/dashboard/classes/:classId/lessons/:lessonId',
+    path: '/dashboard/classes/:classId/lessons/:lessonId/:tab',
     Component: Lesson,
     name: 'Les',
   },
