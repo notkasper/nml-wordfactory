@@ -28,10 +28,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const tabs = ['insights', 'lessons', 'students'];
-const mapTabToIndex = (tab) => tabs.indexOf(tab);
-const mapIndexToTab = (index) => tabs[index];
-
 const Lesson = (props) => {
   const { crumbs } = props;
   const classes = useStyles();
@@ -39,7 +35,6 @@ const Lesson = (props) => {
   const params = useParams();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState(mapTabToIndex(params.tab));
   const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -70,9 +65,8 @@ const Lesson = (props) => {
     setLoading(false);
   }, [loadClass, loadStudents, loadCourses]);
 
-  const onClickTab = (event, tabIndex) => {
+  const onClickTab = (event, newTab) => {
     const currentTab = params.tab;
-    const newTab = mapIndexToTab(tabIndex);
     const newPath = location.pathname.replace(currentTab, newTab);
     history.push(newPath);
   };
@@ -81,11 +75,6 @@ const Lesson = (props) => {
     loadAll();
   }, [loadAll]);
 
-  // for updating the current tab when the URL changes
-  useEffect(() => {
-    setValue(mapTabToIndex(params.tab));
-  }, [params.tab]);
-
   if (loading) {
     return <CircularProgress />;
   }
@@ -93,10 +82,14 @@ const Lesson = (props) => {
   return (
     <>
       <AppBar position="static">
-        <Tabs value={value} onChange={onClickTab}>
-          <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
-          <Tab label="Lessen" icon={<MenuBookIcon />} />
-          <Tab label="Leerlingen" icon={<PeopleIcon />} />
+        <Tabs value={params.tab} onChange={onClickTab}>
+          <Tab
+            label="Inzicht (klas)"
+            value="insights"
+            icon={<EqualizerIcon />}
+          />
+          <Tab label="Lessen" value="lessons" icon={<MenuBookIcon />} />
+          <Tab label="Leerlingen" value="students" icon={<PeopleIcon />} />
         </Tabs>
       </AppBar>
       <PageContainer>
@@ -106,13 +99,13 @@ const Lesson = (props) => {
             {theClass.name}
           </Typography>
         </Grid>
-        <TabContent index={0} value={value}>
+        <TabContent index="insights" value={params.tab}>
           <Insight />
         </TabContent>
-        <TabContent index={1} value={value}>
+        <TabContent index="lessons" value={params.tab}>
           <Courses courses={courses} />
         </TabContent>
-        <TabContent index={2} value={value}>
+        <TabContent index="students" value={params.tab}>
           <Students students={students} />
         </TabContent>
       </PageContainer>

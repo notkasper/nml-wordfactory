@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -12,44 +12,37 @@ import TabContent from '../_shared/TabContent';
 import Breadcrumbs from '../_shared/Breadcrumbs';
 import PageContainer from '../_shared/PageContainer';
 
-const tabs = ['insights', 'questions'];
-const mapTabToIndex = (tab) => tabs.indexOf(tab);
-const mapIndexToTab = (index) => tabs[index];
-
 const Lesson = (props) => {
   const { crumbs } = props;
   const history = useHistory();
   const params = useParams();
   const location = useLocation();
-  const [value, setValue] = useState(mapTabToIndex(params.tab));
 
-  const onClickTab = (event, tabIndex) => {
+  const onClickTab = (event, newTab) => {
     const currentTab = params.tab;
-    const newTab = mapIndexToTab(tabIndex);
     const newPath = location.pathname.replace(currentTab, newTab);
     history.push(newPath);
   };
 
-  // for updating the current tab when the URL changes
-  useEffect(() => {
-    setValue(mapTabToIndex(params.tab));
-  }, [params.tab]);
-
   return (
     <>
       <AppBar position="static">
-        <Tabs value={value} onChange={onClickTab}>
-          <Tab label="Inzicht (les)" icon={<EqualizerIcon />} />
-          <Tab label="Opdrachten" icon={<EditIcon />} />
+        <Tabs value={params.tab} onChange={onClickTab}>
+          <Tab
+            label="Inzicht (les)"
+            value="insights"
+            icon={<EqualizerIcon />}
+          />
+          <Tab label="Opdrachten" value="questions" icon={<EditIcon />} />
         </Tabs>
       </AppBar>
 
       <PageContainer maxWidth="lg">
         <Breadcrumbs crumbs={crumbs} />
-        <TabContent index={0} value={value}>
+        <TabContent index="insights" value={params.tab}>
           <Insights {...props} />
         </TabContent>
-        <TabContent index={1} value={value}>
+        <TabContent index="questions" value={params.tab}>
           <Questions {...props} />
         </TabContent>
       </PageContainer>
