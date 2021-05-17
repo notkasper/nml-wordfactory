@@ -15,13 +15,18 @@ function createRow(courseName, lessonName, category) {
 }
 
 function getIcon(category) {
-  if (category === 'progress') {
-    return <RestoreIcon style={{ color: 'orange' }} />;
-  } else if (category === 'completed') {
-    return <DoneIcon style={{ color: 'green' }} />;
-  } else {
-    return <ClearIcon style={{ color: 'gredreen' }} />;
+  let icon = null;
+  switch (category) {
+    case 'progress':
+      icon = <RestoreIcon style={{ color: 'orange' }} />;
+      break;
+    case 'completed':
+      icon = <DoneIcon style={{ color: 'green' }} />;
+      break;
+    default:
+      icon = <ClearIcon style={{ color: 'red' }} />;
   }
+  return icon;
 }
 
 const getRows = (courses) => {
