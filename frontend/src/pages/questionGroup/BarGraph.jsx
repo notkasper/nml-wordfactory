@@ -1,18 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
 import { Bar } from 'react-chartjs-2';
 import Title from '../_shared/Title';
-
-const useStyles = makeStyles((theme) => ({
-  histogram: {
-    display: 'flex',
-    justifyContent: 'center',
-    component: 'h2',
-    variant: 'h6',
-    textAlign: 'center',
-  },
-}));
 
 const calculateDistribution = (
   questionGroupAttempts,

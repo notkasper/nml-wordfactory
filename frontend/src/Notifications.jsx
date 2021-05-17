@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,25 +15,6 @@ import Badge from '@material-ui/core/Badge';
 import { observer } from 'mobx-react-lite';
 
 import service from './service';
-
-const useStyles = makeStyles(() => ({
-  topGrid: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignContent: 'flex-end',
-    marginRight: '-1%',
-  },
-
-  notification: {
-    color: 'white',
-    backgroundColor: 'red',
-    marginLeft: '-35%',
-    marginTop: '-60%',
-    width: '50%',
-    height: '70%',
-    fontSize: 15,
-  },
-}));
 
 const StyledMenu = withStyles({
   paper: {
@@ -72,7 +52,6 @@ const Notifications = (props) => {
   const [classes, setClasses] = useState(null);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const styleClasses = useStyles();
 
   const loadClasses = useCallback(async () => {
     setLoading(true);
@@ -138,8 +117,8 @@ const Notifications = (props) => {
   }
 
   return (
-    <Grid item xs={3} md={3} className={styleClasses.topGrid}>
-      <Grid item xs={3} md={3}>
+    <Grid container>
+      <Grid item>
         <IconButton color="inherit" onClick={handleClick}>
           <Badge
             badgeContent={notificationStore.notifications.length}
