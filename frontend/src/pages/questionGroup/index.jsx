@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tabs from '@material-ui/core/Tabs';
@@ -27,14 +27,10 @@ const Answers = (props) => {
 };
 
 const QuestionStats = (props) => {
+  const history = useHistory();
   const params = useParams();
-
+  const location = useLocation();
   const { questionStore, crumbs } = props;
-  const [value, setValue] = useState('question');
-
-  const onChangeTab = (event, newValue) => {
-    setValue(newValue);
-  };
 
   const loadAll = useCallback(async () => {
     await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
@@ -44,16 +40,22 @@ const QuestionStats = (props) => {
     loadAll();
   }, [loadAll]);
 
+  const onClickTab = (event, newTab) => {
+    const currentTab = params.tab;
+    const newPath = location.pathname.replace(currentTab, newTab);
+    history.push(newPath);
+  };
+
   return (
     <>
       <AppBar position="static">
-        <Tabs value={value} onChange={onChangeTab}>
+        <Tabs value={params.tab} onChange={onClickTab}>
           <Tab
             label="Inzicht (opdracht)"
             icon={<EqualizerIcon />}
             value="insights"
           />
-          <Tab label="Opdracht" icon={<VisibilityIcon />} value="question" />
+          <Tab label="Opdracht" icon={<VisibilityIcon />} value="questions" />
           <Tab
             label="Antwoorden"
             icon={<AssignmentTurnedInIcon />}
@@ -63,13 +65,13 @@ const QuestionStats = (props) => {
       </AppBar>
       <PageContainer maxWidth="lg">
         <Breadcrumbs crumbs={crumbs} />
-        <TabContent index="question" value={value}>
+        <TabContent index="questions" value={params.tab}>
           <Question {...props} />
         </TabContent>
-        <TabContent index="insights" value={value}>
+        <TabContent index="insights" value={params.tab}>
           <Details {...props} />
         </TabContent>
-        <TabContent index="answers" value={value}>
+        <TabContent index="answers" value={params.tab}>
           <Answers {...props} />
         </TabContent>
       </PageContainer>
