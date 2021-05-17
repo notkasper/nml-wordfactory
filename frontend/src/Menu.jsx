@@ -140,10 +140,6 @@ const Menu = (props) => {
     history.push(value);
   };
 
-  if (loading) {
-    return <CircularProgress />;
-  }
-
   return (
     <TreeView
       className={classes.root}
@@ -166,16 +162,19 @@ const Menu = (props) => {
         labelText="Klassen"
         labelIcon={SchoolRoundedIcon}
       >
-        {classList.map((classItem) => (
-          <StyledTreeItem
-            key={classItem.id}
-            nodeId={`/dashboard/classes/${classItem.id}`}
-            labelText={classItem.name}
-            // labelInfo="3"
-            color="#1a73e8"
-            bgColor="#e8f0fe"
-          />
-        ))}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          classList.map((classItem) => (
+            <StyledTreeItem
+              key={classItem.id}
+              nodeId={`/dashboard/classes/${classItem.id}`}
+              labelText={classItem.name}
+              color="#1a73e8"
+              bgColor="#e8f0fe"
+            />
+          ))
+        )}
       </StyledTreeItem>
       <StyledTreeItem
         nodeId="/dashboard/students"
