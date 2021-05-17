@@ -87,7 +87,7 @@ const addInformation = (questionAttempts) => {
 };
 
 const addQuestionAttemptInformation = (questionGroup) => {
-  const questionType = questionGroup?.questions[0]?.type;
+  const questionType = questionGroup.questions[0].type;
   if (!questionType || questionType !== 'multipleChoice') {
     return questionGroup;
   }
