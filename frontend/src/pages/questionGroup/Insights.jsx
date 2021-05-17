@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import BarGraph from './BarGraph';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Doughnut from './Doughnut';
 import Tile from './Tile';
 import { observer } from 'mobx-react-lite';
@@ -44,13 +44,16 @@ const Insights = (props) => {
         />
         <Tile
           questionGroup={questionStore.questionGroup}
-          title="Gemiddelde tijdsduur: "
+          title="Gemiddelde tijdsduur vragengroep: "
           number={2}
           color={theme.widget.secondary.main}
         />
       </Grid>
       <Grid item xs={12} md={12}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>Meer dingen</Paper>
+        <BarGraph
+          questionGroup={questionStore.questionGroup}
+          title="Correctheid verdeling per vraag"
+        />
       </Grid>
     </Grid>
   );
