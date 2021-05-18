@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
   answer: (props) => ({
     background: getColor(props.correct),
 
-    width: '100%',
+    width: '90%',
   }),
 }));
 
