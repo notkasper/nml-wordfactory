@@ -107,7 +107,7 @@ const Notifications = (props) => {
     if (notification.category === 'classes') {
       notificationStore.deleteNotification(notification.index);
       history.push(
-        `/dashboard/${notification.category}/${notification.classId}`
+        `/dashboard/${notification.category}/${notification.classId}/class_insights`
       );
     }
   };
