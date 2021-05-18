@@ -66,7 +66,7 @@ const Progress = (props) => {
         </TableHead>
         <TableBody>
           {rows.map((row, index) => (
-            <TableRow>
+            <TableRow key={index}>
               {index === 0 ? (
                 <TableCell rowSpan={rows.length}> {row.courseName}</TableCell>
               ) : null}
