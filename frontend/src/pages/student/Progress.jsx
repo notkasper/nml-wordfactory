@@ -17,18 +17,14 @@ const createRow = (courseName, lessonName, category) => ({
 });
 
 const getIcon = (category) => {
-  let icon = null;
   switch (category) {
     case 'progress':
-      icon = <RestoreIcon style={{ color: 'orange' }} />;
-      break;
+      return <RestoreIcon style={{ color: 'orange' }} />;
     case 'completed':
-      icon = <DoneIcon style={{ color: 'green' }} />;
-      break;
+      return <DoneIcon style={{ color: 'green' }} />;
     default:
-      icon = <ClearIcon style={{ color: 'red' }} />;
+      return <ClearIcon style={{ color: 'red' }} />;
   }
-  return icon;
 };
 
 const getRows = (courses) => {
