@@ -10,11 +10,11 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/Restore';
 
-function createRow(courseName, lessonName, category) {
+const createRow = (courseName, lessonName, category) => {
   return { courseName, lessonName, category };
-}
+};
 
-function getIcon(category) {
+const getIcon = (category) => {
   let icon = null;
   switch (category) {
     case 'progress':
@@ -27,7 +27,7 @@ function getIcon(category) {
       icon = <ClearIcon style={{ color: 'red' }} />;
   }
   return icon;
-}
+};
 
 const getRows = (courses) => {
   const rows = [];
