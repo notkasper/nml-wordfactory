@@ -38,20 +38,22 @@ class StudentStore {
     const [studentsInfo, distribution] = this.computeDistribution(
       this.students
     );
+
     const topResults = this.computeTop(
       studentsInfo,
       distribution.sort(),
       Math.round(distribution.length * 0.25)
     );
+
     const bottomResults = this.computeBottom(
       studentsInfo,
       distribution.sort(),
       Math.round(distribution.length * 0.25),
       response.body.data
     );
+
     this.setTopResults(topResults);
     this.setBottomResults(bottomResults);
-
     this.popLoad();
   };
 

@@ -12,7 +12,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import PeopleIcon from '@material-ui/icons/People';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import service from '../../service';
-import Insight from './Insight';
+import Insights from './Insights';
 import Courses from './Courses';
 import Students from './Students';
 import PageContainer from '../_shared/PageContainer';
@@ -102,7 +102,7 @@ const Lesson = (props) => {
           </Typography>
         </Grid>
         <TabContent index="class_insights" value={params.classTab}>
-          <Insight
+          <Insights
             topResults={studentStore.topResults}
             bottomResults={studentStore.bottomResults}
           />

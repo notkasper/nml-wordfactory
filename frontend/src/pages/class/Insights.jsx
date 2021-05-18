@@ -38,7 +38,7 @@ const columns = [
 ];
 
 const getRows = (studentResults) => {
-  if (studentResults) {
+  if (studentResults && studentResults.length) {
     const [distribution, studentInfo] = studentResults;
     const rows = [];
 
@@ -49,12 +49,14 @@ const getRows = (studentResults) => {
         correctness: row,
       });
     });
+
     return rows;
   }
+
   return [];
 };
 
-const Insight = (props) => {
+const Insights = (props) => {
   const { topResults, bottomResults } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -128,4 +130,4 @@ const Insight = (props) => {
   );
 };
 
-export default Insight;
+export default Insights;
