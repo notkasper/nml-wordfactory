@@ -45,7 +45,6 @@ class QuestionStore {
     if (response) {
       let questionAttempts = response.body.data;
       questionAttempts = utils.addInformation(questionAttempts);
-      console.log(questionAttempts);
       this.questionAttempts = questionAttempts;
     }
     this.popLoad();
