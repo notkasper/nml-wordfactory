@@ -81,9 +81,17 @@ const Lesson = (props) => {
     <>
       <AppBar position="static">
         <Tabs value={params.classTab} onChange={onClickTab}>
-          <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
-          <Tab label="Lessen" icon={<MenuBookIcon />} />
-          <Tab label="Leerlingen" icon={<PeopleIcon />} />
+          <Tab
+            label="Inzicht (klas)"
+            value="class_insights"
+            icon={<EqualizerIcon />}
+          />
+          <Tab label="Lessen" value="class_lessons" icon={<MenuBookIcon />} />
+          <Tab
+            label="Leerlingen"
+            value="class_students"
+            icon={<PeopleIcon />}
+          />
         </Tabs>
       </AppBar>
       <PageContainer>

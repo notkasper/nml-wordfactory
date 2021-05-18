@@ -39,7 +39,7 @@ const Students = (props) => {
   };
 
   const onChangePage = (event, value) => {
-    setPage(value);
+    setPage(value - 1);
   };
 
   const start = page * PAGE_SIZE;
@@ -84,7 +84,7 @@ const Students = (props) => {
         {studentFilterValue ? null : (
           <Pagination
             className={classes.marginTop}
-            count={Math.ceil(students.length / 10)}
+            count={Math.ceil(students.length / PAGE_SIZE)}
             color="primary"
             onChange={onChangePage}
           />
