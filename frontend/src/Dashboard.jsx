@@ -16,7 +16,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = (props) => {
-  const { authStore, lessonStore, questionStore, notificationStore } = props;
+  const {
+    authStore,
+    lessonStore,
+    questionStore,
+    notificationStore,
+    studentStore,
+  } = props;
   const classes = useStyles();
 
   return (
@@ -54,6 +60,7 @@ const Dashboard = (props) => {
                     lessonStore={lessonStore}
                     questionStore={questionStore}
                     notificationStore={notificationStore}
+                    studentStore={studentStore}
                     crumbs={crumbs}
                     {...props}
                   />

@@ -29,21 +29,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Lesson = (props) => {
-  const { crumbs } = props;
+  const { crumbs, studentStore } = props;
   const classes = useStyles();
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(0);
-  const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+
   const classId = params.classId;
 
   const loadStudents = useCallback(async () => {
-    const response = await service.loadStudents({ classId });
-    if (!response) return;
-    setStudents(response.body.data);
-  }, [classId]);
+    await studentStore.loadStudents({ classId });
+  }, [studentStore, classId]);
 
   const loadClass = useCallback(async () => {
     const response = await service.loadClass(params.classId);
@@ -70,7 +68,7 @@ const Lesson = (props) => {
     loadAll();
   }, [loadAll]);
 
-  if (loading) {
+  if (loading || studentStore.isLoading) {
     return <CircularProgress />;
   }
 
@@ -91,13 +89,19 @@ const Lesson = (props) => {
           </Typography>
         </Grid>
         <TabContent index={0} value={value}>
-          <Insight />
+          <Insight
+            topResults={studentStore.topResults}
+            bottomResults={studentStore.bottomResults}
+          />
         </TabContent>
         <TabContent index={1} value={value}>
           <Courses courses={courses} />
         </TabContent>
         <TabContent index={2} value={value}>
-          <Students students={students} />
+          <Students
+            students={studentStore.students}
+            bottomResults={studentStore.bottomResults}
+          />
         </TabContent>
       </PageContainer>
     </>

@@ -19,6 +19,7 @@ import authStore from './stores/auth';
 import lessonStore from './stores/lessonStore';
 import questionStore from './stores/questionStore';
 import notificationStore from './stores/notificationStore';
+import studentStore from './stores/studentStore';
 
 defaults.global.plugins.colorschemes.scheme = Classic10;
 extendChart();
@@ -73,6 +74,7 @@ const App = () => {
                   lessonStore={lessonStore}
                   questionStore={questionStore}
                   notificationStore={notificationStore}
+                  studentStore={studentStore}
                   {...props}
                 />
               )}

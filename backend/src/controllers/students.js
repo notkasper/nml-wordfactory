@@ -22,6 +22,16 @@ const getStudents = async (req, res) => {
             model: db.Class,
             as: 'classes',
           },
+          {
+            model: db.LessonAttempt,
+            as: 'lessonAttempts',
+            include: [
+              {
+                model: db.QuestionGroupAttempt,
+                as: 'questionGroupAttempts',
+              },
+            ],
+          },
         ],
       },
     ],

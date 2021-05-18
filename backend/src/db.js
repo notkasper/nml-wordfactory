@@ -72,6 +72,12 @@ db.setupModels = async () => {
       otherKey: 'classId',
     });
 
+    db.Student.hasMany(db.LessonAttempt, {
+      // ADDED THIS
+      as: 'lessonAttempts',
+      foreignKey: 'studentId',
+    });
+
     // Course relationships
     db.Course.hasMany(db.Lesson, {
       foreignKey: 'courseId',

@@ -10,7 +10,6 @@ import PageContainer from '../_shared/PageContainer';
 
 const useStyles = makeStyles((theme) => ({
   widget: {
-    height: 230,
     padding: theme.spacing(3),
     marginBottom: theme.spacing(12),
   },
@@ -34,12 +33,31 @@ const columns = [
   {
     field: 'correctness',
     headerName: 'Gem. correctheid',
-    flex: 0.35,
+    flex: 0.5,
     valueGetter: (params) => params.row.correctness,
   },
 ];
 
-const Insight = () => {
+const getRows = (studentResults) => {
+  const distribution = studentResults[0];
+  const studentInfo = studentResults[1];
+  const rows = [];
+  if (studentInfo && distribution) {
+    for (let i = 0; i < distribution.length; i++) {
+      rows.push({
+        id: studentInfo[i].id,
+        name: studentInfo[i].name,
+        correctness: distribution[i],
+      });
+    }
+  }
+
+  const slicedRows = rows.sort().reverse().slice(0, 10); // TODO: This can be removed to this when #students/classes are correct
+  return slicedRows; // TODO: Change back to "rows" when #students/classes are correct
+};
+
+const Insight = (props) => {
+  const { topResults, bottomResults } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -52,12 +70,14 @@ const Insight = () => {
         >
           <DataGrid
             autoHeight
-            rows={[
-              { id: 1, name: 'Soledad Considine', correctness: 29 },
-              { id: 2, name: 'Arvid Macejkovic', correctness: 33 },
-              { id: 3, name: 'Allen Kunze', correctness: 34 },
-            ]}
+            rows={getRows(bottomResults)}
             columns={columns}
+            sortModel={[
+              {
+                field: 'correctness',
+                sort: 'desc',
+              },
+            ]}
             hideFooterPagination={true}
           />
         </PaperWithHeader>
@@ -67,10 +87,12 @@ const Insight = () => {
         >
           <DataGrid
             autoHeight
-            rows={[
-              { id: 4, name: 'Cleveland Smitham', correctness: 89 },
-              { id: 5, name: 'Dejah Morissette', correctness: 84 },
-              { id: 6, name: 'Maxine Zboncak', correctness: 79 },
+            rows={getRows(topResults)}
+            sortModel={[
+              {
+                field: 'correctness',
+                sort: 'desc',
+              },
             ]}
             columns={columns}
             hideFooterPagination={true}
