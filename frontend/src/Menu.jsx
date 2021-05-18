@@ -168,7 +168,7 @@ const Menu = (props) => {
           classList.map((classItem) => (
             <StyledTreeItem
               key={classItem.id}
-              nodeId={`/dashboard/classes/${classItem.id}/insights`}
+              nodeId={`/dashboard/classes/${classItem.id}/class_insights`}
               labelText={classItem.name}
               color="#1a73e8"
               bgColor="#e8f0fe"

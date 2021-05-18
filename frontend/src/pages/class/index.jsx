@@ -66,7 +66,7 @@ const Lesson = (props) => {
   }, [loadClass, loadStudents, loadCourses]);
 
   const onClickTab = (event, newTab) => {
-    const currentTab = params.tab;
+    const currentTab = params.classTab;
     const newPath = location.pathname.replace(currentTab, newTab);
     history.push(newPath);
   };
@@ -82,14 +82,18 @@ const Lesson = (props) => {
   return (
     <>
       <AppBar position="static">
-        <Tabs value={params.tab} onChange={onClickTab}>
+        <Tabs value={params.classTab} onChange={onClickTab}>
           <Tab
             label="Inzicht (klas)"
-            value="insights"
+            value="class_insights"
             icon={<EqualizerIcon />}
           />
-          <Tab label="Lessen" value="lessons" icon={<MenuBookIcon />} />
-          <Tab label="Leerlingen" value="students" icon={<PeopleIcon />} />
+          <Tab label="Lessen" value="class_lessons" icon={<MenuBookIcon />} />
+          <Tab
+            label="Leerlingen"
+            value="class_students"
+            icon={<PeopleIcon />}
+          />
         </Tabs>
       </AppBar>
       <PageContainer>
@@ -99,13 +103,13 @@ const Lesson = (props) => {
             {theClass.name}
           </Typography>
         </Grid>
-        <TabContent index="insights" value={params.tab}>
+        <TabContent index="class_insights" value={params.classTab}>
           <Insight />
         </TabContent>
-        <TabContent index="lessons" value={params.tab}>
+        <TabContent index="class_lessons" value={params.classTab}>
           <Courses courses={courses} />
         </TabContent>
-        <TabContent index="students" value={params.tab}>
+        <TabContent index="class_students" value={params.classTab}>
           <Students students={students} />
         </TabContent>
       </PageContainer>

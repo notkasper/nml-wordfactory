@@ -19,7 +19,7 @@ const Lesson = (props) => {
   const location = useLocation();
 
   const onClickTab = (event, newTab) => {
-    const currentTab = params.tab;
+    const currentTab = params.lessonTab;
     const newPath = location.pathname.replace(currentTab, newTab);
     history.push(newPath);
   };
@@ -27,22 +27,26 @@ const Lesson = (props) => {
   return (
     <>
       <AppBar position="static">
-        <Tabs value={params.tab} onChange={onClickTab}>
+        <Tabs value={params.lessonTab} onChange={onClickTab}>
           <Tab
             label="Inzicht (les)"
-            value="insights"
+            value="lesson_insights"
             icon={<EqualizerIcon />}
           />
-          <Tab label="Opdrachten" value="questions" icon={<EditIcon />} />
+          <Tab
+            label="Opdrachten"
+            value="lesson_questions"
+            icon={<EditIcon />}
+          />
         </Tabs>
       </AppBar>
 
       <PageContainer maxWidth="lg">
         <Breadcrumbs crumbs={crumbs} />
-        <TabContent index="insights" value={params.tab}>
+        <TabContent index="lesson_insights" value={params.lessonTab}>
           <Insights {...props} />
         </TabContent>
-        <TabContent index="questions" value={params.tab}>
+        <TabContent index="lesson_questions" value={params.lessonTab}>
           <Questions {...props} />
         </TabContent>
       </PageContainer>

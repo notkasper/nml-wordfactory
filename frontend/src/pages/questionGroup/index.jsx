@@ -41,7 +41,7 @@ const QuestionStats = (props) => {
   }, [loadAll]);
 
   const onClickTab = (event, newTab) => {
-    const currentTab = params.tab;
+    const currentTab = params.questionGroupTab;
     const newPath = location.pathname.replace(currentTab, newTab);
     history.push(newPath);
   };
@@ -49,29 +49,42 @@ const QuestionStats = (props) => {
   return (
     <>
       <AppBar position="static">
-        <Tabs value={params.tab} onChange={onClickTab}>
+        <Tabs value={params.questionGroupTab} onChange={onClickTab}>
           <Tab
             label="Inzicht (opdracht)"
             icon={<EqualizerIcon />}
-            value="insights"
+            value="question_group_insights"
           />
-          <Tab label="Opdracht" icon={<VisibilityIcon />} value="questions" />
+          <Tab
+            label="Opdracht"
+            icon={<VisibilityIcon />}
+            value="question_group_questions"
+          />
           <Tab
             label="Antwoorden"
             icon={<AssignmentTurnedInIcon />}
-            value="answers"
+            value="question_group_answers"
           />
         </Tabs>
       </AppBar>
       <PageContainer maxWidth="lg">
         <Breadcrumbs crumbs={crumbs} />
-        <TabContent index="questions" value={params.tab}>
+        <TabContent
+          index="question_group_questions"
+          value={params.questionGroupTab}
+        >
           <Question {...props} />
         </TabContent>
-        <TabContent index="insights" value={params.tab}>
+        <TabContent
+          index="question_group_insights"
+          value={params.questionGroupTab}
+        >
           <Details {...props} />
         </TabContent>
-        <TabContent index="answers" value={params.tab}>
+        <TabContent
+          index="question_group_answers"
+          value={params.questionGroupTab}
+        >
           <Answers {...props} />
         </TabContent>
       </PageContainer>
