@@ -10,9 +10,11 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import RestoreIcon from '@material-ui/icons/Restore';
 
-const createRow = (courseName, lessonName, category) => {
-  return { courseName, lessonName, category };
-};
+const createRow = (courseName, lessonName, category) => ({
+  courseName,
+  lessonName,
+  category,
+});
 
 const getIcon = (category) => {
   let icon = null;
