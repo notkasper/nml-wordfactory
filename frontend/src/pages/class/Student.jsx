@@ -15,10 +15,7 @@ import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 const useStyles = makeStyles((theme) => ({}));
 
 const getIcon = (isBottom) => {
-  if (isBottom) {
-    return <EmojiObjectsIcon style={{ color: 'orange' }} />;
-  }
-  return null;
+  return isBottom ? <EmojiObjectsIcon style={{ color: 'orange' }} /> : null;
 };
 
 const Student = (props) => {

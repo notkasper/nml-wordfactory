@@ -35,17 +35,18 @@ class StudentStore {
       this.students = response.body.data;
     }
 
-    const studentsResults = this.computeDistribution(this.students);
-    const topResults = this.computeTopBottom(
-      studentsResults[0],
-      studentsResults[1],
-      'top',
-      null
+    const [studentsInfo, distribution] = this.computeDistribution(
+      this.students
     );
-    const bottomResults = this.computeTopBottom(
-      studentsResults[0],
-      studentsResults[2],
-      'bottom',
+    const topResults = this.computeTop(
+      studentsInfo,
+      distribution.sort(),
+      Math.round(distribution.length * 0.25)
+    );
+    const bottomResults = this.computeBottom(
+      studentsInfo,
+      distribution.sort(),
+      Math.round(distribution.length * 0.25),
       response.body.data
     );
     this.setTopResults(topResults);
@@ -91,27 +92,22 @@ class StudentStore {
     return [studentsInfo, studentsCorrect, studentsIncorrect];
   };
 
-  computeTopBottom = (studentsInfo, distribution, category, students) => {
-    const sortedDistribution = distribution.sort();
-    const amount = Math.round(sortedDistribution.length * 0.25);
-    const slicedDistribution = [];
-    const slicedStudentInfo = [];
-    if (category === 'top') {
-      for (
-        let i = sortedDistribution.length - amount;
-        i < sortedDistribution.length;
-        i++
-      ) {
-        slicedDistribution.push(sortedDistribution[i]);
-        slicedStudentInfo.push(studentsInfo[i]);
-      }
-      return [slicedDistribution, slicedStudentInfo];
-    }
+  computeTop = (studentsInfo, distribution, cutoffValue) => {
+    const slicedDistribution = distribution.slice(
+      distribution.length - cutoffValue,
+      distribution.length
+    );
+    const slicedStudentInfo = studentsInfo.slice(
+      studentsInfo.length - cutoffValue,
+      studentsInfo.length
+    );
 
-    for (let i = 0; i < amount; i++) {
-      slicedDistribution.push(sortedDistribution[i]);
-      slicedStudentInfo.push(studentsInfo[i]);
-    }
+    return [slicedDistribution, slicedStudentInfo];
+  };
+
+  computeBottom = (studentsInfo, distribution, cutoffValue, students) => {
+    const slicedDistribution = distribution.slice(0, cutoffValue);
+    const slicedStudentInfo = studentsInfo.slice(0, cutoffValue);
     this.updateBottomStudents(students, slicedStudentInfo);
 
     return [slicedDistribution, slicedStudentInfo];

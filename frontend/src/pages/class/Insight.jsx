@@ -3,7 +3,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { DataGrid } from '@material-ui/data-grid';
-
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 import PageContainer from '../_shared/PageContainer';
@@ -39,21 +38,21 @@ const columns = [
 ];
 
 const getRows = (studentResults) => {
-  const distribution = studentResults[0];
-  const studentInfo = studentResults[1];
-  const rows = [];
-  if (studentInfo && distribution) {
-    for (let i = 0; i < distribution.length; i++) {
-      rows.push({
-        id: studentInfo[i].id,
-        name: studentInfo[i].name,
-        correctness: distribution[i],
-      });
-    }
-  }
+  if (studentResults) {
+    const distribution = studentResults[0];
+    const studentInfo = studentResults[1];
+    const rows = [];
 
-  const slicedRows = rows.sort().reverse().slice(0, 10); // TODO: This can be removed to this when #students/classes are correct
-  return slicedRows; // TODO: Change back to "rows" when #students/classes are correct
+    distribution.forEach((d, index) => {
+      rows.push({
+        id: studentInfo[index].id,
+        name: studentInfo[index].name,
+        correctness: distribution[index],
+      });
+    });
+    return rows;
+  }
+  return [];
 };
 
 const Insight = (props) => {
@@ -63,13 +62,15 @@ const Insight = (props) => {
 
   return (
     <PageContainer>
-      <Grid container spacing={3} className={classes.widget}>
+      <Grid container spacing={2} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.primary.main}
           headertitle="Onderste 25%"
         >
           <DataGrid
             autoHeight
+            pageSize={5}
+            pagination
             rows={getRows(bottomResults)}
             columns={columns}
             sortModel={[
@@ -78,7 +79,6 @@ const Insight = (props) => {
                 sort: 'desc',
               },
             ]}
-            hideFooterPagination={true}
           />
         </PaperWithHeader>
         <PaperWithHeader
@@ -88,6 +88,8 @@ const Insight = (props) => {
           <DataGrid
             autoHeight
             rows={getRows(topResults)}
+            pagination
+            pageSize={5}
             sortModel={[
               {
                 field: 'correctness',
@@ -95,7 +97,6 @@ const Insight = (props) => {
               },
             ]}
             columns={columns}
-            hideFooterPagination={true}
           />
         </PaperWithHeader>
       </Grid>
