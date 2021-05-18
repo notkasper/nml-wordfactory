@@ -39,15 +39,14 @@ const columns = [
 
 const getRows = (studentResults) => {
   if (studentResults) {
-    const distribution = studentResults[0];
-    const studentInfo = studentResults[1];
+    const [distribution, studentInfo] = studentResults;
     const rows = [];
 
-    distribution.forEach((d, index) => {
+    distribution.forEach((row, index) => {
       rows.push({
         id: studentInfo[index].id,
         name: studentInfo[index].name,
-        correctness: distribution[index],
+        correctness: row,
       });
     });
     return rows;

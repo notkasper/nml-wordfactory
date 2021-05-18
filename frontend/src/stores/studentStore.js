@@ -56,9 +56,9 @@ class StudentStore {
   };
 
   computeDistribution = (students) => {
-    let studentsCorrect = Array(students.length).fill(0);
+    const studentsCorrect = Array(students.length).fill(0);
     const studentsInfo = [];
-    let studentsIncorrect = Array(students.length).fill(0);
+    const studentsIncorrect = Array(students.length).fill(0);
     let total = 0;
 
     students.forEach((student, index) => {
