@@ -88,16 +88,16 @@ const Lesson = (props) => {
             {theClass.name}
           </Typography>
         </Grid>
-        <TabContent index={0} value={value}>
+        <TabContent index="class_insights" value={value}>
           <Insight
             topResults={studentStore.topResults}
             bottomResults={studentStore.bottomResults}
           />
         </TabContent>
-        <TabContent index={1} value={value}>
+        <TabContent index="class_lessons" value={value}>
           <Courses courses={courses} />
         </TabContent>
-        <TabContent index={2} value={value}>
+        <TabContent index="class_students" value={value}>
           <Students
             students={studentStore.students}
             bottomResults={studentStore.bottomResults}
