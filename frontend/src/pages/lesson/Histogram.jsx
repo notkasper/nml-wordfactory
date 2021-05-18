@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const Histogram = (props) => {
   const { lessonAttempts, title } = props;
   const classes = useStyles();
-  let gradeDistribution = lessonAttempts.reduce(
+  const gradeDistribution = lessonAttempts.reduce(
     (acc, curr) => {
       const index = curr.performance;
       acc[index - 1] += 1;

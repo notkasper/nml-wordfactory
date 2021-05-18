@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import { Bar } from 'react-chartjs-2';
 import Title from '../_shared/Title';
 
-const useStyles = makeStyles((theme) => ({
-  histogram: {
-    display: 'flex',
-    justifyContent: 'center',
-    component: 'h2',
-    variant: 'h6',
-    textAlign: 'center',
-  },
-}));
+// import { makeStyles } from '@material-ui/core/styles';
+// import { Bar } from 'react-chartjs-2';
 
-function onlyUnique(value, index, self) {
+// const useStyles = makeStyles((theme) => ({
+//   histogram: {
+//     display: 'flex',
+//     justifyContent: 'center',
+//     component: 'h2',
+//     variant: 'h6',
+//     textAlign: 'center',
+//   },
+// }));
+
+const onlyUnique = (value, index, self) => {
   return self.indexOf(value) === index;
-}
+};
 
 // TODO (working on this): IF we want to implement all question types
 // const calculateDistribution = (
@@ -24,10 +25,10 @@ function onlyUnique(value, index, self) {
 //   questionGroupIds,
 //   amoutnQuestions
 // ) => {
-//   let correctPerQuestion = Array(amountQuestions).fill(0);
-//   let incorrectPerQuestion = Array(amountQuestions).fill(0);
+//   const correctPerQuestion = Array(amountQuestions).fill(0);
+//   const incorrectPerQuestion = Array(amountQuestions).fill(0);
 
-//   let missedPerQuestion = Array(amountQuestions).fill(0);
+//   const missedPerQuestion = Array(amountQuestions).fill(0);
 
 //   questionGroupAttempts.forEach((questionGroupAttempt) => {
 //     if (questionGroupAttempt.isCompleted) {
@@ -71,6 +72,7 @@ const BarGraph = (props) => {
       amountQuestions: amountQuestions,
     });
   });
+
   questionGroupInfo = questionGroupInfo.filter(onlyUnique);
 
   // TODO (working on this): IF we want to implement all question types

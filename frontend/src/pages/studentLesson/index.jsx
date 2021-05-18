@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import BarGraph from './BarGraph'; // TODO (working on this): IF we want to implement all question types
+// import BarGraph from './BarGraph'; // TODO (working on this): IF we want to implement all question types
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PageContainer from '../_shared/PageContainer';
 import QuestionAttempts from './QuestionAttempts';
