@@ -8,10 +8,10 @@ const CustomBreadcrumbs = (props) => {
   const { crumbs } = props;
   const history = useHistory();
 
-  function handleClick(event, crumb) {
+  const handleClick = (event, crumb) => {
     event.preventDefault();
     history.push(crumb.path);
-  }
+  };
 
   return (
     <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>

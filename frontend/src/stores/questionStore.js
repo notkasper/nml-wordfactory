@@ -7,6 +7,7 @@ class QuestionStore {
   constructor() {
     makeObservable(this, {
       questionGroup: observable,
+      questionAttempts: observable,
       loading: observable,
       popLoad: action,
       pushLoad: action,
@@ -15,6 +16,7 @@ class QuestionStore {
   }
 
   questionGroup = null;
+  questionAttempts = [];
   loading = 0;
 
   popLoad = () => (this.loading -= 1);
@@ -30,6 +32,21 @@ class QuestionStore {
       this.questionGroup = questionGroup;
     }
 
+    this.popLoad();
+  };
+
+  loadQuestionAttemptsWithInfo = async (studentId, lessonId) => {
+    this.pushLoad();
+    const response = await service.loadQuestionAttempts({
+      studentId: studentId,
+      lessonId: lessonId,
+    });
+
+    if (response) {
+      let questionAttempts = response.body.data;
+      questionAttempts = utils.addInformation(questionAttempts);
+      this.questionAttempts = questionAttempts;
+    }
     this.popLoad();
   };
 

@@ -88,7 +88,7 @@ const Answers = (props) => {
   };
 
   const getRows = (questionId) => {
-    let rows = [];
+    const rows = [];
     questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId) {
@@ -105,7 +105,7 @@ const Answers = (props) => {
   };
 
   const getRowsFilter = (questionId, filterValue) => {
-    let rows = [];
+    const rows = [];
     questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId && qa.answer === filterValue.answer) {
@@ -122,7 +122,7 @@ const Answers = (props) => {
   };
 
   const getOptions = (questionId) => {
-    let options = [];
+    const options = [];
     questionStore.questionGroup.questions.forEach((q) => {
       if (q.id === questionId) {
         q.data.options.forEach((option) => {

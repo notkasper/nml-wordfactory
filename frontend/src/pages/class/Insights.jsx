@@ -3,14 +3,12 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { DataGrid } from '@material-ui/data-grid';
-
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 import PageContainer from '../_shared/PageContainer';
 
 const useStyles = makeStyles((theme) => ({
   widget: {
-    height: 230,
     padding: theme.spacing(3),
     marginBottom: theme.spacing(12),
   },
@@ -34,31 +32,54 @@ const columns = [
   {
     field: 'correctness',
     headerName: 'Gem. correctheid',
-    flex: 0.35,
+    flex: 0.5,
     valueGetter: (params) => params.row.correctness,
   },
 ];
 
-const Insight = () => {
+const getRows = (studentResults) => {
+  if (studentResults && studentResults.length) {
+    const [distribution, studentInfo] = studentResults;
+    const rows = [];
+
+    distribution.forEach((row, index) => {
+      rows.push({
+        id: studentInfo[index].id,
+        name: studentInfo[index].name,
+        correctness: row,
+      });
+    });
+
+    return rows;
+  }
+
+  return [];
+};
+
+const Insights = (props) => {
+  const { topResults, bottomResults } = props;
   const classes = useStyles();
   const theme = useTheme();
 
   return (
     <PageContainer>
-      <Grid container spacing={3} className={classes.widget}>
+      <Grid container spacing={2} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.primary.main}
           headertitle="Onderste 25%"
         >
           <DataGrid
             autoHeight
-            rows={[
-              { id: 1, name: 'Soledad Considine', correctness: 29 },
-              { id: 2, name: 'Arvid Macejkovic', correctness: 33 },
-              { id: 3, name: 'Allen Kunze', correctness: 34 },
-            ]}
+            pageSize={5}
+            pagination
+            rows={getRows(bottomResults)}
             columns={columns}
-            hideFooterPagination={true}
+            sortModel={[
+              {
+                field: 'correctness',
+                sort: 'desc',
+              },
+            ]}
           />
         </PaperWithHeader>
         <PaperWithHeader
@@ -67,13 +88,16 @@ const Insight = () => {
         >
           <DataGrid
             autoHeight
-            rows={[
-              { id: 4, name: 'Cleveland Smitham', correctness: 89 },
-              { id: 5, name: 'Dejah Morissette', correctness: 84 },
-              { id: 6, name: 'Maxine Zboncak', correctness: 79 },
+            rows={getRows(topResults)}
+            pagination
+            pageSize={5}
+            sortModel={[
+              {
+                field: 'correctness',
+                sort: 'desc',
+              },
             ]}
             columns={columns}
-            hideFooterPagination={true}
           />
         </PaperWithHeader>
       </Grid>
@@ -106,4 +130,4 @@ const Insight = () => {
   );
 };
 
-export default Insight;
+export default Insights;

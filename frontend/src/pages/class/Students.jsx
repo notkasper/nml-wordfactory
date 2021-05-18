@@ -75,6 +75,7 @@ const Students = (props) => {
               <Student
                 key={student.id}
                 {...student}
+                isBottom={student.bottom}
                 onClick={() => onClick(student.id)}
               />
             ))}
