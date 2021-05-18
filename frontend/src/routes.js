@@ -23,13 +23,13 @@ const routes = [
   },
   {
     exact: true,
-    path: '/dashboard/classes/:classId',
+    path: '/dashboard/classes/:classId/:classTab',
     Component: Class,
     name: 'Klas',
   },
   {
     exact: true,
-    path: '/dashboard/classes/:classId/lessons/:lessonId',
+    path: '/dashboard/classes/:classId/:classTab/lessons/:lessonId/:lessonTab',
     Component: Lesson,
     name: 'Les',
   },
@@ -48,7 +48,7 @@ const routes = [
   {
     exact: true,
     path:
-      '/dashboard/classes/:classId/lessons/:lessonId/questionGroups/:questionGroupId',
+      '/dashboard/classes/:classId/:classTab/lessons/:lessonId/:lessonTab/questionGroups/:questionGroupId/:questionGroupTab',
     Component: QuestionGroup,
     name: 'Vraag Groep',
   },
