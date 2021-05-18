@@ -18,7 +18,8 @@ const Course = (props) => {
   const history = useHistory();
   const location = useLocation();
 
-  const goToLesson = (id) => history.push(`${location.pathname}/lessons/${id}`);
+  const goToLesson = (id) =>
+    history.push(`${location.pathname}/lessons/${id}/lesson_insights`);
 
   return (
     <List
@@ -30,6 +31,7 @@ const Course = (props) => {
     >
       {lessons.map((lesson) => (
         <ListItem
+          component="div"
           alignItems="flex-start"
           key={lesson.id}
           button

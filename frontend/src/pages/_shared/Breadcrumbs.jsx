@@ -18,6 +18,7 @@ const CustomBreadcrumbs = (props) => {
       <Typography variant="body2">Locatie:</Typography>
       {crumbs.map((crumb) => (
         <Link
+          key={crumb.path}
           component="button"
           color="inherit"
           onClick={(event) => handleClick(event, crumb)}

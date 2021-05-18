@@ -16,9 +16,15 @@ const Student = (props) => {
   const classes = useStyles();
 
   return (
-    <ListItem alignItems="flex-start" key={id} button onClick={onClick}>
+    <ListItem
+      component="div"
+      alignItems="flex-start"
+      key={id}
+      button
+      onClick={onClick}
+    >
       <ListItemAvatar>
-        <Avatar alt="Travis Howard" src="/static/images/avatar.png" />
+        <Avatar alt="Travis Howard" />
       </ListItemAvatar>
       <ListItemText
         primary={name}

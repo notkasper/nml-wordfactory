@@ -142,7 +142,7 @@ const MultipleChoice = (props) => {
       >
         <Typography>{popoverText}</Typography>
       </Popover>
-      <ListItem alignItems="flex-start" key={id}>
+      <ListItem component="div" alignItems="flex-start" key={id}>
         <Grid container>
           <Grid item xs={12}>
             <Typography variant="body1" className={classes.marginBottom}>
@@ -159,9 +159,8 @@ const MultipleChoice = (props) => {
               </FormLabel>
               <RadioGroup>
                 {data.options.map((option, index) => (
-                  <div>
+                  <div key={index}>
                     <FormControlLabel
-                      key={index}
                       value={option.value}
                       control={
                         <Radio

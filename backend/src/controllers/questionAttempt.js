@@ -3,54 +3,80 @@ const db = require('../db');
 const getQuestionAttempts = async (req, res) => {
   const {
     teacher,
-    query: { pageSize },
+    query: { studentId, lessonId },
   } = req;
 
-  const classes = await teacher.getClasses();
-  let questionGroups = [];
-  for (const theClass of classes) {
-    const courses = await theClass.getCourses();
-    for (const course of courses) {
-      const lessons = await course.getLessons();
-      for (const lesson of lessons) {
-        questionGroups = await lesson.getQuestionGroups();
-      }
-    }
+  if (!studentId || !lessonId) {
+    return res.status(400).send({
+      message: 'Please provide one of the following: studentId, lessonId',
+    });
   }
 
-  const questionAttempts = await db.QuestionGroupAttempt.findAll({
+  const questionAttempts = await db.QuestionAttempt.findAll({
     where: {
-      questionGroupId: questionGroups.map((e) => e.id),
+      '$question.questions.questionGroups.Course.Class.teachers.id$':
+        teacher.id,
+      '$question.questions.questionGroups.id$': lessonId,
+      '$questionGroupAttempts.lessonAttempts.student.id$': studentId,
     },
-    attributes: ['id', 'isCompleted', 'updatedAt'],
     include: [
       {
-        model: db.QuestionGroup,
-        as: 'QuestionGroup',
-        attributes: ['id', 'index', 'name'],
+        model: db.Question,
+        as: 'question',
         include: [
           {
-            model: db.Lesson,
-            as: 'questionGroups',
-            attributes: ['id', 'index', 'prefix', 'instruction', 'name'],
+            model: db.QuestionGroup,
+            as: 'questions',
+            attributes: ['id', 'index', 'name'],
+            include: [
+              {
+                model: db.Lesson,
+                as: 'questionGroups',
+                attributes: ['id', 'index', 'prefix', 'instruction', 'name'],
+                include: [
+                  {
+                    model: db.Course,
+                    as: 'Course',
+                    attributes: ['id'],
+                    include: [
+                      {
+                        model: db.Class,
+                        as: 'Class',
+                        attributes: ['id'],
+                        include: [
+                          {
+                            model: db.Teacher,
+                            as: 'teachers',
+                            attributes: ['id'],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
       {
-        model: db.LessonAttempt,
-        as: 'LessonAttempt',
-        attributes: ['id'],
+        model: db.QuestionGroupAttempt,
+        as: 'questionGroupAttempts',
         include: [
           {
-            model: db.Student,
-            as: 'student',
-            attributes: ['id', 'name'],
+            model: db.LessonAttempt,
+            as: 'lessonAttempts',
+            include: [
+              {
+                model: db.Student,
+                as: 'student',
+              },
+            ],
           },
         ],
       },
     ],
     order: [['updatedAt', 'DESC']],
-    limit: pageSize || 50,
   });
 
   res.status(200).send({ data: questionAttempts });

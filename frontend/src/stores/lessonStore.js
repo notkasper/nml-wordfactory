@@ -11,6 +11,7 @@ class LessonStore {
       loading: observable,
       loadLesson: action,
       loadLessonAttempts: action,
+      questionGroup: observable,
       popLoad: action,
       pushLoad: action,
       setlesson: action,
@@ -22,6 +23,7 @@ class LessonStore {
 
   lesson = null;
   lessonAttempts = [];
+  questionGroup = [];
   loading = 0;
 
   popLoad = () => (this.loading -= 1);
@@ -43,9 +45,11 @@ class LessonStore {
     if (!response) {
       return;
     }
-
     // Calculate average score... not pretty. Do this in the backend query at some point
-    const lesson = utils.addQuestionGroupAverages(response.body.data);
+    const lesson = utils.addQuestionGroupAverages(
+      response.body.data,
+      this.questionGroup
+    );
     this.setlesson(lesson);
     this.popLoad();
   };

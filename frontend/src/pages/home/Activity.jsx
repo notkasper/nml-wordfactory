@@ -6,8 +6,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import Grid from '@material-ui/core/Grid';
+
 import Title from '../_shared/Title';
 import service from '../../service';
+import PageContainer from '../_shared/PageContainer';
 
 const convertDateToReadableString = (date) => {
   return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
@@ -24,7 +26,7 @@ const columns = [
     field: 'student',
     headerName: 'Leerling',
     flex: 0.2,
-    valueGetter: (params) => params.row.LessonAttempt.student.name,
+    valueGetter: (params) => params.row.lessonAttempts.student.name,
   },
   {
     field: 'lesson',
@@ -59,46 +61,50 @@ const useStyles = makeStyles((theme) => ({
 const Activity = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const [questionAttempts, setQuestionAttempts] = useState([]);
+  const [questionGroupAttempts, setQuestionGroupAttempts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadQuestionAttempts = useCallback(async () => {
+  const loadQuestionGroupAttempts = useCallback(async () => {
     setLoading(true);
 
-    const response = await service.loadQuestionAttempts();
+    const response = await service.loadQuestionGroupAttempts({ pageSize: 10 });
     if (!response) {
       return;
     }
 
-    setQuestionAttempts(response.body.data);
+    setQuestionGroupAttempts(response.body.data);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    loadQuestionAttempts();
-  }, [loadQuestionAttempts]);
+    loadQuestionGroupAttempts();
+
+    return () => {
+      setQuestionGroupAttempts([]);
+    };
+  }, [loadQuestionGroupAttempts]);
 
   if (loading) {
     return <CircularProgress />;
   }
 
   const onClickStudent = (event) =>
-    history.push(`/dashboard/students/${event.row.LessonAttempt.student.id}`);
+    history.push(`/dashboard/students/${event.row.lessonAttempts.student.id}`);
 
   return (
-    <React.Fragment>
+    <PageContainer>
       <Title>Recente leerlingen activiteit</Title>
       <Grid item xs={12}>
         <DataGrid
           className={classes.datagrid}
           autoHeight
-          rows={questionAttempts}
+          rows={questionGroupAttempts}
           columns={columns}
           pageSize={5}
           onRowClick={onClickStudent}
         />
       </Grid>
-    </React.Fragment>
+    </PageContainer>
   );
 };
 

@@ -236,7 +236,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       {
         questionId: uuid.v4(),
         questionIndex: 0,
-        type: 'open',
+        type: 'list',
         instruction: lesson.lessonInstruction,
         data: {},
       },

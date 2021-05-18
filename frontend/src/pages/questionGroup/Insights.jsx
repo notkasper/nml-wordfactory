@@ -1,38 +1,27 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import BarGraph from './BarGraph';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import service from '../../service';
 import Doughnut from './Doughnut';
+import Tile from './Tile';
+import { observer } from 'mobx-react-lite';
 
-const Details = (props) => {
-  const [questionGroupAttempts, setQuestionGroupAttempts] = useState([]);
-  const [loading, setLoading] = useState(false);
+const Insights = (props) => {
+  const { questionStore } = props;
+  const theme = useTheme();
   const params = useParams();
 
-  const loadQuestionGroupAttempts = useCallback(async () => {
-    setLoading(true);
-
-    const response = await service.loadQuestionGroupAttempts(
-      params.questionGroupId
-    );
-
-    if (!response) {
-      return;
-    }
-
-    const data = response.body.data.filter((attempt) => attempt.isCompleted);
-    setQuestionGroupAttempts(data);
-    setLoading(false);
-  }, [params.questionGroupId]);
+  const loadAll = useCallback(async () => {
+    await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
+  }, [questionStore, params.questionGroupId]);
 
   useEffect(() => {
-    loadQuestionGroupAttempts();
-  }, [loadQuestionGroupAttempts]);
+    loadAll();
+  }, [loadAll]);
 
-  if (loading) {
+  if (questionStore.isLoading || !questionStore.questionGroup) {
     return <CircularProgress />;
   }
 
@@ -40,27 +29,34 @@ const Details = (props) => {
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
         <Doughnut
-          questionGroupAttempts={questionGroupAttempts}
-          title="Correctheid verdeling van de vraag"
+          questionGroupAttempts={
+            questionStore.questionGroup.questionGroupAttempts
+          }
+          title="Correctheid verdeling van de vragen"
         />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>
-          <Typography>Meer data visualisatie</Typography>
-        </Paper>
+      <Grid item xs={12} md={6} style={{ padding: '1rem' }}>
+        <Tile
+          questionGroup={questionStore.questionGroup}
+          title="Totaal aantal vragen: "
+          number={1}
+          color={theme.widget.tertiary.main}
+        />
+        <Tile
+          questionGroup={questionStore.questionGroup}
+          title="Gemiddelde tijdsduur vragengroep: "
+          number={2}
+          color={theme.widget.secondary.main}
+        />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>
-          <Typography>Meer data visualisatie</Typography>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '2rem', height: '100%' }}>
-          <Typography>Meer data visualisatie</Typography>
-        </Paper>
+      <Grid item xs={12} md={12}>
+        <BarGraph
+          questionGroup={questionStore.questionGroup}
+          title="Correctheid verdeling per vraag"
+        />
       </Grid>
     </Grid>
   );
 };
 
-export default Details;
+export default observer(Insights);

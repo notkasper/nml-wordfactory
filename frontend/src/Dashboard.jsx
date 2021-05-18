@@ -16,13 +16,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = (props) => {
-  const { authStore, lessonStore } = props;
+  const { authStore, lessonStore, questionStore, notificationStore } = props;
   const classes = useStyles();
 
   return (
     <Switch>
       {routes.map(({ exact, path, name, Component }) => (
         <Route
+          key={path}
           exact={exact}
           path={path}
           render={(props) => {
@@ -41,17 +42,18 @@ const Dashboard = (props) => {
                   : path,
                 ...rest,
               }));
-            console.log(`Generated crumbs for ${props.match.path}`);
-            crumbs.map(({ name, path }) => console.log({ name, path }));
+
             return (
               <>
-                <AppBar />
+                <AppBar notificationStore={notificationStore} {...props} />
                 <Menu authStore={authStore} />
                 <main className={classes.content}>
                   <div className={classes.appBarSpacer} />
                   <Component
                     authStore={authStore}
                     lessonStore={lessonStore}
+                    questionStore={questionStore}
+                    notificationStore={notificationStore}
                     crumbs={crumbs}
                     {...props}
                   />

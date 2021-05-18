@@ -17,20 +17,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PercentageDoughnut = (props) => {
-	const classes = useStyles();
-	const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-	const { title, data, options } = props;
+  const { title, data, options } = props;
 
   return (
-		<Grid item xs={12} md={4}>
-			<Paper className={classes.paper}>
-				<Title color={theme.widget.primary.main}>{title}</Title>
-				<Doughnut data={data} options={options} />
-			</Paper>
-		</Grid>
+    <Grid item xs={12} md={4}>
+      <Paper className={classes.paper}>
+        <Title color={theme.widget.primary.main}>{title}</Title>
+        <Doughnut data={data} options={options} />
+      </Paper>
+    </Grid>
   );
-}
+};
 
 PercentageDoughnut.propTypes = {
   children: PropTypes.node,
