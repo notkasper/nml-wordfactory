@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
@@ -31,9 +31,10 @@ const useStyles = makeStyles((theme) => ({
 const Lesson = (props) => {
   const { crumbs, studentStore } = props;
   const classes = useStyles();
+  const history = useHistory();
   const params = useParams();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState(0);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
 
@@ -62,7 +63,11 @@ const Lesson = (props) => {
     setLoading(false);
   }, [loadClass, loadStudents, loadCourses]);
 
-  const onChangeTab = (event, newValue) => setValue(newValue);
+  const onClickTab = (event, newTab) => {
+    const currentTab = params.classTab;
+    const newPath = location.pathname.replace(currentTab, newTab);
+    history.push(newPath);
+  };
 
   useEffect(() => {
     loadAll();
@@ -75,7 +80,7 @@ const Lesson = (props) => {
   return (
     <>
       <AppBar position="static">
-        <Tabs value={value} onChange={onChangeTab}>
+        <Tabs value={params.classTab} onChange={onClickTab}>
           <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
           <Tab label="Lessen" icon={<MenuBookIcon />} />
           <Tab label="Leerlingen" icon={<PeopleIcon />} />
@@ -88,16 +93,16 @@ const Lesson = (props) => {
             {theClass.name}
           </Typography>
         </Grid>
-        <TabContent index="class_insights" value={value}>
+        <TabContent index="class_insights" value={params.classTab}>
           <Insight
             topResults={studentStore.topResults}
             bottomResults={studentStore.bottomResults}
           />
         </TabContent>
-        <TabContent index="class_lessons" value={value}>
+        <TabContent index="class_lessons" value={params.classTab}>
           <Courses courses={courses} />
         </TabContent>
-        <TabContent index="class_students" value={value}>
+        <TabContent index="class_students" value={params.classTab}>
           <Students
             students={studentStore.students}
             bottomResults={studentStore.bottomResults}
