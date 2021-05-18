@@ -45,6 +45,47 @@ const addQuestionGroupAttemptStats = (questionGroup) => {
   return questionGroup;
 };
 
+const addInformation = (questionAttempts) => {
+  questionAttempts.forEach((qa) => {
+    const answers = [];
+    let answerAttempt = '';
+    let correct = 0;
+    let incorrect = 0;
+    let missed = 0;
+    const correctAnswers = [];
+    if (qa.question.type === 'multipleChoice') {
+      qa.question.data.options.forEach((q, index) => {
+        answers.push(q.value);
+        if (q.isCorrect) {
+          correctAnswers.push(index);
+        }
+      });
+
+      if (qa.content !== []) {
+        qa.content.forEach((attempt, index) => {
+          if (correctAnswers.includes(attempt)) {
+            correct += 1;
+          } else {
+            incorrect += 1;
+          }
+          answerAttempt += answers[index];
+        });
+        missed += correctAnswers.length - qa.content.length;
+      } else {
+        answerAttempt = qa.content;
+        correct = incorrect = missed = 0;
+      }
+    } else {
+      answerAttempt = qa.content;
+    }
+    qa.correct = correct;
+    qa.incorrect = incorrect;
+    qa.missed = missed;
+    qa.answer = answerAttempt;
+  });
+  return questionAttempts;
+};
+
 const addQuestionAttemptInformation = (questionGroup) => {
   const questionType = questionGroup.questions[0].type;
   if (!questionType || questionType !== 'multipleChoice') {
@@ -137,6 +178,7 @@ const addQuestionGroupAverages = (lesson, questionGroup) => {
 const utils = {
   addDuration,
   addPerformance,
+  addInformation,
   addQuestionGroupAverages,
   addQuestionGroupAttemptStats,
   addQuestionAttemptInformation,
