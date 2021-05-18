@@ -16,7 +16,7 @@ class QuestionStore {
   }
 
   questionGroup = null;
-  questionAttempts = null;
+  questionAttempts = [];
   loading = 0;
 
   popLoad = () => (this.loading -= 1);
