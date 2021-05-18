@@ -75,7 +75,9 @@ const LessonContent = (props) => {
   const history = useHistory();
 
   const onClickStudent = (event) =>
-    history.push(`${location.pathname}/questionGroups/${event.row.id}`);
+    history.push(
+      `${location.pathname}/questionGroups/${event.row.id}/question_group_insights`
+    );
 
   useEffect(() => {
     lessonStore.loadLesson(params.lessonId);

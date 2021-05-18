@@ -45,7 +45,6 @@ class LessonStore {
     if (!response) {
       return;
     }
-
     // Calculate average score... not pretty. Do this in the backend query at some point
     const lesson = utils.addQuestionGroupAverages(
       response.body.data,

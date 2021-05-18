@@ -18,7 +18,8 @@ const Course = (props) => {
   const history = useHistory();
   const location = useLocation();
 
-  const goToLesson = (id) => history.push(`${location.pathname}/lessons/${id}`);
+  const goToLesson = (id) =>
+    history.push(`${location.pathname}/lessons/${id}/lesson_insights`);
 
   return (
     <List
