@@ -25,10 +25,10 @@ const ProfileHeader = (props) => {
 
   return (
     <Grid container>
-      <Grid item xs={12} md={12} lg={3}>
+      <Grid item xs={12} lg={3}>
         <Avatar src={avatar} className={classes.avatar} />
       </Grid>
-      <Grid item xs={12} md={12} lg={9}>
+      <Grid item xs={12} lg={9}>
         <Typography variant="h3">Bert Vis</Typography>
         <Link href={`mailto:${'b.vis@outlook.com'}`} onClick={preventDefault}>
           <Typography
