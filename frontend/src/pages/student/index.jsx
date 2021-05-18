@@ -30,15 +30,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Student = (props) => {
-  const { lessonStore } = props;
   const classes = useStyles();
   const params = useParams();
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
-
   const [student, setStudent] = useState([]);
-  // const [questionGroupWithAttempts, setQuestionGrouWithAttempts] =
-  //   useState(null);
   const [courses, setCourses] = useState([]);
 
   const loadCourses = useCallback(async () => {
@@ -59,31 +55,14 @@ const Student = (props) => {
     setStudent(response.body.data);
   }, [params.studentId]);
 
-  const loadLesson = useCallback(
-    async (lessonId, lessons) => {
-      await lessonStore.loadLesson(lessonId);
-      lessons.push(lessonStore.lesson);
-    },
-    [lessonStore]
-  );
-
   const loadAll = useCallback(async () => {
     setLoading(true);
+
     const promises = [loadCourses(), loadStudent()];
     await Promise.all(promises);
 
-    const lessons = [];
-    const promises2 = [];
-
-    if (courses[0]) {
-      console.log(courses[0]);
-      courses[0].lessons.forEach((lesson) => {
-        promises2.push(loadLesson(lesson.id, lessons));
-      });
-      await Promise.all(promises2);
-    }
     setLoading(false);
-  }, [loadCourses, loadStudent, loadLesson, courses]);
+  }, [loadCourses, loadStudent]);
 
   useEffect(() => {
     loadAll();
@@ -127,10 +106,9 @@ const Student = (props) => {
               />
             </Paper>
           </PaperWithHeader>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Courses courses={courses} />
+          <Grid item xs={12}>
+            <Courses courses={courses} />
+          </Grid>
         </Grid>
       </Grid>
     </PageContainer>

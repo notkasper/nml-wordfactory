@@ -1,9 +1,9 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { Typography, Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((props) => ({
+const useStyles = makeStyles(() => ({
   title: {
     textAlign: 'center',
     background: 'black',
@@ -15,7 +15,7 @@ const useStyles = makeStyles((props) => ({
 }));
 
 const ProfileHeader = (props) => {
-  const { name, id } = props;
+  const { name } = props;
   const classes = useStyles();
   return (
     <Paper className={classes.title}>

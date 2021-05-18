@@ -33,7 +33,6 @@ const getLessonAttempts = async (req, res) => {
           'missed',
           'isCompleted',
         ],
-        //include: [{ model: db.QuestionAttempts, as: 'questionAttempts' }],
       },
       {
         model: db.Lesson,

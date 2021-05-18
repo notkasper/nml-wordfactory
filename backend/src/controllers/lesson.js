@@ -45,7 +45,6 @@ const getLesson = async (req, res) => {
             model: db.QuestionGroupAttempt,
             as: 'questionGroupAttempts',
             attributes: ['correct', 'incorrect', 'missed', 'isCompleted'],
-            //include: [{ model: db.QuestionAttempts, as: 'questionAttempts' }],
           },
         ],
       },
