@@ -357,7 +357,7 @@ const preprocess = async () => {
   });
 
   fs.writeFileSync(
-    'wordfactory-preprocessed.json',
+    '../wordfactory-preprocessed.json',
     JSON.stringify(preprocessedData)
   );
 };
