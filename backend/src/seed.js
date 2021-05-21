@@ -4,10 +4,11 @@ const path = require('path');
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const db = require('./db');
-const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
 const logger = require('./logger');
 
-const seed = async () => {
+const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
+
+(async () => {
   logger.info('Seeding initialized');
   await db.initialize();
 
@@ -25,119 +26,117 @@ const seed = async () => {
   await db.QuestionGroupAttempt.destroy({ where: {} });
 
   try {
-    const { users, lessons } = wordfactoryPreprocessed;
-    const [teacherData, ...studentsData] = users;
-    const teacher = await db.Teacher.create(teacherData);
-    const students = await db.Student.bulkCreate(studentsData);
+    const { classes } = wordfactoryPreprocessed;
 
-    const class1 = await db.Class.create({
-      id: 'b5fb3711-1157-4f9b-b387-d9e549561012',
-      name: 'Klas 1',
-      level: 'HAVO',
-    });
-
-    const class2 = await db.Class.create({
-      id: 'b3b104a3-c54a-4bc9-bd72-015e4af41717',
-      name: 'Klas 2',
-      level: 'VWO',
-    });
-
-    await class1.addTeacher(teacher);
-    await class1.addStudents(students);
-
-    await class2.addTeacher(teacher);
-    await class2.addStudents(students);
-
-    const course = await db.Course.create({
-      id: '94e8e1fc-dd2d-448d-a829-f7cc4369fd24',
-      classId: class1.id,
-      name: 'Morfologie cursus 1',
-    });
-
-    await class1.addCourse(course);
-
-    for (const lesson of lessons) {
-      const createdLesson = await db.Lesson.create({
-        id: lesson.lessonId,
-        courseId: course.id,
-        index: lesson.lessonIndex,
-        prefix: lesson.lessonPrefix,
-        instruction: lesson.lessonInstruction,
-        name: lesson.lessonTitle,
+    for (const theClass of classes) {
+      const createdClass = await db.Class.create({
+        id: theClass.id,
+        name: theClass.name,
+        level: theClass.level,
       });
 
-      course.addLesson(createdLesson);
-
-      for (const questionGroup of lesson.questionGroups) {
-        const createdQuestionGroup = await db.QuestionGroup.create({
-          id: questionGroup.questionGroupId,
-          lessonId: createdLesson.id,
-          index: questionGroup.questionGroupIndex,
-          name: questionGroup.questionGroupTitle,
+      for (const teacher of theClass.teachers) {
+        const [upsertedTeacher] = await db.Teacher.upsert({
+          id: teacher.id,
+          name: teacher.name,
+          email: teacher.email,
+          passwordEncrypted: teacher.passwordEncrypted,
         });
 
-        for (const question of questionGroup.questions) {
-          await db.Question.create({
-            id: question.questionId,
-            questionGroupId: createdQuestionGroup.id,
-            data: question.data,
-            index: question.questionIndex,
-            type: question.type,
-            instruction: question.instruction,
+        await createdClass.addTeacher(upsertedTeacher);
+      }
+
+      const students = await db.Student.bulkCreate(theClass.students);
+      await createdClass.addStudents(students);
+
+      for (const course of theClass.courses) {
+        const createdCourse = await db.Course.create({
+          id: course.id,
+          classId: createdClass.id,
+          name: course.name,
+        });
+
+        await createdClass.addCourse(createdCourse);
+
+        for (const lesson of course.lessons) {
+          const createdLesson = await db.Lesson.create({
+            id: lesson.lessonId,
+            courseId: course.id,
+            index: lesson.lessonIndex,
+            prefix: lesson.lessonPrefix,
+            instruction: lesson.lessonInstruction,
+            name: lesson.lessonTitle,
           });
+
+          createdCourse.addLesson(createdLesson);
+
+          for (const questionGroup of lesson.questionGroups) {
+            const createdQuestionGroup = await db.QuestionGroup.create({
+              id: questionGroup.questionGroupId,
+              lessonId: createdLesson.id,
+              index: questionGroup.questionGroupIndex,
+              name: questionGroup.questionGroupTitle,
+            });
+
+            for (const question of questionGroup.questions) {
+              await db.Question.create({
+                id: question.questionId,
+                questionGroupId: createdQuestionGroup.id,
+                data: question.data,
+                index: question.questionIndex,
+                type: question.type,
+                instruction: question.instruction,
+              });
+            }
+          }
         }
       }
-    }
 
-    for (const studentData of studentsData) {
-      const lessonAttempts = studentData.lessonAttempts;
-      for (const lessonAttempt of lessonAttempts) {
-        const createdLessonAttempt = await db.LessonAttempt.create({
-          id: lessonAttempt.id,
-          studentId: studentData.id,
-          lessonId: lessonAttempt.lessonId,
-          stoppedTime: lessonAttempt.stoppedTime,
-          startedTime: lessonAttempt.startedTime,
-          isStopped: lessonAttempt.isStopped,
-          isStarted: lessonAttempt.isStarted,
-          isCompleted: lessonAttempt.isCompleted,
-        });
+      for (const studentData of theClass.students) {
+        const lessonAttempts = studentData.lessonAttempts;
+        for (const lessonAttempt of lessonAttempts) {
+          const createdLessonAttempt = await db.LessonAttempt.create({
+            id: lessonAttempt.id,
+            studentId: studentData.id,
+            lessonId: lessonAttempt.lessonId,
+            stoppedTime: lessonAttempt.stoppedTime,
+            startedTime: lessonAttempt.startedTime,
+            isStopped: lessonAttempt.isStopped,
+            isStarted: lessonAttempt.isStarted,
+            isCompleted: lessonAttempt.isCompleted,
+          });
 
-        for (const questionGroupAttempt of lessonAttempt.questionGroups) {
-          const createdQuestionGroupAttempt = await db.QuestionGroupAttempt.create(
-            {
-              id: questionGroupAttempt.id,
-              lessonAttemptId: createdLessonAttempt.id,
-              questionGroupId: questionGroupAttempt.questionGroupId,
-              timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
-                ? Math.round(questionGroupAttempt.timeElapsedSeconds)
-                : 0,
-              correct: questionGroupAttempt.correct,
-              incorrect: questionGroupAttempt.incorrect,
-              missed: questionGroupAttempt.missed,
-              isCompleted: questionGroupAttempt.isCompleted || false,
-              showFeedback: questionGroupAttempt.showFeedback || false,
+          for (const questionGroupAttempt of lessonAttempt.questionGroups) {
+            const createdQuestionGroupAttempt =
+              await db.QuestionGroupAttempt.create({
+                id: questionGroupAttempt.id,
+                lessonAttemptId: createdLessonAttempt.id,
+                questionGroupId: questionGroupAttempt.questionGroupId,
+                timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
+                  ? Math.round(questionGroupAttempt.timeElapsedSeconds)
+                  : 0,
+                correct: questionGroupAttempt.correct,
+                incorrect: questionGroupAttempt.incorrect,
+                missed: questionGroupAttempt.missed,
+                isCompleted: questionGroupAttempt.isCompleted || false,
+                showFeedback: questionGroupAttempt.showFeedback || false,
+              });
+
+            for (const questionAttempt of questionGroupAttempt.answers) {
+              await db.QuestionAttempt.create({
+                id: questionAttempt.id,
+                questionGroupAttemptId: createdQuestionGroupAttempt.id,
+                questionId: questionAttempt.questionId,
+                content: questionAttempt.content,
+              });
             }
-          );
-
-          for (const questionAttempt of questionGroupAttempt.answers) {
-            await db.QuestionAttempt.create({
-              id: questionAttempt.id,
-              questionGroupAttemptId: createdQuestionGroupAttempt.id,
-              questionId: questionAttempt.questionId,
-              content: questionAttempt.content,
-            });
           }
         }
       }
     }
-
-    logger.info('Seeding completed');
   } catch (error) {
     logger.error(error);
   } finally {
     db.close();
   }
-};
-
-seed();
+})();
