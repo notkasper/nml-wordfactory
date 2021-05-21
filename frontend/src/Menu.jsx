@@ -59,6 +59,7 @@ const Menu = (props) => {
         handleDialogOpen();
         break;
       case '/dashboard/classes':
+        // do nothing
         break;
       default:
         history.push(value);
