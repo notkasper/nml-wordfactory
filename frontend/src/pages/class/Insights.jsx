@@ -36,9 +36,8 @@ const columns = [
   },
 ];
 
-const getRows = (studentResults) => {
-  if (studentResults && studentResults.length) {
-    const distribution = studentResults;
+const getRows = (distribution) => {
+  if (distribution && distribution.length) {
     const rows = [];
 
     distribution.forEach((row, index) => {
