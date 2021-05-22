@@ -10,7 +10,6 @@ import PageContainer from '../_shared/PageContainer';
 const useStyles = makeStyles((theme) => ({
   widget: {
     padding: theme.spacing(3),
-    marginBottom: theme.spacing(12),
   },
   paper: {
     borderBottomLeftRadius: 4,
@@ -39,14 +38,14 @@ const columns = [
 
 const getRows = (studentResults) => {
   if (studentResults && studentResults.length) {
-    const [distribution, studentInfo] = studentResults;
+    const distribution = studentResults;
     const rows = [];
 
     distribution.forEach((row, index) => {
       rows.push({
-        id: studentInfo[index].id,
-        name: studentInfo[index].name,
-        correctness: row,
+        id: row.id,
+        name: row.name,
+        correctness: row.correctness,
       });
     });
 

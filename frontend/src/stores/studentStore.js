@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import { action, makeObservable, observable, computed } from 'mobx';
+
 import service from '../service';
 
 class StudentStore {
@@ -35,98 +37,51 @@ class StudentStore {
       this.students = response.body.data;
     }
 
-    const [studentsInfo, distribution] = this.computeDistribution(
-      this.students
+    const distribution = this.computeDistribution(this.students).sort(
+      (a, b) => a.correctness - b.correctness
     );
 
-    const topResults = this.computeTop(
-      studentsInfo,
-      distribution.sort(),
-      Math.round(distribution.length * 0.25)
+    const cutoffValue = Math.round(distribution.length * 0.25);
+    const bottomResults = distribution.slice(0, cutoffValue);
+    const topResults = distribution.slice(
+      Math.max(distribution.length - cutoffValue, 0)
     );
 
-    const bottomResults = this.computeBottom(
-      studentsInfo,
-      distribution.sort(),
-      Math.round(distribution.length * 0.25),
-      response.body.data
-    );
-
-    this.setTopResults(topResults);
     this.setBottomResults(bottomResults);
+    this.setTopResults(topResults);
     this.popLoad();
   };
 
   computeDistribution = (students) => {
-    const studentsCorrect = Array(students.length).fill(0);
-    const studentsInfo = [];
-    const studentsIncorrect = Array(students.length).fill(0);
-    let total = 0;
+    const distribution = [];
 
-    students.forEach((student, index) => {
-      studentsInfo.push({ name: student.name, id: student.id });
-      student.lessonAttempts.forEach((lessonAtempt) => {
-        lessonAtempt.questionGroupAttempts.forEach(
-          (questionGroupAttempt, index) => {
-            if (
-              !(
-                questionGroupAttempt.correct === 0 &&
-                questionGroupAttempt.incorrect === 0 &&
-                questionGroupAttempt.missed === 0
-              ) &&
-              questionGroupAttempt.isCompleted
-            ) {
-              total +=
-                questionGroupAttempt.correct +
-                questionGroupAttempt.incorrect +
-                questionGroupAttempt.missed;
-              studentsCorrect[index] += Math.round(
-                (questionGroupAttempt.correct / total) * 100
-              );
-              studentsIncorrect[index] +=
-                (questionGroupAttempt.incorrect + questionGroupAttempt.missed) /
-                total;
-            }
-          }
+    students.forEach((student) => {
+      let total = { correct: 0, incorrect: 0, missed: 0 };
+      student.lessonAttempts.forEach((lessonAttempt) => {
+        const currentTotal = lessonAttempt.questionGroupAttempts.reduce(
+          (acc, curr) => ({
+            correct: acc.correct + curr.correct,
+            incorrect: acc.incorrect + curr.incorrect,
+            missed: acc.missed + curr.missed,
+          }),
+          { correct: 0, incorrect: 0, missed: 0 }
+        );
+
+        total = _.mergeWith({}, total, currentTotal, (obj1, obj2) =>
+          _.isNumber(obj1) ? obj1 + obj2 : obj2
         );
       });
-    });
-    return [studentsInfo, studentsCorrect, studentsIncorrect];
-  };
 
-  computeTop = (studentsInfo, distribution, cutoffValue) => {
-    const slicedDistribution = distribution.slice(
-      distribution.length - cutoffValue,
-      distribution.length
-    );
-    const slicedStudentInfo = studentsInfo.slice(
-      studentsInfo.length - cutoffValue,
-      studentsInfo.length
-    );
-
-    return [slicedDistribution, slicedStudentInfo];
-  };
-
-  computeBottom = (studentsInfo, distribution, cutoffValue, students) => {
-    const slicedDistribution = distribution.slice(0, cutoffValue);
-    const slicedStudentInfo = studentsInfo.slice(0, cutoffValue);
-    this.updateBottomStudents(students, slicedStudentInfo);
-
-    return [slicedDistribution, slicedStudentInfo];
-  };
-
-  updateBottomStudents = (students, studentsInfo) => {
-    students.forEach((student) => {
-      studentsInfo.forEach((info) => {
-        if (student.id === info.id) {
-          student.bottom = true;
-        }
+      const totalPoints = total.correct + total.incorrect + total.missed;
+      const ratio = total.correct / totalPoints;
+      distribution.push({
+        name: student.name,
+        id: student.id,
+        correctness: Math.round((ratio || 0) * 100),
       });
-      if (!student.bottom) {
-        student.bottom = false;
-      }
     });
-    this.students = students;
+
+    return distribution;
   };
 
   get isLoading() {
