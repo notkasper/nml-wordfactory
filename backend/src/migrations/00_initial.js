@@ -284,6 +284,18 @@ const up = async (query) => {
       primaryKey: true,
       type: DataTypes.UUID,
     },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    lessonId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     lessonAttemptId: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -331,6 +343,18 @@ const up = async (query) => {
     id: {
       primaryKey: true,
       type: DataTypes.UUID,
+    },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    lessonId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
     },
     questionGroupAttemptId: {
       type: DataTypes.UUID,

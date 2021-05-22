@@ -15,7 +15,7 @@ const getQuestionGroupAttempts = async (req, res) => {
   } else {
     questionGroupAttempts = await db.QuestionGroupAttempt.findAll({
       where: {
-        '$QuestionGroup.questionGroups.Course.Class.teachers.id$': teacher.id,
+        '$Class.teachers.id$': teacher.id,
       },
       attributes: ['id', 'isCompleted', 'updatedAt'],
       include: [
@@ -28,27 +28,18 @@ const getQuestionGroupAttempts = async (req, res) => {
               model: db.Lesson,
               as: 'questionGroups',
               attributes: ['id', 'index', 'prefix', 'instruction', 'name'],
-              include: [
-                {
-                  model: db.Course,
-                  as: 'Course',
-                  attributes: ['id'],
-                  include: [
-                    {
-                      model: db.Class,
-                      as: 'Class',
-                      attributes: ['id'],
-                      include: [
-                        {
-                          model: db.Teacher,
-                          as: 'teachers',
-                          attributes: ['id'],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+            },
+          ],
+        },
+        {
+          model: db.Class,
+          as: 'Class',
+          attributes: ['id'],
+          include: [
+            {
+              model: db.Teacher,
+              as: 'teachers',
+              attributes: ['id'],
             },
           ],
         },
