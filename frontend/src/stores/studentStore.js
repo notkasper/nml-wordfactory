@@ -49,6 +49,7 @@ class StudentStore {
 
     this.setBottomResults(bottomResults);
     this.setTopResults(topResults);
+    this.updateBottomStudents(bottomResults);
     this.popLoad();
   };
 
@@ -82,6 +83,12 @@ class StudentStore {
     });
 
     return distribution;
+  };
+
+  updateBottomStudents = (bottomResults) => {
+    this.students.forEach((student) => {
+      student.bottom = bottomResults.some((info) => student.id === info.id);
+    });
   };
 
   get isLoading() {
