@@ -49,9 +49,7 @@ const Insights = (props) => {
           headertitle="Onderste 25%"
         >
           <DataGrid
-            autoHeight
             pageSize={5}
-            pagination
             rows={bottomResults}
             columns={columns}
             sortModel={[
@@ -67,9 +65,7 @@ const Insights = (props) => {
           headertitle="Top 25%"
         >
           <DataGrid
-            autoHeight
             rows={topResults}
-            pagination
             pageSize={5}
             sortModel={[
               {
