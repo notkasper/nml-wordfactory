@@ -10,7 +10,6 @@ import PageContainer from '../_shared/PageContainer';
 const useStyles = makeStyles((theme) => ({
   widget: {
     padding: theme.spacing(3),
-    marginBottom: theme.spacing(12),
   },
   paper: {
     borderBottomLeftRadius: 4,
@@ -37,25 +36,6 @@ const columns = [
   },
 ];
 
-const getRows = (studentResults) => {
-  if (studentResults && studentResults.length) {
-    const [distribution, studentInfo] = studentResults;
-    const rows = [];
-
-    distribution.forEach((row, index) => {
-      rows.push({
-        id: studentInfo[index].id,
-        name: studentInfo[index].name,
-        correctness: row,
-      });
-    });
-
-    return rows;
-  }
-
-  return [];
-};
-
 const Insights = (props) => {
   const { topResults, bottomResults } = props;
   const classes = useStyles();
@@ -69,10 +49,8 @@ const Insights = (props) => {
           headertitle="Onderste 25%"
         >
           <DataGrid
-            autoHeight
             pageSize={5}
-            pagination
-            rows={getRows(bottomResults)}
+            rows={bottomResults}
             columns={columns}
             sortModel={[
               {
@@ -87,9 +65,7 @@ const Insights = (props) => {
           headertitle="Top 25%"
         >
           <DataGrid
-            autoHeight
-            rows={getRows(topResults)}
-            pagination
+            rows={topResults}
             pageSize={5}
             sortModel={[
               {
