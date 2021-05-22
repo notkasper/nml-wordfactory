@@ -36,24 +36,6 @@ const columns = [
   },
 ];
 
-const getRows = (distribution) => {
-  if (distribution && distribution.length) {
-    const rows = [];
-
-    distribution.forEach((row, index) => {
-      rows.push({
-        id: row.id,
-        name: row.name,
-        correctness: row.correctness,
-      });
-    });
-
-    return rows;
-  }
-
-  return [];
-};
-
 const Insights = (props) => {
   const { topResults, bottomResults } = props;
   const classes = useStyles();
@@ -70,7 +52,7 @@ const Insights = (props) => {
             autoHeight
             pageSize={5}
             pagination
-            rows={getRows(bottomResults)}
+            rows={bottomResults}
             columns={columns}
             sortModel={[
               {
@@ -86,7 +68,7 @@ const Insights = (props) => {
         >
           <DataGrid
             autoHeight
-            rows={getRows(topResults)}
+            rows={topResults}
             pagination
             pageSize={5}
             sortModel={[
