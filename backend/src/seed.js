@@ -115,9 +115,6 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
                 timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
                   ? Math.round(questionGroupAttempt.timeElapsedSeconds)
                   : 0,
-                correct: questionGroupAttempt.correct,
-                incorrect: questionGroupAttempt.incorrect,
-                missed: questionGroupAttempt.missed,
                 isCompleted: questionGroupAttempt.isCompleted || false,
                 showFeedback: questionGroupAttempt.showFeedback || false,
               });
@@ -127,6 +124,10 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
                 id: questionAttempt.id,
                 questionGroupAttemptId: createdQuestionGroupAttempt.id,
                 questionId: questionAttempt.questionId,
+                correct: questionAttempt.correct,
+                incorrect: questionAttempt.incorrect,
+                missed: questionAttempt.missed,
+                score: questionAttempt.score,
                 content: questionAttempt.content,
               });
             }

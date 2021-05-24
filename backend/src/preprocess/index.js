@@ -5,6 +5,7 @@ const { encryptPassword } = require('../_utils');
 const {
   convertQuestionItemToAnswer,
   convertFormatToQuestions,
+  getScoreFromQuestionGroup,
 } = require('./conversion');
 
 const wordfactoryExport = require('../../wordfactory-export.json');
@@ -73,7 +74,7 @@ const preprocessedData = {};
                   questionGroupTitle: questionGroup.data.formatTitle,
                   questions: convertFormatToQuestions({
                     lesson,
-                    format: questionGroup.format,
+                    format: questionGroup,
                     items: questionGroup.data.item
                       ? [questionGroup.data.item]
                       : questionGroup.data.items || [],
@@ -122,9 +123,6 @@ const preprocessedData = {};
               questionGroupId: questionGroup.questionGroupId,
               isCompleted: format.data.isCompleted,
               showFeedback: format.data.showFeedback,
-              correct: format.data.correct,
-              incorrect: format.data.incorrect,
-              missed: format.data.missed,
               timeElapsedSeconds: format.data.timeElapsedSeconds,
               answers: questionGroup.questions.map(
                 (question, questionIndex) => {
@@ -141,6 +139,11 @@ const preprocessedData = {};
                         question: answer,
                         questionIndex,
                       }) || {},
+                    ...getScoreFromQuestionGroup({
+                      format,
+                      question: answer,
+                      questionIndex,
+                    }),
                   };
                 }
               ),

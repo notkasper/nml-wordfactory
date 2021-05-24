@@ -11,18 +11,6 @@ module.exports = (sequelize) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    correct: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    incorrect: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    missed: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

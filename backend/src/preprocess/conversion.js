@@ -59,7 +59,7 @@ const convertQuestionItemToAnswer = ({
 };
 
 const convertFormatToQuestions = ({ lesson, format, items }) => {
-  if (['Format_F1b'].includes(format)) {
+  if (['Format_F1b'].includes(format.format)) {
     return [
       {
         questionId: uuid.v4(),
@@ -73,7 +73,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     ];
   }
 
-  if (['Format_V1', 'Format_V1c'].includes(format)) {
+  if (['Format_V1', 'Format_V1c'].includes(format.format)) {
     return items.map((item, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
@@ -88,7 +88,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     }));
   }
 
-  if (['Format_W1'].includes(format)) {
+  if (['Format_W1'].includes(format.format)) {
     return items.map((item, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
@@ -104,7 +104,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     }));
   }
 
-  if (['Format_Z1', 'Format_Z1b'].includes(format)) {
+  if (['Format_Z1', 'Format_Z1b'].includes(format.format)) {
     return [
       {
         questionId: uuid.v4(),
@@ -120,7 +120,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     ];
   }
 
-  if (format.includes('Format_UQ')) {
+  if (format.format.includes('Format_UQ')) {
     return items.map((item, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
@@ -130,7 +130,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     }));
   }
 
-  if (['Format_K1'].includes(format)) {
+  if (['Format_K1'].includes(format.format)) {
     return items.map((item, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
@@ -149,7 +149,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     }));
   }
 
-  if (['Format_F1'].includes(format)) {
+  if (['Format_F1'].includes(format.format)) {
     return [
       {
         questionId: uuid.v4(),
@@ -165,7 +165,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     ];
   }
 
-  if (['Format_H1'].includes(format)) {
+  if (['Format_H1'].includes(format.format)) {
     return [
       {
         questionId: uuid.v4(),
@@ -182,7 +182,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     ];
   }
 
-  if (['Format_B1', 'Format_B2'].includes(format)) {
+  if (['Format_B1', 'Format_B2'].includes(format.format)) {
     return items[0].assignment.words.map((w, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
@@ -201,7 +201,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     }));
   }
 
-  if (['Format_B3'].includes(format)) {
+  if (['Format_B3'].includes(format.format)) {
     return items[0].assignment.words.map((w, index) => ({
       questionId: uuid.v4(),
       questionIndex: index,
@@ -216,7 +216,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     }));
   }
 
-  if (['Format_W2'].includes(format)) {
+  if (['Format_W2'].includes(format.format)) {
     return [
       {
         questionId: uuid.v4(),
@@ -230,7 +230,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
     ];
   }
 
-  if (['Format_WC'].includes(format)) {
+  if (['Format_WC'].includes(format.format)) {
     return [
       {
         questionId: uuid.v4(),
@@ -245,7 +245,35 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
   return {};
 };
 
+const getScoreFromQuestionGroup = ({ format, question, questionIndex = 0 }) => {
+  if (['Format_H1', 'Format_WC'].includes(format.format)) {
+    return {
+      score: format.data.score,
+    };
+  }
+
+  if (['Format_B1', 'Format_B2', 'Format_B3'].includes(format.format)) {
+    return {
+      score: question.assignment.words[questionIndex].score,
+    };
+  }
+
+  if (['Format_W2'].includes(format.format)) {
+    return {
+      score: question.score,
+    };
+  }
+
+  return {
+    correct: question.correct,
+    incorrect: question.incorrect,
+    missed: question.missed,
+    score: question.score,
+  };
+};
+
 module.exports = {
   convertQuestionItemToAnswer,
   convertFormatToQuestions,
+  getScoreFromQuestionGroup,
 };
