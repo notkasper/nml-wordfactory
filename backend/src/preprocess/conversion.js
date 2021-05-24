@@ -245,7 +245,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
   return {};
 };
 
-const getScoreFromQuestionGroup = ({ format, question, questionIndex = 0 }) => {
+const getScoreFromQuestion = ({ format, question, questionIndex = 0 }) => {
   if (['Format_H1', 'Format_WC'].includes(format.format)) {
     return {
       score: format.data.score,
@@ -275,5 +275,5 @@ const getScoreFromQuestionGroup = ({ format, question, questionIndex = 0 }) => {
 module.exports = {
   convertQuestionItemToAnswer,
   convertFormatToQuestions,
-  getScoreFromQuestionGroup,
+  getScoreFromQuestion,
 };

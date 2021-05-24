@@ -5,7 +5,7 @@ const { encryptPassword } = require('../_utils');
 const {
   convertQuestionItemToAnswer,
   convertFormatToQuestions,
-  getScoreFromQuestionGroup,
+  getScoreFromQuestion,
 } = require('./conversion');
 
 const wordfactoryExport = require('../../wordfactory-export.json');
@@ -139,7 +139,7 @@ const preprocessedData = {};
                         question: answer,
                         questionIndex,
                       }) || {},
-                    ...getScoreFromQuestionGroup({
+                    ...getScoreFromQuestion({
                       format,
                       question: answer,
                       questionIndex,
