@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Doughnut } from 'react-chartjs-2';
 
-import Title from '../_shared/Title';
+import Title from './Title';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 import Activity from './Activity';
 import Widget from './Widget';
-import PercentageDoughnut from './PercentageDoughnut';
+import PercentageDoughnut from '../_shared/PercentageDoughnut';
 import service from '../../service';
 import PageContainer from '../_shared/PageContainer';
 

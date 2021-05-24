@@ -69,6 +69,7 @@ class LessonStore {
     let loadedLessonAttempts = response.body.data;
     loadedLessonAttempts = utils.addDuration(loadedLessonAttempts);
     loadedLessonAttempts = utils.addPerformance(loadedLessonAttempts);
+    console.log(loadedLessonAttempts);
     this.setlessonAttempts(loadedLessonAttempts);
     this.popLoad();
   };

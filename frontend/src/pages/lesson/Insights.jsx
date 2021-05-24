@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useHistory } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
@@ -8,6 +8,9 @@ import Paper from '@material-ui/core/Paper';
 import { observer } from 'mobx-react-lite';
 import Doughnut from './Doughnut';
 import Histogram from './Histogram';
+import InsightsAfter from './InsightsAfter';
+import InsightsDuring from './InsightsDuring';
+import Button from '@material-ui/core/Button';
 
 const calculateProgress = (questionGroupAttempts = []) => {
   const total = questionGroupAttempts.length;
@@ -22,30 +25,6 @@ const calculateProgress = (questionGroupAttempts = []) => {
   return total !== 0 ? Math.floor((completed / total) * 100) : 100;
 };
 
-const columns = [
-  {
-    field: 'name',
-    headerName: 'Naam',
-    flex: 0.2,
-    valueGetter: (params) => params.row.student.name,
-  },
-  {
-    field: 'progress',
-    headerName: 'Voortgang (%)',
-    flex: 0.1,
-    valueGetter: (params) =>
-      calculateProgress(params.row.questionGroupAttempts),
-  },
-  {
-    field: 'duration',
-    headerName: 'Tijdsduur (minuten)',
-    flex: 0.15,
-  },
-  { field: 'correct', headerName: 'Correct', flex: 0.1, type: 'number' },
-  { field: 'incorrect', headerName: 'Incorrect', flex: 0.1, type: 'number' },
-  { field: 'performance', headerName: 'Prestatie', flex: 0.1, type: 'number' },
-];
-
 const useStyles = makeStyles((theme) => ({
   datagrid: {
     marginTop: '1rem',
@@ -56,26 +35,65 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Lesson = (props) => {
-  const classes = useStyles();
-  const history = useHistory();
-  const params = useParams();
+  const [showCategory, setShowCategory] = useState('after');
+  //  const [page, setPage] = useState(0);
 
-  const { lessonStore } = props;
+  const changeCategory = () => {
+    setShowCategory(showCategory === 'during' ? 'after' : 'during');
+  };
 
-  useEffect(() => {
-    lessonStore.loadLessonAttempts(params.lessonId);
-  }, [lessonStore, params.lessonId]);
-
-  if (lessonStore.isLoading) {
-    return <CircularProgress />;
-  }
-
-  const onClickStudent = (event) =>
-    history.push(`/dashboard/students/${event.row.student.id}`);
+  const getContent = () => {
+    return showCategory === 'after' ? (
+      <InsightsAfter {...props} />
+    ) : (
+      <InsightsDuring {...props} />
+    );
+  };
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
+      <Grid
+        container
+        spacing={2}
+        style={{ justifyContent: 'center', display: 'flex' }}
+      >
+        <Grid
+          item
+          xs={4}
+          md={4}
+          style={{
+            display: 'flex',
+            direction: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingBottom: '2rem',
+            paddingTop: '2rem',
+          }}
+        >
+          <Grid item style={{ paddingRight: '1rem' }}>
+            <Button
+              variant="contained"
+              color={showCategory === 'during' ? 'primary' : 'default'}
+              onClick={changeCategory}
+            >
+              Tijdens de les
+            </Button>
+          </Grid>
+          <Grid item style={{ paddingLeft: '1rem' }}>
+            <Button
+              variant="contained"
+              color={showCategory === 'after' ? 'primary' : 'default'}
+              onClick={changeCategory}
+            >
+              Achteraf
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} md={12}>
+        {getContent()}
+      </Grid>
+      {/* <Grid item xs={12} md={6}>
         <Doughnut
           lessonAttempts={lessonStore.lessonAttempts}
           title="Algemene voortgang"
@@ -98,7 +116,7 @@ const Lesson = (props) => {
             onRowClick={onClickStudent}
           />
         </Paper>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };
