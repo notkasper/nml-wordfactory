@@ -25,4 +25,10 @@ const disconnect = () => {
   socket.disconnect();
 };
 
-export default { init, subscribe, disconnect };
+const exports = {
+  init,
+  subscribe,
+  disconnect,
+};
+
+export default exports;
