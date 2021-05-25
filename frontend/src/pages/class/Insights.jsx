@@ -38,32 +38,21 @@ const columns = [
 
 // TODO: this is duplicate code! Make sure to create store for this and then call shared _utils.js
 const convertCategoryToString = (category) => {
-  switch (category) {
-    case 'learning_process':
-      return 'Leerproces';
-    case 'recognizing_morphemes_sentence':
-      return 'Herkennen morfemen in een zin';
-    case 'meaning_morphemes':
-      return 'Betekenis morfemen';
-    case 'splitsing_morphemes':
-      return 'Splits morfemen';
-    case 'create_morphemes_prefix':
-      return 'Creëren morfemen (voorvoegsel)';
-    case 'background_morphemes':
-      return 'Alternatieve betekenis morfemen';
-    case 'recognizing_morphemes_text':
-      return 'Herkennen morfemen in een tekst';
-    case 'intuition':
-      return 'Intuïtie';
-    case 'create_alternative_morphemes':
-      return 'Creëren alternatieve morfemen';
-    case 'create_morphemes_suffix':
-      return 'Creëren morfemen (achtervoegsel)';
-    case 'create_new_morphemes':
-      return 'Creëren nieuwe morfemen';
-    default:
-      return null;
-  }
+  const conversion = {
+    learning_process: 'Leerproces',
+    recognizing_morphemes_sentence: 'Herkennen morfemen in een zin',
+    meaning_morphemes: 'Betekenis morfemen',
+    splitsing_morphemes: 'Splits morfemen',
+    create_morphemes_prefix: 'Creëren morfemen (voorvoegsel)',
+    background_morphemes: 'Alternatieve betekenis morfemen',
+    recognizing_morphemes_text: 'Herkennen morfemen in een tekst',
+    intuition: 'Intuïtie',
+    create_alternative_morphemes: 'Creëren alternatieve morfemen',
+    create_morphemes_suffix: 'Creëren morfemen (achtervoegsel)',
+    create_new_morphemes: 'Creëren nieuwe morfemen',
+  };
+
+  return conversion[category];
 };
 
 const Insights = (props) => {
