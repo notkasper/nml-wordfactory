@@ -11,6 +11,7 @@ module.exports = (sequelize) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    // TODO: temporarily, correct / incorrect / missed / score are added to both group level and question level
     correct: {
       type: DataTypes.INTEGER,
       allowNull: true,

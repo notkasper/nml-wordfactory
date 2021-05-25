@@ -7,6 +7,7 @@ module.exports = (sequelize) =>
       primaryKey: true,
       type: DataTypes.UUID,
     },
+    // TODO: temporarily, correct / incorrect / missed / score are added to both group level and question level
     correct: {
       type: DataTypes.INTEGER,
       allowNull: true,
