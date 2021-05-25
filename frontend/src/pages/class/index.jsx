@@ -37,7 +37,7 @@ const Lesson = (props) => {
   const [loading, setLoading] = useState(false);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [problemCategories, setProblemCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const classId = params.classId;
 
@@ -57,11 +57,10 @@ const Lesson = (props) => {
     setCourses(response.body.data);
   }, [classId]);
 
-  const loadProblemCategories = useCallback(async () => {
-    const response = await service.loadProblemCategories(classId);
-    console.log('Response:', response.body.data);
+  const loadLessonCategories = useCallback(async () => {
+    const response = await service.loadLessonCategories(classId);
     if (!response) return;
-    setProblemCategories(response.body.data);
+    setCategories(response.body.data);
   }, [classId]);
 
   const loadAll = useCallback(async () => {
@@ -70,11 +69,11 @@ const Lesson = (props) => {
       loadStudents(),
       loadCourses(),
       loadClass(),
-      loadProblemCategories(),
+      loadLessonCategories(),
     ];
     await Promise.all(promises);
     setLoading(false);
-  }, [loadClass, loadStudents, loadCourses, loadProblemCategories]);
+  }, [loadClass, loadStudents, loadCourses, loadLessonCategories]);
 
   const onClickTab = (event, newTab) => {
     const currentTab = params.classTab;
@@ -118,7 +117,7 @@ const Lesson = (props) => {
           <Insights
             topResults={studentStore.topResults}
             bottomResults={studentStore.bottomResults}
-            problemCategories={problemCategories}
+            categories={categories}
           />
         </TabContent>
         <TabContent index="class_lessons" value={params.classTab}>

@@ -97,8 +97,14 @@ const loadQuestionGroup = async (id) => {
   return response;
 };
 
-const loadProblemCategories = async (id) => {
-  const req = request.get(`/api/v1/classes/${id}/problem_categories`);
+const loadLessonCategories = async (id) => {
+  const req = request.get(`/api/v1/classes/${id}/categories`);
+  const response = await handleResponse(req);
+  return response;
+};
+
+const loadStudentCategories = async (id) => {
+  const req = request.get(`/api/v1/students/${id}/categories`);
   const response = await handleResponse(req);
   return response;
 };
@@ -122,7 +128,8 @@ const service = {
   login,
   loadQuestionGroupAttempts,
   loadQuestionGroup,
-  loadProblemCategories,
+  loadLessonCategories,
+  loadStudentCategories,
   updateQuestion,
 };
 
