@@ -5,6 +5,8 @@ import 'chartjs-plugin-colorschemes';
 import routes from './routes';
 import Menu from './Menu';
 import AppBar from './AppBar';
+import { useEffect } from 'react';
+import socket from './socket';
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -24,6 +26,11 @@ const Dashboard = (props) => {
     studentStore,
   } = props;
   const classes = useStyles();
+
+  useEffect(() => {
+    socket.init();
+    socket.subscribe('ping', (data) => console.log(data));
+  }, []);
 
   return (
     <Switch>

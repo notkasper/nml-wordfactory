@@ -19,6 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import MenuItem from './pages/_shared/MenuItem';
 import service from './service';
+import socket from './socket';
 
 const drawerWidth = 245;
 
@@ -68,6 +69,7 @@ const Menu = (props) => {
 
   const handleLogout = () => {
     authStore.logout();
+    socket.disconnect();
     history.push('/');
     authStore.setSuccess('Succesvol uitgelogd!');
   };
