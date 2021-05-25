@@ -46,7 +46,7 @@ const Insights = (props) => {
       <Grid container spacing={2} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.primary.main}
-          headertitle="Onderste 25%"
+          headertitle="Benedengemiddelde prestaties"
         >
           <DataGrid
             pageSize={5}
@@ -55,14 +55,14 @@ const Insights = (props) => {
             sortModel={[
               {
                 field: 'correctness',
-                sort: 'desc',
+                sort: 'asc',
               },
             ]}
           />
         </PaperWithHeader>
         <PaperWithHeader
           headercolor={theme.widget.primary.main}
-          headertitle="Top 25%"
+          headertitle="Bovengemiddelde prestaties"
         >
           <DataGrid
             rows={topResults}

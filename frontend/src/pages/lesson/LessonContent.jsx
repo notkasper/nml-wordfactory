@@ -51,6 +51,12 @@ const columns = [
     type: 'number',
   },
   {
+    field: 'averageElapsedTime',
+    headerName: 'Gem. tijdsduur (sec)',
+    flex: 0.1,
+    type: 'number',
+  },
+  {
     field: 'completions',
     headerName: 'Klaar',
     flex: 0.1,
