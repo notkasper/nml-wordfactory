@@ -97,6 +97,12 @@ const loadQuestionGroup = async (id) => {
   return response;
 };
 
+const loadProblemCategories = async (id) => {
+  const req = request.get(`/api/v1/classes/${id}/problem_categories`);
+  const response = await handleResponse(req);
+  return response;
+};
+
 const updateQuestion = async (id, data) => {
   const req = request.patch(`/api/v1/question/${id}`).send({ data });
   const response = await handleResponse(req);
@@ -116,6 +122,7 @@ const service = {
   login,
   loadQuestionGroupAttempts,
   loadQuestionGroup,
+  loadProblemCategories,
   updateQuestion,
 };
 

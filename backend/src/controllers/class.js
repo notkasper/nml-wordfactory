@@ -29,4 +29,10 @@ const getClass = async (req, res) => {
   res.status(200).send({ data: theClass });
 };
 
-module.exports = { getClasses, getClass };
+const getProblemCategories = async (req, res) => {
+  const theClass = await db.Class.findByPk(req.params.id);
+
+  res.status(200).send({ data: [] });
+};
+
+module.exports = { getClasses, getClass, getProblemCategories };

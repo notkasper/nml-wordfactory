@@ -110,6 +110,9 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
             const createdQuestionGroupAttempt =
               await db.QuestionGroupAttempt.create({
                 id: questionGroupAttempt.id,
+                classId: theClass.id,
+                lessonId: lessonAttempt.lessonId,
+                studentId: studentData.id,
                 lessonAttemptId: createdLessonAttempt.id,
                 questionGroupId: questionGroupAttempt.questionGroupId,
                 timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
@@ -126,6 +129,9 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
             for (const questionAttempt of questionGroupAttempt.answers) {
               await db.QuestionAttempt.create({
                 id: questionAttempt.id,
+                classId: theClass.id,
+                lessonId: lessonAttempt.lessonId,
+                studentId: studentData.id,
                 questionGroupAttemptId: createdQuestionGroupAttempt.id,
                 questionId: questionAttempt.questionId,
                 correct: questionAttempt.correct,

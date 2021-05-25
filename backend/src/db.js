@@ -64,6 +64,14 @@ db.setupModels = async () => {
       foreignKey: 'classId',
     });
 
+    db.Class.hasMany(db.QuestionGroupAttempt, {
+      foreignKey: 'classId',
+    });
+
+    db.Class.hasMany(db.QuestionAttempt, {
+      foreignKey: 'classId',
+    });
+
     // Student relationships
     db.Student.belongsToMany(db.Class, {
       as: 'classes',
@@ -74,6 +82,14 @@ db.setupModels = async () => {
 
     db.Student.hasMany(db.LessonAttempt, {
       as: 'lessonAttempts',
+      foreignKey: 'studentId',
+    });
+
+    db.Student.hasMany(db.QuestionGroupAttempt, {
+      foreignKey: 'studentId',
+    });
+
+    db.Student.hasMany(db.QuestionAttempt, {
       foreignKey: 'studentId',
     });
 
@@ -95,6 +111,14 @@ db.setupModels = async () => {
 
     db.Lesson.hasMany(db.LessonAttempt, {
       as: 'lessonAttempts',
+      foreignKey: 'lessonId',
+    });
+
+    db.Lesson.hasMany(db.QuestionGroupAttempt, {
+      foreignKey: 'lessonId',
+    });
+
+    db.Lesson.hasMany(db.QuestionAttempt, {
       foreignKey: 'lessonId',
     });
 
@@ -155,6 +179,10 @@ db.setupModels = async () => {
       foreignKey: 'questionGroupId',
     });
 
+    db.QuestionGroupAttempt.belongsTo(db.Class, {
+      foreignKey: 'classId',
+    });
+
     db.QuestionGroupAttempt.hasMany(db.QuestionAttempt, {
       foreignKey: 'questionGroupAttemptId',
       as: 'questionAttempts',
@@ -169,6 +197,10 @@ db.setupModels = async () => {
     db.QuestionAttempt.belongsTo(db.Question, {
       foreignKey: 'questionId',
       as: 'question',
+    });
+
+    db.QuestionAttempt.belongsTo(db.Class, {
+      foreignKey: 'classId',
     });
 
     logger.info('All models created successfully');
