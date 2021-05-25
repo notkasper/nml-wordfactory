@@ -30,6 +30,9 @@ const Dashboard = (props) => {
   useEffect(() => {
     socket.init();
     socket.subscribe('ping', (data) => console.log(data));
+    return () => {
+      socket.unsubscribe('ping');
+    };
   }, []);
 
   return (
