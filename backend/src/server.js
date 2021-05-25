@@ -62,10 +62,10 @@ const start = async () => {
   // Xss prevention
   app.use(xssClean());
 
-  // Rate limiting
+  // Rate limiting (100 requests per minute)
   app.use(
     expressRateLimit({
-      windowMs: 1000 * 60 * 5,
+      windowMs: 1000 * 60,
       max: 100,
     })
   );
