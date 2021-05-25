@@ -44,7 +44,13 @@ const getLesson = async (req, res) => {
           {
             model: db.QuestionGroupAttempt,
             as: 'questionGroupAttempts',
-            attributes: ['correct', 'incorrect', 'missed', 'isCompleted'],
+            attributes: [
+              'correct',
+              'incorrect',
+              'missed',
+              'isCompleted',
+              'timeElapsedSeconds',
+            ],
           },
         ],
       },
