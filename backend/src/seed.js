@@ -85,6 +85,7 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
                 data: question.data,
                 index: question.questionIndex,
                 type: question.type,
+                contentTags: question.contentTags,
                 instruction: question.instruction,
               });
             }
