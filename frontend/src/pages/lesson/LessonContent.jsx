@@ -71,11 +71,6 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
-
-  '& .lowScore': {
-    color: 'red',
-    background: 'red',
-  },
 }));
 
 const LessonContent = (props) => {
