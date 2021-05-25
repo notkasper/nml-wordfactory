@@ -13,6 +13,7 @@ const hpp = require('hpp');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
+const socketManager = require('./socketManager');
 require('express-async-errors'); // catching async errors, that arent caught anywhere else, only needs to be required here
 
 // routers
@@ -122,6 +123,8 @@ const start = async () => {
       `Server running in ${process.env.NODE_ENV} mode on port ${port}`
     )
   );
+
+  socketManager.init(server);
 
   process.on('unhandledRejection', (error, promise) => {
     logger.error(error);
