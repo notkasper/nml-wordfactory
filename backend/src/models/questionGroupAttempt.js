@@ -23,6 +23,10 @@ module.exports = (sequelize) =>
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    score: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
