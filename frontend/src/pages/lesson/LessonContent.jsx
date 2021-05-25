@@ -3,10 +3,7 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { observer } from 'mobx-react-lite';
-import { DataGrid, getThemePaletteMode } from '@material-ui/data-grid';
-import { createMuiTheme, darken, lighten } from '@material-ui/core/styles';
-
-const defaultTheme = createMuiTheme();
+import { DataGrid } from '@material-ui/data-grid';
 
 const typeLabels = {
   open: 'Open',
@@ -67,27 +64,19 @@ const columns = [
   },
 ];
 
-const useStyles = makeStyles(
-  (
-    theme //({
-  ) => {
-    return {
-      root: {
-        datagrid: {
-          marginTop: '1rem',
-          '& .MuiDataGrid-row:hover': {
-            cursor: 'pointer',
-          },
-        },
+const useStyles = makeStyles((theme) => ({
+  datagrid: {
+    marginTop: '1rem',
+    '& .MuiDataGrid-row:hover': {
+      cursor: 'pointer',
+    },
+  },
 
-        '& .lowScore': {
-          color: 'red',
-          background: 'red',
-        },
-      },
-    };
-  }
-); //);
+  '& .lowScore': {
+    color: 'red',
+    background: 'red',
+  },
+}));
 
 const LessonContent = (props) => {
   const { lessonStore } = props;
@@ -116,11 +105,6 @@ const LessonContent = (props) => {
       rows={lessonStore.lesson.questionGroups}
       columns={columns}
       pageSize={12}
-      getRowClassName={`lowScore`}
-      // console.log(params);
-      // if (params.row.averageScore <= 5) {
-      //   return `lowScore`;
-      // }
       onRowClick={onClickStudent}
       sortModel={[
         {
