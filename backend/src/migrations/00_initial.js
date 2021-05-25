@@ -214,6 +214,10 @@ const up = async (query) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    contentTags: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
+    },
     instruction: {
       type: DataTypes.TEXT,
       allowNull: false,
