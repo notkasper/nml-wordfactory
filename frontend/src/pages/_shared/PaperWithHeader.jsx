@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     borderBottomRightRadius: 4,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    height: 370,
   },
 }));
 
@@ -34,7 +33,12 @@ const PaperWithHeader = (props) => {
       >
         <Typography>{props.headertitle}</Typography>
       </Paper>
-      <Paper className={classes.papercontent}>{props.children}</Paper>
+      <Paper
+        className={classes.papercontent}
+        style={props.height ? { height: props.height } : {}}
+      >
+        {props.children}
+      </Paper>
     </Grid>
   );
 };

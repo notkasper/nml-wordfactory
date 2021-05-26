@@ -184,6 +184,35 @@ const addQuestionGroupAverages = (lesson, questionGroup) => {
   return lesson;
 };
 
+const convertCategoryToString = (category) => {
+  switch (category) {
+    case 'learning_process':
+      return 'Leerproces';
+    case 'recognizing_morphemes_sentence':
+      return 'Herkennen morfemen in een zin';
+    case 'meaning_morphemes':
+      return 'Betekenis morfemen';
+    case 'splitsing_morphemes':
+      return 'Splits morfemen';
+    case 'create_morphemes_prefix':
+      return 'Creëren morfemen (voorvoegsel)';
+    case 'background_morphemes':
+      return 'Alternatieve betekenis morfemen';
+    case 'recognizing_morphemes_text':
+      return 'Herkennen morfemen in een tekst';
+    case 'intuition':
+      return 'Intuïtie';
+    case 'create_alternative_morphemes':
+      return 'Creëren alternatieve morfemen';
+    case 'create_morphemes_suffix':
+      return 'Creëren morfemen (achtervoegsel)';
+    case 'create_new_morphemes':
+      return 'Creëren nieuwe morfemen';
+    default:
+      return null;
+  }
+};
+
 const utils = {
   addDuration,
   addPerformance,
@@ -191,6 +220,7 @@ const utils = {
   addQuestionGroupAverages,
   addQuestionGroupAttemptStats,
   addQuestionAttemptInformation,
+  convertCategoryToString,
 };
 
 export default utils;

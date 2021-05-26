@@ -32,7 +32,7 @@ const columns = [
     field: 'lesson',
     headerName: 'Les',
     flex: 0.2,
-    valueGetter: (params) => params.row.QuestionGroup.questionGroups.prefix,
+    valueGetter: (params) => params.row.QuestionGroup.lesson.prefix,
   },
   {
     field: 'question',
