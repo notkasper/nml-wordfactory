@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import { DataGrid } from '@material-ui/data-grid';
-
 import { useHistory } from 'react-router-dom';
 import PageContainer from '../_shared/PageContainer';
 import Title from '../_shared/Title';
+
 const convertDateToReadableString = (date) => {
   return `${date.substring(0, 10)} ${date.substring(11, 19)}`;
 };
@@ -69,14 +69,9 @@ const Activity = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const { questionGroups } = props;
-  console.log(questionGroups);
 
   const onClickStudent = (event) =>
     history.push(`/dashboard/students/${event.row.lessonAttempts.student.id}`);
-
-  // if (!questionGroups) {
-  //   return <CircularProgress />;
-  // }
 
   return (
     <PageContainer>

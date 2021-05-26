@@ -87,6 +87,16 @@ const InsightsDuring = (props) => {
     };
   };
 
+  const getContent = () => {
+    return questionStore.questionGroups ? (
+      <Activity
+        questionGroups={questionStore.questionGroups}
+        lessonId={lessonId}
+        {...props}
+      />
+    ) : null;
+  };
+
   const options = ({ color, text }) => ({
     cutoutPercentage: 75,
     tooltips: { enabled: false },
@@ -133,14 +143,7 @@ const InsightsDuring = (props) => {
         titleColor={theme.widget.tertiary.main}
       />
       <Grid item xs={12}>
-        <Paper>
-          {' '}
-          <Activity
-            questionGroups={questionStore.questionGroups}
-            lessonId={lessonId}
-            {...props}
-          />
-        </Paper>
+        <Paper>{getContent()}</Paper>
       </Grid>
     </Grid>
   );
