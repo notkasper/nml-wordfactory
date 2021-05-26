@@ -29,6 +29,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// TODO: this is duplicate code! Make sure to create store for this and then call shared _utils.js
+const convertCategoryToString = (category) => {
+  const conversion = {
+    learning_process: 'Leerproces',
+    recognizing_morphemes_sentence: 'Herkennen morfemen in een zin',
+    meaning_morphemes: 'Betekenis morfemen',
+    splitsing_morphemes: 'Splits morfemen',
+    create_morphemes_prefix: 'Creëren morfemen (voorvoegsel)',
+    background_morphemes: 'Alternatieve betekenis morfemen',
+    recognizing_morphemes_text: 'Herkennen morfemen in een tekst',
+    intuition: 'Intuïtie',
+    create_alternative_morphemes: 'Creëren alternatieve morfemen',
+    create_morphemes_suffix: 'Creëren morfemen (achtervoegsel)',
+    create_new_morphemes: 'Creëren nieuwe morfemen',
+  };
+
+  return conversion[category];
+};
+
 const Student = (props) => {
   const classes = useStyles();
   const params = useParams();
@@ -36,6 +55,7 @@ const Student = (props) => {
   const [loading, setLoading] = useState(false);
   const [student, setStudent] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const loadCourses = useCallback(async () => {
     const studentId = params.studentId;
@@ -55,14 +75,23 @@ const Student = (props) => {
     setStudent(response.body.data);
   }, [params.studentId]);
 
+  const loadStudentCategories = useCallback(async () => {
+    const studentId = params.studentId;
+    const response = await service.loadStudentCategories(studentId);
+    if (!response) {
+      return;
+    }
+    setCategories(response.body.data);
+  }, [params.studentId]);
+
   const loadAll = useCallback(async () => {
     setLoading(true);
 
-    const promises = [loadCourses(), loadStudent()];
+    const promises = [loadCourses(), loadStudent(), loadStudentCategories()];
     await Promise.all(promises);
 
     setLoading(false);
-  }, [loadCourses, loadStudent]);
+  }, [loadCourses, loadStudent, loadStudentCategories]);
 
   useEffect(() => {
     loadAll();
@@ -88,9 +117,15 @@ const Student = (props) => {
             headertitle="Probleem categorieën"
           >
             <Paper className={classes.paper}>
-              <ProgressBar title="1. Herken morfemen in woorden" value={38} />
-              <ProgressBar title="2. Herken morfemen in een zin" value={48} />
-              <ProgressBar title="3. Verwisselen morfemen" value={55} />
+              {categories.slice(0, 3).map((category, index) => (
+                <ProgressBar
+                  key={category.key}
+                  title={`${index + 1}. ${convertCategoryToString(
+                    category.key
+                  )}`}
+                  value={category.correctness}
+                />
+              ))}
             </Paper>
           </PaperWithHeader>
           <PaperWithHeader
@@ -98,12 +133,15 @@ const Student = (props) => {
             headertitle="Top categorieën"
           >
             <Paper className={classes.paper}>
-              <ProgressBar title="1. Betekenis morfemen" value={97} />
-              <ProgressBar title="2. Splits morfemen" value={83} />
-              <ProgressBar
-                title="3. Alternatieve betekenis morfemen"
-                value={74}
-              />
+              {categories.slice(-3).map((category, index) => (
+                <ProgressBar
+                  key={category.key}
+                  title={`${index + 1}. ${convertCategoryToString(
+                    category.key
+                  )}`}
+                  value={category.correctness}
+                />
+              ))}
             </Paper>
           </PaperWithHeader>
           <Grid item xs={12}>
