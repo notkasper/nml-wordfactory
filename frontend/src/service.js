@@ -100,6 +100,18 @@ const loadQuestionGroups = async (ids) => {
   return response;
 };
 
+const loadLessonCategories = async (id) => {
+  const req = request.get(`/api/v1/classes/${id}/categories`);
+  const response = await handleResponse(req);
+  return response;
+};
+
+const loadStudentCategories = async (id) => {
+  const req = request.get(`/api/v1/students/${id}/categories`);
+  const response = await handleResponse(req);
+  return response;
+};
+
 const updateQuestion = async (id, data) => {
   const req = request.patch(`/api/v1/question/${id}`).send({ data });
   const response = await handleResponse(req);
@@ -119,6 +131,8 @@ const service = {
   login,
   loadQuestionGroupAttempts,
   loadQuestionGroups,
+  loadLessonCategories,
+  loadStudentCategories,
   updateQuestion,
 };
 

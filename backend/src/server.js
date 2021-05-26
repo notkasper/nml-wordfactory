@@ -13,6 +13,7 @@ const hpp = require('hpp');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
+const socketManager = require('./socketManager');
 require('express-async-errors'); // catching async errors, that arent caught anywhere else, only needs to be required here
 
 // routers
@@ -29,9 +30,11 @@ const questionRouter = require('./routes/question');
 
 const db = require('./db');
 const logger = require('./logger');
+const hooks = require('./hooks/hooks');
 
 const start = async () => {
   await db.initialize();
+  await hooks.initialize();
 
   const app = express();
   if (process.env.NODE_ENV === 'development') {
@@ -61,10 +64,10 @@ const start = async () => {
   // Xss prevention
   app.use(xssClean());
 
-  // Rate limiting
+  // Rate limiting (100 requests per minute)
   app.use(
     expressRateLimit({
-      windowMs: 1000 * 60 * 5,
+      windowMs: 1000 * 60,
       max: 100,
     })
   );
@@ -122,6 +125,8 @@ const start = async () => {
       `Server running in ${process.env.NODE_ENV} mode on port ${port}`
     )
   );
+
+  socketManager.init(server);
 
   process.on('unhandledRejection', (error, promise) => {
     logger.error(error);

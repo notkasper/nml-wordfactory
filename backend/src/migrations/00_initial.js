@@ -308,10 +308,6 @@ const up = async (query) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    score: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     isCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -343,22 +339,6 @@ const up = async (query) => {
     questionId: {
       type: DataTypes.UUID,
       allowNull: false,
-    },
-    correct: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    incorrect: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    missed: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    score: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
     },
     content: {
       type: DataTypes.JSON,

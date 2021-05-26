@@ -37,6 +37,7 @@ const Lesson = (props) => {
   const [loading, setLoading] = useState(false);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const classId = params.classId;
 
@@ -56,12 +57,23 @@ const Lesson = (props) => {
     setCourses(response.body.data);
   }, [classId]);
 
+  const loadLessonCategories = useCallback(async () => {
+    const response = await service.loadLessonCategories(classId);
+    if (!response) return;
+    setCategories(response.body.data);
+  }, [classId]);
+
   const loadAll = useCallback(async () => {
     setLoading(true);
-    const promises = [loadStudents(), loadCourses(), loadClass()];
+    const promises = [
+      loadStudents(),
+      loadCourses(),
+      loadClass(),
+      loadLessonCategories(),
+    ];
     await Promise.all(promises);
     setLoading(false);
-  }, [loadClass, loadStudents, loadCourses]);
+  }, [loadClass, loadStudents, loadCourses, loadLessonCategories]);
 
   const onClickTab = (event, newTab) => {
     const currentTab = params.classTab;
@@ -105,6 +117,7 @@ const Lesson = (props) => {
           <Insights
             topResults={studentStore.topResults}
             bottomResults={studentStore.bottomResults}
+            categories={categories}
           />
         </TabContent>
         <TabContent index="class_lessons" value={params.classTab}>

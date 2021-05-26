@@ -65,6 +65,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'fillInTheBlanks',
+        contentTags: ['intuition', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {
           story: items[0].story.replace(/WOORD_OPTIE/g, '<BLANK>'),
@@ -78,6 +79,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoice',
+      contentTags: ['background_morphemes'],
       instruction: item.question || '',
       data: {
         options: item.answers.map((answer, index) => ({
@@ -93,6 +95,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoice',
+      contentTags: ['create_morphemes_prefix', 'made-up'],
       instruction: item.question || '',
       data: {
         wordpart: item.wordpart,
@@ -110,6 +113,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'clickTheRightWords',
+        contentTags: ['recognizing_morphemes_sentence'],
         instruction: lesson.lessonInstruction,
         data: {
           story: items[0].story,
@@ -125,6 +129,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'open',
+      contentTags: ['learning_process'],
       instruction: item.question,
       data: {},
     }));
@@ -135,6 +140,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'divideTheWord',
+      contentTags: ['splitsing_morphemes'],
       instruction: lesson.lessonInstruction,
       data: {
         word: item.word,
@@ -155,6 +161,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'combineAndFillInTheBlanks',
+        contentTags: ['create_morphemes_suffix', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {
           story: items[0].story.replace(/WOORD_OPTIE/g, '<BLANK>'),
@@ -171,6 +178,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'multipleChoice',
+        contentTags: ['recognizing_morphemes_text'],
         instruction: lesson.lessonInstruction,
         data: {
           options: items.map((item) => ({
@@ -187,6 +195,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoiceGroup',
+      contentTags: ['meaning_morphemes', 'made-up'],
       instruction: lesson.lessonInstruction,
       data: {
         word: w.word,
@@ -206,6 +215,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'openGroup',
+      contentTags: ['meaning_morphemes', 'made-up'],
       instruction: lesson.lessonInstruction,
       data: {
         word: w.word,
@@ -222,6 +232,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'open',
+        contentTags: ['create_alternative_morphemes', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {
           wordpart: items[0].wordpart,
@@ -236,6 +247,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'list',
+        contentTags: ['create_new_morphemes', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {},
       },
