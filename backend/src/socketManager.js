@@ -29,6 +29,8 @@ const init = (server) => {
   });
 };
 
+const isConnected = (teacherId) => !!getSocket(teacherId)?.connected;
+
 const emitEvent = (teacherId, eventName, data = {}) => {
   const socket = getSocket(teacherId);
   if (!socket) {
@@ -39,4 +41,4 @@ const emitEvent = (teacherId, eventName, data = {}) => {
   socket.emit(eventName, data);
 };
 
-module.exports = { init, emitEvent };
+module.exports = { init, emitEvent, isConnected };

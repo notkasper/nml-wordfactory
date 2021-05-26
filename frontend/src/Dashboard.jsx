@@ -27,9 +27,21 @@ const Dashboard = (props) => {
   } = props;
   const classes = useStyles();
 
+  const onNewQuestionAttempts = (data) => {
+    console.log(`New question attempt event: ${JSON.stringify(data)}`);
+  };
+
   useEffect(() => {
+    // intialize socket, only need to be done once in the application
     socket.init();
-    socket.subscribe('ping', (data) => console.log(data));
+
+    // subscribe to websocket event
+    socket.subscribe('newQuestionAttempts', onNewQuestionAttempts);
+
+    return () => {
+      // when component is unmounted, unsubscribe from websocket event
+      socket.unsubscribe('newQuestionAttempts');
+    };
   }, []);
 
   return (

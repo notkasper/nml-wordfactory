@@ -135,7 +135,7 @@ db.setupModels = async () => {
 
     // QuestionGroup relationships
     db.QuestionGroup.belongsTo(db.Lesson, {
-      as: 'questionGroups',
+      as: 'lesson',
       foreignKey: 'lessonId',
     });
 
@@ -151,7 +151,7 @@ db.setupModels = async () => {
 
     // Question relationships
     db.Question.belongsTo(db.QuestionGroup, {
-      as: 'questions',
+      as: 'questionGroup',
       foreignKey: 'questionGroupId',
     });
 

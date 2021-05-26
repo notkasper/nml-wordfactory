@@ -30,9 +30,11 @@ const questionRouter = require('./routes/question');
 
 const db = require('./db');
 const logger = require('./logger');
+const hooks = require('./hooks/hooks');
 
 const start = async () => {
   await db.initialize();
+  await hooks.initialize();
 
   const app = express();
   if (process.env.NODE_ENV === 'development') {
