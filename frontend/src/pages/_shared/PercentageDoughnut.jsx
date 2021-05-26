@@ -20,12 +20,13 @@ const PercentageDoughnut = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { title, data, options } = props;
+  const { title, data, options, titleColor } = props;
+  const color = titleColor ? titleColor : theme.widget.primary.main;
 
   return (
     <Grid item xs={12} md={4}>
       <Paper className={classes.paper}>
-        <Title color={theme.widget.primary.main}>{title}</Title>
+        <Title color={color}>{title}</Title>
         <Doughnut data={data} options={options} />
       </Paper>
     </Grid>

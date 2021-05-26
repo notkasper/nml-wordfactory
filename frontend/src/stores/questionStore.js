@@ -6,8 +6,9 @@ import utils from './_utils';
 class QuestionStore {
   constructor() {
     makeObservable(this, {
-      questionGroup: observable,
+      //questionGroup: observable,
       questionAttempts: observable,
+      questionGroups: observable,
       loading: observable,
       popLoad: action,
       pushLoad: action,
@@ -15,25 +16,48 @@ class QuestionStore {
     });
   }
 
-  questionGroup = null;
+  //questionGroup = null;
   questionAttempts = [];
+  questionGroups = null;
   loading = 0;
 
   popLoad = () => (this.loading -= 1);
   pushLoad = () => (this.loading += 1);
 
-  loadQuestionGroupWithAttempts = async (questionGroupId) => {
+  loadQuestionGroupsWithAttempts = async (questionGroupIds) => {
     this.pushLoad();
-    const response = await service.loadQuestionGroup(questionGroupId);
+    const response = await service.loadQuestionGroups(questionGroupIds);
     if (response) {
-      let questionGroup = response.body.data;
-      questionGroup = utils.addQuestionGroupAttemptStats(questionGroup);
-      questionGroup = utils.addQuestionAttemptInformation(questionGroup);
-      this.questionGroup = questionGroup;
+      let questionGroups = response.body.data;
+      console.log(questionGroups);
+      questionGroups.forEach((qg) => {
+        utils.addQuestionGroupAttemptStats(qg);
+        utils.addQuestionAttemptInformation(qg);
+        this.questionGroups = questionGroups;
+      });
     }
 
     this.popLoad();
   };
+
+  // loadQuestionGroupsWithAttempts = async (questionGroupIds) => {
+  //   this.pushLoad();
+  //   const questionGroups = [];
+  //   const responses = await service.loadQuestionGroups(questionGroupIds);
+  //   if (responses.length > 0) {
+  //     responses.forEach((response) => {
+  //       console.log(response.body);
+  //       questionGroups.push(response.body.data);
+  //     });
+  //     questionGroups.forEach((qg) => {
+  //       utils.addQuestionGroupAttemptStats(qg);
+  //       utils.addQuestionAttemptInformation(qg);
+  //     });
+  //     this.questionGroups = questionGroups;
+  //   }
+
+  //   this.popLoad();
+  // };
 
   loadQuestionAttemptsWithInfo = async (studentId, lessonId) => {
     this.pushLoad();

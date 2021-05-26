@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useHistory } from 'react-router-dom';
-import { DataGrid } from '@material-ui/data-grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+
 import { observer } from 'mobx-react-lite';
-import Doughnut from './Doughnut';
-import Histogram from './Histogram';
+
 import InsightsAfter from './InsightsAfter';
 import InsightsDuring from './InsightsDuring';
 import Button from '@material-ui/core/Button';
@@ -36,17 +34,41 @@ const useStyles = makeStyles((theme) => ({
 
 const Lesson = (props) => {
   const [showCategory, setShowCategory] = useState('after');
+  //const [loading, setLoading] = useState(null);
+  const { lessonStore } = props;
+  const params = useParams();
   //  const [page, setPage] = useState(0);
 
+  useEffect(() => {
+    lessonStore.loadLesson(params.lessonId);
+  }, [lessonStore, params.lessonId]);
+
+  if (lessonStore.isLoading) {
+    return <CircularProgress />;
+  }
   const changeCategory = () => {
     setShowCategory(showCategory === 'during' ? 'after' : 'during');
+  };
+
+  const getQuestionGroupIds = () => {
+    const ids = [];
+    if (lessonStore.lesson) {
+      lessonStore.lesson.questionGroups.forEach((qg) => {
+        ids.push(qg.id);
+      });
+      return ids;
+    }
   };
 
   const getContent = () => {
     return showCategory === 'after' ? (
       <InsightsAfter {...props} />
     ) : (
-      <InsightsDuring {...props} />
+      <InsightsDuring
+        questionGroupIds={getQuestionGroupIds()}
+        lessonId={params.lessonId}
+        {...props}
+      />
     );
   };
 

@@ -1,41 +1,92 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { useParams, useHistory } from 'react-router-dom';
-
-import Paper from '@material-ui/core/Paper';
+import { useHistory } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import Activity from './Activity';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Paper from '@material-ui/core/Paper';
 
 import PercentageDoughnut from '../_shared/PercentageDoughnut';
-import service from '../../service';
-import PageContainer from '../_shared/PageContainer';
 
 const InsightsDuring = (props) => {
-  const theme = useTheme();
-  //const classes = useStyles();
-  const history = useHistory();
-  const { lessonStore } = props;
-  const params = useParams();
+  const { questionGroupIds, lessonId, questionStore } = props;
 
-  //const params = useParams();
+  const theme = useTheme();
+  const [loading, setLoading] = useState(false);
+  let ratioCorrect = 0;
+  let ratioProgress = 0;
+  let averageTime = 0;
+  const history = useHistory();
+
+  const loadAll = useCallback(async () => {
+    setLoading(true);
+    await questionStore.loadQuestionGroupsWithAttempts(questionGroupIds);
+    setLoading(false);
+  }, [questionStore, questionGroupIds]);
 
   useEffect(() => {
-    lessonStore.loadLessonAttempts(params.lessonId);
-  }, [lessonStore, params.lessonId]);
+    loadAll();
+  }, [loadAll]);
 
-  if (lessonStore.isLoading) {
+  if (questionStore.isLoading || loading) {
     return <CircularProgress />;
   }
 
-  const data = ({ color, variant }) => ({
-    datasets: [
-      {
-        data: [100 - variant * 25, variant * 25],
-        backgroundColor: ['rgb(0, 0, 0, 0)', color],
-      },
-    ],
-  });
-  console.log(lessonStore.lessonAttempts);
+  const getAverageValues = () => {
+    let totalCorrect = 0;
+    let totalNotComplete = 0;
+    let totalComplete = 0;
+    let totalScores = 0;
+    let totalTime = 0;
+    if (questionStore.questionGroups) {
+      questionStore.questionGroups.forEach((qg) => {
+        if (qg.questions[0].type === 'multipleChoice') {
+          qg.questionGroupAttempts.forEach((qga) => {
+            if (qga.lessonAttempts.lessonId === lessonId) {
+              if (qga.isCompleted) {
+                totalComplete += 1;
+                totalCorrect += qga.correct;
+                totalScores += qga.correct + qga.incorrect + qga.missed;
+                totalTime += qga.timeElapsedSeconds;
+              } else {
+                totalNotComplete += 1;
+              }
+            }
+          });
+        }
+      });
+
+      ratioCorrect = Math.round((totalCorrect / totalScores) * 100);
+      ratioProgress = Math.round(
+        (totalComplete / (totalComplete + totalNotComplete)) * 100
+      );
+      averageTime = Math.round((totalTime / totalComplete) * 100);
+    }
+  };
+
+  const calculateRGB = (percentage) => {
+    const shade = 0.8;
+    const color = Math.floor(
+      (percentage <= 50 ? percentage / 50 : (100 - percentage) / 50) * 255
+    );
+    const rgb = (percentage <= 50 ? [255, color, 0] : [color, 255, 0]).map(
+      (color) => Math.round(color * shade)
+    );
+    return `rgb(${rgb.join(',')})`;
+  };
+
+  const getDoughnutData = (ratio) => {
+    return {
+      datasets: [
+        {
+          data: [100 - ratio, ratio],
+          backgroundColor: ['rgb(0, 0, 0, 0)', calculateRGB(ratio)],
+        },
+      ],
+    };
+  };
+
   const options = ({ color, text }) => ({
     cutoutPercentage: 75,
     tooltips: { enabled: false },
@@ -49,35 +100,50 @@ const InsightsDuring = (props) => {
     },
   });
 
+  getAverageValues();
   return (
-    <PageContainer> </PageContainer>
-    // <PageContainer>
-    //   <Grid container spacing={3}>
-    //     {/* Average percentage statistics */}
-    //     <PercentageDoughnut
-    //       title="Gemiddelde correctheid"
-    //       data={data({ color: theme.widget.primary.main, variant: 1 })}
-    //       options={options({ color: theme.widget.primary.main, text: '25%' })}
-    //     />
-    //     <PercentageDoughnut
-    //       title="Gemiddelde voortgang"
-    //       data={data({ color: theme.widget.secondary.main, variant: 2 })}
-    //       options={options({ color: theme.widget.secondary.main, text: '50%' })}
-    //     />
-    //     <PercentageDoughnut
-    //       title="Opdrachten nagekeken"
-    //       data={data({ color: theme.widget.tertiary.main, variant: 3 })}
-    //       options={options({ color: theme.widget.tertiary.main, text: '75%' })}
-    //     />
-    //     {/* Recent activity */}
-    //     <Grid item xs={12}>
-    //       <Paper className={classes.paper}>
-    //         <Activity />
-    //       </Paper>
-    //     </Grid>
-    //   </Grid>
-    // </PageContainer>
+    <Grid container spacing={3}>
+      {/* Average percentage statistics */}
+      <PercentageDoughnut
+        title="Gemiddelde correctheid"
+        data={getDoughnutData(ratioCorrect)}
+        options={options({
+          color: 'black',
+          text: String(ratioCorrect) + '%',
+        })}
+      />
+      <PercentageDoughnut
+        title="Gemiddelde voortgang"
+        data={getDoughnutData(ratioProgress)}
+        options={options({
+          color: 'black',
+          text: String(ratioProgress) + '%',
+        })}
+        titleColor={theme.widget.secondary.main}
+      />
+      <PercentageDoughnut
+        title="Gemiddelde tijdsduur"
+        data={getDoughnutData({
+          averageTime,
+        })}
+        options={options({
+          color: 'black',
+          text: String(averageTime) + ' sec',
+        })}
+        titleColor={theme.widget.tertiary.main}
+      />
+      <Grid item xs={12}>
+        <Paper>
+          {' '}
+          <Activity
+            questionGroups={questionStore.questionGroups}
+            lessonId={lessonId}
+            {...props}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 
-export default InsightsDuring;
+export default observer(InsightsDuring);
