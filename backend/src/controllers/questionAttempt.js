@@ -26,12 +26,12 @@ const getQuestionAttempts = async (req, res) => {
         include: [
           {
             model: db.QuestionGroup,
-            as: 'questions',
+            as: 'questionGroup',
             attributes: ['id', 'index', 'name'],
             include: [
               {
                 model: db.Lesson,
-                as: 'questionGroups',
+                as: 'lesson',
                 attributes: ['id', 'index', 'prefix', 'instruction', 'name'],
                 include: [
                   {
