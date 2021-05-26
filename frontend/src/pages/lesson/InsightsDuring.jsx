@@ -6,12 +6,13 @@ import { observer } from 'mobx-react-lite';
 import Activity from './Activity';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
-
 import PercentageDoughnut from '../_shared/PercentageDoughnut';
+import { connect } from 'superagent';
+import { Timeline } from '@material-ui/lab';
 
 const InsightsDuring = (props) => {
   const { questionGroupIds, lessonId, questionStore } = props;
-
+  const math = require('mathjs');
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
   let ratioCorrect = 0;
@@ -39,6 +40,9 @@ const InsightsDuring = (props) => {
     let totalComplete = 0;
     let totalScores = 0;
     let totalTime = 0;
+    let acc = 0;
+    let elapsedTimes = [];
+
     if (questionStore.questionGroups) {
       questionStore.questionGroups.forEach((qg) => {
         if (qg.questions[0].type === 'multipleChoice') {
@@ -48,7 +52,7 @@ const InsightsDuring = (props) => {
                 totalComplete += 1;
                 totalCorrect += qga.correct;
                 totalScores += qga.correct + qga.incorrect + qga.missed;
-                totalTime += qga.timeElapsedSeconds;
+                elapsedTimes.push(qga.timeElapsedSeconds);
               } else {
                 totalNotComplete += 1;
               }
@@ -61,8 +65,26 @@ const InsightsDuring = (props) => {
       ratioProgress = Math.round(
         (totalComplete / (totalComplete + totalNotComplete)) * 100
       );
-      averageTime = Math.round((totalTime / totalComplete) * 100);
+
+      const sortedTimes = elapsedTimes.sort((a, b) => a - b);
+      const median = math.median(sortedTimes);
+      const std = math.std(sortedTimes);
+      const rangeMin = median - std;
+      const rangeMax = median + std;
+      for (const time in sortedTimes) {
+        if (time >= rangeMin && time <= rangeMax) {
+          totalTime += parseInt(time);
+          acc += 1;
+        }
+      }
+      averageTime = totalTime / acc;
     }
+  };
+
+  const convertToMinutes = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes} min. ${seconds} sec.`;
   };
 
   const calculateRGB = (percentage) => {
@@ -138,7 +160,7 @@ const InsightsDuring = (props) => {
         })}
         options={options({
           color: 'black',
-          text: String(averageTime) + ' sec',
+          text: convertToMinutes(averageTime),
         })}
         titleColor={theme.widget.tertiary.main}
       />
