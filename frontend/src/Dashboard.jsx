@@ -33,8 +33,8 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     // intialize socket, only need to be done once in the application
-
     socket.init();
+
     // subscribe to websocket event
     socket.subscribe('newQuestionAttempts', onNewQuestionAttempts);
 
