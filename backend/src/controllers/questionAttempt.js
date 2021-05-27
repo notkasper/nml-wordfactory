@@ -14,9 +14,8 @@ const getQuestionAttempts = async (req, res) => {
 
   const questionAttempts = await db.QuestionAttempt.findAll({
     where: {
-      '$question.questions.questionGroups.Course.Class.teachers.id$':
-        teacher.id,
-      '$question.questions.questionGroups.id$': lessonId,
+      '$question.questionGroup.lesson.Course.Class.teachers.id$': teacher.id,
+      '$question.questionGroup.id$': lessonId,
       '$questionGroupAttempts.lessonAttempts.student.id$': studentId,
     },
     include: [
