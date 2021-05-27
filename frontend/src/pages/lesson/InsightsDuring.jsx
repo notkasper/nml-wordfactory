@@ -55,40 +55,6 @@ const InsightsDuring = (props) => {
   const [ratioProgress, setRatioProgess] = useState(0);
   const [averageTime, setAverageTime] = useState(0);
 
-  const loadLessonCategories = useCallback(async () => {
-    const response = await service.loadLessonCategories(classId);
-    if (!response) return;
-    setCategories(response.body.data);
-  }, [classId]);
-
-  const loadStudents = useCallback(async () => {
-    await studentStore.loadStudents({ classId });
-  }, [studentStore, classId]);
-
-  const loadQuestionGroups = useCallback(async () => {
-    await questionStore.loadQuestionGroupsWithAttempts(questionGroupIds);
-  }, [questionStore, questionGroupIds]);
-
-  const loadAll = useCallback(async () => {
-    setLoading(true);
-    const promises = [
-      loadStudents(),
-      loadQuestionGroups(),
-      loadLessonCategories(),
-    ];
-    await Promise.all(promises);
-
-    setLoading(false);
-  }, [loadStudents, loadQuestionGroups, loadLessonCategories]);
-
-  useEffect(() => {
-    loadAll();
-  }, [loadAll]);
-
-  if (questionStore.isLoading || loading) {
-    return <CircularProgress />;
-  }
-
   const getAverageValues = () => {
     let totalCorrect = 0;
     let totalNotComplete = 0;
@@ -133,6 +99,40 @@ const InsightsDuring = (props) => {
       setAverageTime(totalTime / acc);
     }
   };
+
+  const loadLessonCategories = useCallback(async () => {
+    const response = await service.loadLessonCategories(classId);
+    if (!response) return;
+    setCategories(response.body.data);
+  }, [classId]);
+
+  const loadStudents = useCallback(async () => {
+    await studentStore.loadStudents({ classId });
+  }, [studentStore, classId]);
+
+  const loadQuestionGroups = useCallback(async () => {
+    await questionStore.loadQuestionGroupsWithAttempts(questionGroupIds);
+  }, [questionStore, questionGroupIds]);
+
+  const loadAll = useCallback(async () => {
+    setLoading(true);
+    const promises = [
+      loadStudents(),
+      loadQuestionGroups(),
+      loadLessonCategories(),
+    ];
+    await Promise.all(promises);
+    getAverageValues();
+    setLoading(false);
+  }, [loadStudents, loadQuestionGroups, loadLessonCategories]);
+
+  useEffect(() => {
+    loadAll();
+  }, [loadAll]);
+
+  if (questionStore.isLoading || loading) {
+    return <CircularProgress />;
+  }
 
   const convertToMinutes = (totalSeconds) => {
     const minutes = Math.floor(totalSeconds / 60);
@@ -185,7 +185,6 @@ const InsightsDuring = (props) => {
     },
   });
 
-  getAverageValues();
   return (
     <Grid container spacing={3}>
       {/* Average percentage statistics */}
