@@ -29,7 +29,7 @@ const addPerformance = (lessonAttempts) => {
     if (total === 0) {
       performance = 10;
     } else {
-      performance = Math.round((correct / total) * 9 + 1);
+      performance = Math.min(Math.round((correct / total) * 9 + 1), 10);
     }
     lessonAttempt.performance = performance;
 
