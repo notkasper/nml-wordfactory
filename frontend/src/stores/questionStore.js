@@ -33,7 +33,6 @@ class QuestionStore {
         this.questionGroups = questionGroups;
       });
     }
-
     this.popLoad();
   };
 

@@ -1,30 +1,87 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Activity from './Activity';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import PercentageDoughnut from '../_shared/PercentageDoughnut';
-import { connect } from 'superagent';
-import { Timeline } from '@material-ui/lab';
+import service from '../../service';
+
+import PaperWithHeader from '../_shared/PaperWithHeader';
+import ProgressBar from '../_shared/ProgressBar';
+
+const useStyles = makeStyles((theme) => ({
+  widget: {
+    padding: theme.spacing(3),
+  },
+  paper: {
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    height: 230,
+    padding: theme.spacing(3),
+  },
+}));
+
+const convertCategoryToString = (category) => {
+  const conversion = {
+    learning_process: 'Leerproces',
+    recognizing_morphemes_sentence: 'Herkennen morfemen in een zin',
+    meaning_morphemes: 'Betekenis morfemen',
+    splitsing_morphemes: 'Splits morfemen',
+    create_morphemes_prefix: 'Creëren morfemen (voorvoegsel)',
+    background_morphemes: 'Alternatieve betekenis morfemen',
+    recognizing_morphemes_text: 'Herkennen morfemen in een tekst',
+    intuition: 'Intuïtie',
+    create_alternative_morphemes: 'Creëren alternatieve morfemen',
+    create_morphemes_suffix: 'Creëren morfemen (achtervoegsel)',
+    create_new_morphemes: 'Creëren nieuwe morfemen',
+  };
+
+  return conversion[category];
+};
 
 const InsightsDuring = (props) => {
-  const { questionGroupIds, lessonId, questionStore } = props;
+  const { questionGroupIds, lessonId, classId, questionStore, studentStore } =
+    props;
   const math = require('mathjs');
   const theme = useTheme();
+  const classes = useStyles();
+
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+
   let ratioCorrect = 0;
   let ratioProgress = 0;
   let averageTime = 0;
-  const history = useHistory();
+
+  const loadLessonCategories = useCallback(async () => {
+    const response = await service.loadLessonCategories(classId);
+    if (!response) return;
+    setCategories(response.body.data);
+  }, [classId]);
+
+  const loadStudents = useCallback(async () => {
+    await studentStore.loadStudents({ classId });
+  }, [studentStore, classId]);
+
+  const loadQuestionGroups = useCallback(async () => {
+    await questionStore.loadQuestionGroupsWithAttempts(questionGroupIds);
+  }, [questionStore, questionGroupIds]);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
-    await questionStore.loadQuestionGroupsWithAttempts(questionGroupIds);
+    const promises = [
+      loadStudents(),
+      loadQuestionGroups(),
+      loadLessonCategories(),
+    ];
+    await Promise.all(promises);
+
     setLoading(false);
-  }, [questionStore, questionGroupIds]);
+  }, [loadStudents, loadQuestionGroups, loadLessonCategories]);
 
   useEffect(() => {
     loadAll();
@@ -164,6 +221,36 @@ const InsightsDuring = (props) => {
         })}
         titleColor={theme.widget.tertiary.main}
       />
+      <Grid container spacing={3} className={classes.widget}>
+        <PaperWithHeader
+          headercolor={theme.widget.secondary.main}
+          headertitle="Top categorieën"
+        >
+          <Paper className={classes.paper}>
+            {categories.slice(0, 3).map((category, index) => (
+              <ProgressBar
+                key={category.key}
+                title={`${index + 1}. ${convertCategoryToString(category.key)}`}
+                value={category.correctness}
+              />
+            ))}
+          </Paper>
+        </PaperWithHeader>
+        <PaperWithHeader
+          headercolor={theme.widget.secondary.main}
+          headertitle="Probleem categorieën"
+        >
+          <Paper className={classes.paper}>
+            {categories.slice(-3).map((category, index) => (
+              <ProgressBar
+                key={category.key}
+                title={`${index + 1}. ${convertCategoryToString(category.key)}`}
+                value={category.correctness}
+              />
+            ))}
+          </Paper>
+        </PaperWithHeader>
+      </Grid>
       <Grid item xs={12}>
         <Paper>{getContent()}</Paper>
       </Grid>

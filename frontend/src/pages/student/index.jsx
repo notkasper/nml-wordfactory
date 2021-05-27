@@ -114,7 +114,7 @@ const Student = (props) => {
 
           <PaperWithHeader
             headercolor={theme.widget.secondary.main}
-            headertitle="Probleem categorieën"
+            headertitle="Top categorieën"
           >
             <Paper className={classes.paper}>
               {categories.slice(0, 3).map((category, index) => (
@@ -130,7 +130,7 @@ const Student = (props) => {
           </PaperWithHeader>
           <PaperWithHeader
             headercolor={theme.widget.secondary.main}
-            headertitle="Top categorieën"
+            headertitle="Probleem categorieën"
           >
             <Paper className={classes.paper}>
               {categories.slice(-3).map((category, index) => (
