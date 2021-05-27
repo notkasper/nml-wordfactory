@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import PercentageDoughnut from '../_shared/PercentageDoughnut';
 import service from '../../service';
-
+import { math } from 'mathjs';
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 
@@ -46,16 +46,14 @@ const convertCategoryToString = (category) => {
 const InsightsDuring = (props) => {
   const { questionGroupIds, lessonId, classId, questionStore, studentStore } =
     props;
-  const math = require('mathjs');
   const theme = useTheme();
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-
-  let ratioCorrect = 0;
-  let ratioProgress = 0;
-  let averageTime = 0;
+  const [ratioCorrect, setRatioCorrect] = useState(0);
+  const [ratioProgress, setRatioProgess] = useState(0);
+  const [averageTime, setAverageTime] = useState(0);
 
   const loadLessonCategories = useCallback(async () => {
     const response = await service.loadLessonCategories(classId);
@@ -102,25 +100,23 @@ const InsightsDuring = (props) => {
 
     if (questionStore.questionGroups) {
       questionStore.questionGroups.forEach((qg) => {
-        if (qg.questions[0].type === 'multipleChoice') {
-          qg.questionGroupAttempts.forEach((qga) => {
-            if (qga.lessonAttempts.lessonId === lessonId) {
-              if (qga.isCompleted) {
-                totalComplete += 1;
-                totalCorrect += qga.correct;
-                totalScores += qga.correct + qga.incorrect + qga.missed;
-                elapsedTimes.push(qga.timeElapsedSeconds);
-              } else {
-                totalNotComplete += 1;
-              }
+        qg.questionGroupAttempts.forEach((qga) => {
+          if (qga.lessonAttempts.lessonId === lessonId) {
+            if (qga.isCompleted) {
+              totalComplete += 1;
+              totalCorrect += qga.correct;
+              totalScores += qga.correct + qga.incorrect + qga.missed;
+              elapsedTimes.push(qga.timeElapsedSeconds);
+            } else {
+              totalNotComplete += 1;
             }
-          });
-        }
+          }
+        });
       });
 
-      ratioCorrect = Math.round((totalCorrect / totalScores) * 100);
-      ratioProgress = Math.round(
-        (totalComplete / (totalComplete + totalNotComplete)) * 100
+      setRatioCorrect(Math.round((totalCorrect / totalScores) * 100));
+      setRatioProgess(
+        Math.round((totalComplete / (totalComplete + totalNotComplete)) * 100)
       );
 
       const sortedTimes = elapsedTimes.sort((a, b) => a - b);
@@ -134,7 +130,7 @@ const InsightsDuring = (props) => {
           acc += 1;
         }
       }
-      averageTime = totalTime / acc;
+      setAverageTime(totalTime / acc);
     }
   };
 

@@ -32,8 +32,7 @@ const getQuestionGroups = async (req, res) => {
       },
     ],
   });
-  //   questionGroups.push(questionGroup);
-  // }
+
   res.status(200).send({ data: questionGroups });
 };
 

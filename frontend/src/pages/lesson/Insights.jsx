@@ -26,11 +26,8 @@ const Lesson = (props) => {
   };
 
   const getQuestionGroupIds = () => {
-    const ids = [];
     if (lessonStore.lesson) {
-      lessonStore.lesson.questionGroups.forEach((qg) => {
-        ids.push(qg.id);
-      });
+      const ids = lessonStore.lesson.questionGroups.map((e) => e.id);
       return ids;
     }
   };
@@ -58,7 +55,6 @@ const Lesson = (props) => {
         <Grid
           item
           xs={4}
-          md={4}
           style={{
             display: 'flex',
             direction: 'row',
@@ -88,7 +84,7 @@ const Lesson = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12} md={12}>
+      <Grid item xs={12}>
         {getContent()}
       </Grid>
     </Grid>
