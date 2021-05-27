@@ -35,9 +35,16 @@ const initialize = async () => {
       for (const questionAttempt of questionAttempts) {
         teachers.push(await getTeachersFromQuestionAttempt(questionAttempt));
       }
+      // Can result in duplicate teacher instances
+      const teacherIds = [];
       teachers.forEach((teacher) => {
-        if (socketManager.isConnected(teacher.id)) {
-          socketManager.emitEvent(teacher.id, 'newQuestionAttempts');
+        if (!teacherIds.includes(teacher.id)) {
+          teacherIds.push(teacher.id);
+        }
+      });
+      teacherIds.forEach((teacherId) => {
+        if (socketManager.isConnected(teacherId)) {
+          socketManager.emitEvent(teacherId, 'newQuestionAttempts');
         }
       });
     }

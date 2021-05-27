@@ -21,11 +21,16 @@ const makeRequest = async (stage) => {
 
     // press space bar to insert some data
     if (key === '\u0020') {
-      console.info('Attempting to push new data...');
-      counter += 1;
       const stage = stages[counter];
-      await makeRequest(stage);
-      console.log('Data pushes successfully');
+      console.info(`Attempting to push new data, stage: ${stage}`);
+      counter += 1;
+      try {
+        await makeRequest(stage);
+      } catch (error) {
+        console.log('Error while pushing data');
+        process.exit();
+      }
+      console.log('Data pushed successfully');
       if (counter >= 3) {
         process.exit();
       }
