@@ -1,5 +1,6 @@
 const db = require('../db');
 const socketManager = require('../socketManager');
+const logger = require('../logger');
 
 const getTeachersFromQuestionAttempt = async (questionAttempt) => {
   const teachers = await questionAttempt
@@ -30,10 +31,12 @@ const initialize = async () => {
   db.QuestionAttempt.addHook(
     'afterBulkCreate',
     async (questionAttempts, options) => {
-      // TODO: This is super ugly and will be fixed once we add db shortcuts
+      logger.info('After bulk create hook');
       const teachers = [];
       for (const questionAttempt of questionAttempts) {
-        teachers.push(await getTeachersFromQuestionAttempt(questionAttempt));
+        teachers.push(
+          ...(await getTeachersFromQuestionAttempt(questionAttempt))
+        );
       }
       // Can result in duplicate teacher instances
       const teacherIds = [];
@@ -42,9 +45,11 @@ const initialize = async () => {
           teacherIds.push(teacher.id);
         }
       });
+      logger.info('Emitting to', teacherIds);
       teacherIds.forEach((teacherId) => {
         if (socketManager.isConnected(teacherId)) {
           socketManager.emitEvent(teacherId, 'newQuestionAttempts');
+          socketManager.emitEvent(teacherId, 'newQuestionAttempts_temp'); // remove this one at some point
         }
       });
     }
