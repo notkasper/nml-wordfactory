@@ -11,6 +11,7 @@ class LessonStore {
       loading: observable,
       loadLesson: action,
       loadLessonAttempts: action,
+      refreshLessonAttempts: action,
       questionGroup: observable,
       popLoad: action,
       pushLoad: action,
@@ -54,10 +55,26 @@ class LessonStore {
     this.popLoad();
   };
 
-  loadLessonAttempts = async (lessonId) => {
+  refreshLessonAttempts = async () => {
+    console.log('GONNA REFRESH');
+    if (!this.lessonAttempts.length) {
+      console.log('no lesson attempts, returning');
+      return;
+    }
+    const lessonIdToRefresh = this.lessonAttempts[0]?.lessonId;
+    if (!lessonIdToRefresh) {
+      console.log('no lesson id to refresh, returning');
+      return;
+    }
+    console.log('refreshing', lessonIdToRefresh);
+    await this.loadLessonAttempts(lessonIdToRefresh, true);
+  };
+
+  loadLessonAttempts = async (lessonId, isRefresh = false) => {
     if (
       this.lessonAttempts?.length &&
-      this.lessonAttempts[0]?.lessonId === lessonId
+      this.lessonAttempts[0]?.lessonId === lessonId &&
+      !isRefresh
     ) {
       return;
     }
@@ -71,6 +88,10 @@ class LessonStore {
     loadedLessonAttempts = utils.addPerformance(loadedLessonAttempts);
     this.setlessonAttempts(loadedLessonAttempts);
     this.popLoad();
+  };
+
+  onNewQuestionAttempts = (data) => {
+    console.log('NEW', data);
   };
 
   get isLoading() {

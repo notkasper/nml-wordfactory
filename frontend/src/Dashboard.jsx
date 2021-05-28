@@ -5,8 +5,6 @@ import 'chartjs-plugin-colorschemes';
 import routes from './routes';
 import Menu from './Menu';
 import AppBar from './AppBar';
-import { useEffect } from 'react';
-import socket from './socket';
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -26,23 +24,6 @@ const Dashboard = (props) => {
     studentStore,
   } = props;
   const classes = useStyles();
-
-  const onNewQuestionAttempts = (data) => {
-    console.log(`New question attempt event: ${JSON.stringify(data)}`);
-  };
-
-  useEffect(() => {
-    // intialize socket, only need to be done once in the application
-    socket.init();
-
-    // subscribe to websocket event
-    socket.subscribe('newQuestionAttempts', onNewQuestionAttempts);
-
-    return () => {
-      // when component is unmounted, unsubscribe from websocket event
-      socket.unsubscribe('newQuestionAttempts');
-    };
-  }, []);
 
   return (
     <Switch>

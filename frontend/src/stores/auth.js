@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 import cookie from 'js-cookie';
 import service from '../service';
+import socket from '../socket';
 
 // Tutorial on mobx state management: https://blog.logrocket.com/introduction-to-mobx-with-react/
 class AuthStore {
@@ -36,11 +37,13 @@ class AuthStore {
     if (!response) {
       return false;
     }
+    socket.connect();
     return true;
   };
 
   logout = () => {
     cookie.remove('token');
+    socket.disconnect();
   };
 }
 
