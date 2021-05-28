@@ -7,15 +7,13 @@ import service from '../../service';
 
 const Question = (props) => {
   const { authStore } = props;
-  const [questionGroup, setQuestionGroup] = useState(null);
+  const [questionGroups, setQuestionGroup] = useState(null);
   const [loading, setLoading] = useState(false);
   const params = useParams();
 
-  const loadQuestionGroup = useCallback(async () => {
+  const loadQuestionGroups = useCallback(async () => {
     setLoading(true);
-    const response = await service.loadQuestionGroups({
-      ids: [params.questionGroupId],
-    });
+    const response = await service.loadQuestionGroups([params.questionGroupId]);
     if (!response) {
       return;
     }
@@ -24,8 +22,8 @@ const Question = (props) => {
   }, [params.questionGroupId]);
 
   useEffect(() => {
-    loadQuestionGroup();
-  }, [loadQuestionGroup]);
+    loadQuestionGroups();
+  }, [loadQuestionGroups]);
 
   const save = async (questionId, newData) => {
     setLoading(true);
@@ -35,10 +33,10 @@ const Question = (props) => {
       return;
     }
     authStore.setSuccess('Vraag succesvol geüpdatet');
-    await loadQuestionGroup();
+    await loadQuestionGroups();
   };
 
-  if (loading || !questionGroup) {
+  if (loading || !questionGroups) {
     return <CircularProgress />;
   }
 
@@ -46,7 +44,7 @@ const Question = (props) => {
     <Grid container spacing={2}>
       <Grid item xs={12}></Grid>
       <Grid item xs={12}>
-        <QuestionGroup {...questionGroup} save={save} />
+        <QuestionGroup {...questionGroups[0]} save={save} />
       </Grid>
     </Grid>
   );

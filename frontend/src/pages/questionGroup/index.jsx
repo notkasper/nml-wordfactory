@@ -15,14 +15,18 @@ import AnswersMultipleChoice from './AnswersMultipleChoice';
 
 const Answers = (props) => {
   const { questionStore } = props;
-  const type = questionStore.questionGroup.questions[0].type;
-  switch (type) {
-    case 'multipleChoice':
-      return <AnswersMultipleChoice {...props} />;
-    default:
-      return (
-        <p>{`Er is iets fout gegaan, ${type} wordt niet herkend als vraag type`}</p>
-      );
+  if (questionStore.questionGroups) {
+    const type = questionStore.questionGroups[0].questions[0].type;
+    switch (type) {
+      case 'multipleChoice':
+        return <AnswersMultipleChoice {...props} />;
+      default:
+        return (
+          <p>{`Er is iets fout gegaan, ${type} wordt niet herkend als vraag type`}</p>
+        );
+    }
+  } else {
+    return null;
   }
 };
 
@@ -33,7 +37,9 @@ const QuestionStats = (props) => {
   const { questionStore, crumbs } = props;
 
   const loadAll = useCallback(async () => {
-    await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
+    await questionStore.loadQuestionGroupsWithAttempts([
+      params.questionGroupId,
+    ]);
   }, [questionStore, params.questionGroupId]);
 
   useEffect(() => {
