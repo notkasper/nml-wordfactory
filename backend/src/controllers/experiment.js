@@ -93,6 +93,7 @@ const main = async (req, res) => {
       setTimeout(() => {
         socketManager.broadcast('notification', {
           message: 'De probleemcategoriën van leerlingen zijn veranderd.',
+          path: ['/dashboard', `/classes/${class1.id}/class_insights`].join(''),
         });
       }, 5000);
 
@@ -109,6 +110,11 @@ const main = async (req, res) => {
         socketManager.broadcast('notification', {
           message:
             'Leerlingen doen lang over opdrachten over "morfemen herkennen".',
+          path: [
+            '/dashboard',
+            `/classes/${class1.id}/class_lessons`,
+            `/lessons/${lesson.lessonId}/lesson_questions`,
+          ].join(''),
         });
       }, 5000);
 
@@ -125,6 +131,12 @@ const main = async (req, res) => {
         socketManager.broadcast('notification', {
           message:
             'Leerlingen in klas 1 vereisen aandacht, een opdracht is gemiddeld zeer slecht uitgevoerd.',
+          path: [
+            '/dashboard',
+            `/classes/${class1.id}/class_lessons`,
+            `/lessons/${lesson.lessonId}/lesson_questions`,
+            `/questionGroups/${situation4[0]}/question_group_insights`,
+          ].join(''),
         });
       }, 5000);
 
