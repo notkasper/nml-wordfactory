@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
+    textAlign: 'center',
     overflow: 'auto',
     flexDirection: 'column',
   },

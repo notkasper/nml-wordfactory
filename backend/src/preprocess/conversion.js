@@ -1,11 +1,10 @@
-const fs = require('fs');
 const uuid = require('uuid');
-const _ = require('lodash');
-const { encryptPassword } = require('./_utils');
 
-const wordfactoryExport = require('../wordfactory-export.json');
-
-convertQuestionItemToAnswer = ({ format, question, questionIndex = 0 }) => {
+const convertQuestionItemToAnswer = ({
+  format,
+  question,
+  questionIndex = 0,
+}) => {
   if (['Format_F1', 'Format_F1b'].includes(format.format)) {
     return Object.values(question.answers || []);
   }
@@ -66,6 +65,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'fillInTheBlanks',
+        contentTags: ['intuition', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {
           story: items[0].story.replace(/WOORD_OPTIE/g, '<BLANK>'),
@@ -79,6 +79,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoice',
+      contentTags: ['background_morphemes'],
       instruction: item.question || '',
       data: {
         options: item.answers.map((answer, index) => ({
@@ -94,6 +95,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoice',
+      contentTags: ['create_morphemes_prefix', 'made-up'],
       instruction: item.question || '',
       data: {
         wordpart: item.wordpart,
@@ -111,6 +113,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'clickTheRightWords',
+        contentTags: ['recognizing_morphemes_sentence'],
         instruction: lesson.lessonInstruction,
         data: {
           story: items[0].story,
@@ -126,6 +129,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'open',
+      contentTags: ['learning_process'],
       instruction: item.question,
       data: {},
     }));
@@ -136,6 +140,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'divideTheWord',
+      contentTags: ['splitsing_morphemes'],
       instruction: lesson.lessonInstruction,
       data: {
         word: item.word,
@@ -156,6 +161,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'combineAndFillInTheBlanks',
+        contentTags: ['create_morphemes_suffix', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {
           story: items[0].story.replace(/WOORD_OPTIE/g, '<BLANK>'),
@@ -172,6 +178,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'multipleChoice',
+        contentTags: ['recognizing_morphemes_text'],
         instruction: lesson.lessonInstruction,
         data: {
           options: items.map((item) => ({
@@ -188,6 +195,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'multipleChoiceGroup',
+      contentTags: ['meaning_morphemes', 'made-up'],
       instruction: lesson.lessonInstruction,
       data: {
         word: w.word,
@@ -207,6 +215,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       questionId: uuid.v4(),
       questionIndex: index,
       type: 'openGroup',
+      contentTags: ['meaning_morphemes', 'made-up'],
       instruction: lesson.lessonInstruction,
       data: {
         word: w.word,
@@ -223,6 +232,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
         questionId: uuid.v4(),
         questionIndex: 0,
         type: 'open',
+        contentTags: ['create_alternative_morphemes', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {
           wordpart: items[0].wordpart,
@@ -236,7 +246,8 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
       {
         questionId: uuid.v4(),
         questionIndex: 0,
-        type: 'open',
+        type: 'list',
+        contentTags: ['create_new_morphemes', 'made-up'],
         instruction: lesson.lessonInstruction,
         data: {},
       },
@@ -246,120 +257,7 @@ const convertFormatToQuestions = ({ lesson, format, items }) => {
   return {};
 };
 
-const preprocessedData = {};
-const preprocess = async () => {
-  const uniqueUsernames = _.uniqBy(wordfactoryExport, (e) => e.user.name);
-  preprocessedData.users = [
-    {
-      id: uuid.v4(),
-      role: 'teacher',
-      name: 'superuser',
-      email: 'super@user.nl',
-      passwordEncrypted: await encryptPassword('superuser'),
-    },
-  ];
-
-  for (const uniqueUsername of uniqueUsernames) {
-    preprocessedData.users.push({
-      id: uuid.v4(),
-      role: 'student',
-      name: uniqueUsername.user.name,
-      passwordEncrypted: await encryptPassword(uniqueUsername.user.name),
-      lessonAttempts: [],
-    });
-  }
-
-  const uniqueLessons = _.uniqBy(wordfactoryExport, (e) => e.lesson.lesson_id)
-    .sort((a, b) => a.lesson.lesson_id - b.lesson.lesson_id)
-    .map(({ lesson }) => ({
-      lessonId: uuid.v4(),
-      lessonIndex: lesson.lesson_id,
-      lessonPrefix: lesson.lessonPrefix,
-      lessonInstruction: lesson.lessonInstruction,
-      lessonTitle: lesson.lessonTitle,
-      questionGroups: wordfactoryExport
-        .find((e) => e.lesson.lessonPrefix === lesson.lessonPrefix)
-        .lesson.formats.map((questionGroup, index) => ({
-          questionGroupId: uuid.v4(),
-          questionGroupFormat: questionGroup.format,
-          questionGroupIndex: index,
-          questionGroupTitle: questionGroup.data.formatTitle,
-          questions: convertFormatToQuestions({
-            lesson,
-            format: questionGroup.format,
-            items: questionGroup.data.item
-              ? [questionGroup.data.item]
-              : questionGroup.data.items || [],
-          }),
-        })),
-    }));
-
-  preprocessedData.lessons = uniqueLessons;
-
-  wordfactoryExport.forEach((lessonAttempt) => {
-    const {
-      user: { name },
-      lesson,
-    } = lessonAttempt;
-
-    const preprocessedLesson = preprocessedData.lessons.find(
-      (e) => e.lessonPrefix === lesson.lessonPrefix
-    );
-
-    const index = preprocessedData.users.findIndex((e) => e.name === name);
-    const lessonAttemptId = uuid.v4();
-    const completed = lessonAttempt.lesson.formats.every((e) => e.completed);
-    preprocessedData.users[index].lessonAttempts.push({
-      id: lessonAttemptId,
-      lessonId: preprocessedLesson.lessonId,
-      stoppedTime: lesson.stoppedTime,
-      startedTime: lesson.startedTime,
-      isStopped: lesson.isStopped,
-      isStarted: lesson.isStarted,
-      isCompleted: completed,
-      questionGroups: preprocessedLesson.questionGroups
-        .map((questionGroup, questionGroupIndex) => {
-          const format = lessonAttempt.lesson.formats[questionGroupIndex];
-          const questionGroupAttemptId = uuid.v4();
-          if (format) {
-            return {
-              id: questionGroupAttemptId,
-              questionGroupId: questionGroup.questionGroupId,
-              isCompleted: format.data.isCompleted,
-              showFeedback: format.data.showFeedback,
-              correct: format.data.correct,
-              incorrect: format.data.incorrect,
-              missed: format.data.missed,
-              timeElapsedSeconds: format.data.timeElapsedSeconds,
-              answers: questionGroup.questions.map(
-                (question, questionIndex) => {
-                  const questionAttemptId = uuid.v4();
-                  const answer = format.data.items
-                    ? format.data.items[questionIndex]
-                    : format.data.item;
-                  return {
-                    id: questionAttemptId,
-                    questionId: question.questionId,
-                    content:
-                      convertQuestionItemToAnswer({
-                        format,
-                        question: answer,
-                        questionIndex,
-                      }) || {},
-                  };
-                }
-              ),
-            };
-          }
-        })
-        .filter((e) => e !== null && e !== undefined),
-    });
-  });
-
-  fs.writeFileSync(
-    'wordfactory-preprocessed.json',
-    JSON.stringify(preprocessedData)
-  );
+module.exports = {
+  convertQuestionItemToAnswer,
+  convertFormatToQuestions,
 };
-
-preprocess();

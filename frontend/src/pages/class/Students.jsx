@@ -39,7 +39,7 @@ const Students = (props) => {
   };
 
   const onChangePage = (event, value) => {
-    setPage(value);
+    setPage(value - 1);
   };
 
   const start = page * PAGE_SIZE;
@@ -62,7 +62,6 @@ const Students = (props) => {
           onChange={onStudentFilterChange}
           inputValue={studentFilterInputValue}
           onInputChange={onStudentFilterInputChange}
-          id="combo-box-demo"
           options={students}
           getOptionLabel={(option) => option.name}
           renderInput={(params) => (
@@ -73,14 +72,19 @@ const Students = (props) => {
         <Paper>
           <List className={classes.root}>
             {shownStudents.map((student) => (
-              <Student key={student.id} {...student} onClick={() => onClick(student.id)} />
+              <Student
+                key={student.id}
+                {...student}
+                isBottom={student.bottom}
+                onClick={() => onClick(student.id)}
+              />
             ))}
           </List>
         </Paper>
         {studentFilterValue ? null : (
           <Pagination
             className={classes.marginTop}
-            count={Math.ceil(students.length / 10)}
+            count={Math.ceil(students.length / PAGE_SIZE)}
             color="primary"
             onChange={onChangePage}
           />

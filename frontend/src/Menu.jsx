@@ -2,117 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import TreeView from '@material-ui/lab/TreeView';
-import TreeItem from '@material-ui/lab/TreeItem';
-import Typography from '@material-ui/core/Typography';
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded';
-import ImportContactsRoundedIcon from '@material-ui/icons/ImportContactsRounded';
 import NoMeetingRoomRoundedIcon from '@material-ui/icons/NoMeetingRoomRounded';
+import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import MenuItem from './pages/_shared/MenuItem';
 import service from './service';
+import socket from './socket';
 
 const drawerWidth = 245;
 
-const useTreeItemStyles = makeStyles((theme) => ({
-  root: {
-    width: drawerWidth,
-    color: theme.palette.text.secondary,
-    '&:hover > $content': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    '&:focus > $content, &$selected > $content': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
-      color: 'var(--tree-view-color)',
-    },
-    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
-      backgroundColor: 'transparent',
-    },
+const useStyles = makeStyles(() => ({
+  drawer: {
+    marginRight: drawerWidth,
   },
-  content: {
-    color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    '$expanded > &': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-  },
-  group: {
-    marginLeft: 0,
-    '& $content': {
-      paddingLeft: theme.spacing(2),
-    },
-  },
-  expanded: {},
-  selected: {},
-  label: {
-    fontWeight: 'inherit',
-    color: 'inherit',
-  },
-  labelRoot: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0.5, 0),
-  },
-  labelIcon: {
-    marginRight: theme.spacing(1),
-  },
-  labelText: {
-    fontWeight: 'inherit',
-    flexGrow: 1,
+  logoutButton: {
+    position: 'absolute',
+    bottom: 0,
   },
 }));
-
-const StyledTreeItem = (props) => {
-  const classes = useTreeItemStyles();
-  const {
-    labelText,
-    labelIcon: LabelIcon,
-    labelInfo,
-    color,
-    bgColor,
-    ...other
-  } = props;
-
-  return (
-    <TreeItem
-      label={
-        <div className={classes.labelRoot}>
-          {LabelIcon && (
-            <LabelIcon color="inherit" className={classes.labelIcon} />
-          )}
-          <Typography variant="body2" className={classes.labelText}>
-            {labelText}
-          </Typography>
-          <Typography variant="caption" color="inherit">
-            {labelInfo}
-          </Typography>
-        </div>
-      }
-      style={{
-        '--tree-view-color': color,
-        '--tree-view-bg-color': bgColor,
-      }}
-      classes={{
-        root: classes.root,
-        content: classes.content,
-        expanded: classes.expanded,
-        selected: classes.selected,
-        group: classes.group,
-        label: classes.label,
-      }}
-      {...other}
-    />
-  );
-};
-
-const useStyles = makeStyles({});
 
 const Menu = (props) => {
   const { authStore } = props;
@@ -120,6 +39,7 @@ const Menu = (props) => {
   const history = useHistory();
   const [classList, setClassList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const loadClasses = async () => {
     setLoading(true);
@@ -135,65 +55,99 @@ const Menu = (props) => {
   }, []);
 
   const onNodeSelect = (event, value) => {
-    if (value === '/') {
-      authStore.logout(); // logout route
+    switch (value) {
+      case '/':
+        handleDialogOpen();
+        break;
+      case '/dashboard/classes':
+        // do nothing
+        break;
+      default:
+        history.push(value);
     }
-    history.push(value);
   };
 
-  if (loading) {
-    return <CircularProgress />;
-  }
+  const handleLogout = () => {
+    authStore.logout();
+    socket.disconnect();
+    history.push('/');
+    authStore.setSuccess('Succesvol uitgelogd!');
+  };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   return (
-    <TreeView
-      className={classes.root}
-      defaultExpanded={['/dashboard/classes']}
-      defaultCollapseIcon={<ArrowDropDownIcon />}
-      defaultExpandIcon={<ArrowRightIcon />}
-      defaultEndIcon={<div style={{ width: 24 }} />}
-      onNodeSelect={onNodeSelect}
-    >
-      <div style={{ marginTop: '64px', padding: 0 }} />
-      <Divider />
-      <ListSubheader inset>Leraren dashboard</ListSubheader>
-      <StyledTreeItem
-        nodeId="/dashboard/home"
-        labelText="Overzicht"
-        labelIcon={HomeRoundedIcon}
-      />
-      <StyledTreeItem
-        nodeId="/dashboard/classes"
-        labelText="Klassen"
-        labelIcon={SchoolRoundedIcon}
+    <Drawer variant="permanent" className={classes.drawer}>
+      <TreeView
+        defaultExpanded={['/dashboard/classes']}
+        defaultCollapseIcon={<ArrowDropDownIcon />}
+        defaultExpandIcon={<ArrowRightIcon />}
+        defaultEndIcon={<div style={{ width: 24 }} />}
+        onNodeSelect={onNodeSelect}
       >
-        {classList.map((classItem) => (
-          <StyledTreeItem
-            key={classItem.id}
-            nodeId={`/dashboard/classes/${classItem.id}`}
-            labelText={classItem.name}
-            // labelInfo="3"
-            color="#1a73e8"
-            bgColor="#e8f0fe"
-          />
-        ))}
-      </StyledTreeItem>
-      <StyledTreeItem
-        nodeId="/dashboard/students"
-        labelText="Leerlingen"
-        labelIcon={GroupRoundedIcon}
-      />
-      {/* <StyledTreeItem
-        nodeId="/dashboard/lessons"
-        labelText="Lessen"
-        labelIcon={ImportContactsRoundedIcon}
-      /> */}
-      <StyledTreeItem
-        nodeId="/"
-        labelText="Uitloggen"
-        labelIcon={NoMeetingRoomRoundedIcon}
-      />
-    </TreeView>
+        <div style={{ marginTop: '64px', padding: 0 }} />
+        <Divider />
+        <MenuItem
+          nodeId="/dashboard/home"
+          labelText="Overzicht"
+          labelIcon={HomeRoundedIcon}
+        />
+        <MenuItem
+          nodeId="/dashboard/classes"
+          labelText="Klassen"
+          labelIcon={SchoolRoundedIcon}
+        >
+          {loading
+            ? null
+            : classList.map((classItem) => (
+                <MenuItem
+                  key={classItem.id}
+                  nodeId={`/dashboard/classes/${classItem.id}/class_insights`}
+                  labelText={classItem.name}
+                  color="#1a73e8"
+                  bgColor="#e8f0fe"
+                />
+              ))}
+        </MenuItem>
+        <MenuItem
+          nodeId="/dashboard/students"
+          labelText="Leerlingen"
+          labelIcon={GroupRoundedIcon}
+        />
+        <MenuItem
+          nodeId="/"
+          labelText="Uitloggen"
+          labelIcon={NoMeetingRoomRoundedIcon}
+          className={classes.logoutButton}
+        />
+      </TreeView>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Uitloggen</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Weet je zeker dat je wilt uitloggen?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Annuleren
+          </Button>
+          <Button onClick={handleLogout} color="primary">
+            Uitloggen
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Drawer>
   );
 };
 

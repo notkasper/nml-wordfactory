@@ -1,18 +1,39 @@
 const db = require('../db');
 
-const getQuestionGroup = async (req, res) => {
-  const {
-    params: { id },
-  } = req;
-
-  const questionGroup = await db.QuestionGroup.findByPk(id, {
-    include: {
-      model: db.Question,
-      as: 'questions',
-    },
+const getQuestionGroups = async (req, res) => {
+  const { ids } = req.query;
+  const idsParsed = JSON.parse(ids);
+  const questionGroups = await db.QuestionGroup.findAll({
+    where: { id: idsParsed },
+    include: [
+      {
+        model: db.QuestionGroupAttempt,
+        as: 'questionGroupAttempts',
+        include: [
+          {
+            model: db.QuestionAttempt,
+            as: 'questionAttempts',
+          },
+          {
+            model: db.LessonAttempt,
+            as: 'lessonAttempts',
+            include: [
+              {
+                model: db.Student,
+                as: 'student',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        model: db.Question,
+        as: 'questions',
+      },
+    ],
   });
 
-  res.status(200).send({ data: questionGroup });
+  res.status(200).send({ data: questionGroups });
 };
 
-module.exports = { getQuestionGroup };
+module.exports = { getQuestionGroups };

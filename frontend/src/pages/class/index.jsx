@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,12 +12,13 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import PeopleIcon from '@material-ui/icons/People';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import service from '../../service';
-import Insight from './Insight';
+import Insights from './Insights';
 import Courses from './Courses';
 import Students from './Students';
 import PageContainer from '../_shared/PageContainer';
 import TabContent from '../_shared/TabContent';
 import Breadcrumbs from '../_shared/Breadcrumbs';
+import socket from '../../socket';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -29,21 +30,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Lesson = (props) => {
-  const { crumbs } = props;
+  const { crumbs, studentStore } = props;
   const classes = useStyles();
+  const history = useHistory();
   const params = useParams();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState(0);
-  const [students, setStudents] = useState([]);
   const [theClass, setTheClass] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
+
   const classId = params.classId;
 
   const loadStudents = useCallback(async () => {
-    const response = await service.loadStudents({ classId });
-    if (!response) return;
-    setStudents(response.body.data);
-  }, [params.classId]);
+    await studentStore.loadStudents({ classId });
+  }, [studentStore, classId]);
 
   const loadClass = useCallback(async () => {
     const response = await service.loadClass(params.classId);
@@ -55,32 +56,58 @@ const Lesson = (props) => {
     const response = await service.loadCourses({ classId });
     if (!response) return;
     setCourses(response.body.data);
-  }, [params.classId]);
+  }, [classId]);
+
+  const loadLessonCategories = useCallback(async () => {
+    const response = await service.loadLessonCategories(classId);
+    if (!response) return;
+    setCategories(response.body.data);
+  }, [classId]);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
-    const promises = [loadStudents(), loadCourses(), loadClass()];
+    const promises = [
+      loadStudents(),
+      loadCourses(),
+      loadClass(),
+      loadLessonCategories(),
+    ];
     await Promise.all(promises);
     setLoading(false);
-  }, [loadClass, loadStudents, loadCourses]);
+  }, [loadClass, loadStudents, loadCourses, loadLessonCategories]);
 
-  const onChangeTab = (event, newValue) => setValue(newValue);
+  const onClickTab = (event, newTab) => {
+    const currentTab = params.classTab;
+    const newPath = location.pathname.replace(currentTab, newTab);
+    history.push(newPath);
+  };
 
   useEffect(() => {
     loadAll();
+    socket.subscribe('newQuestionAttempts_temp', () => {
+      loadAll();
+    });
   }, [loadAll]);
 
-  if (loading) {
+  if (loading || studentStore.isLoading) {
     return <CircularProgress />;
   }
 
   return (
     <>
       <AppBar position="static">
-        <Tabs value={value} onChange={onChangeTab}>
-          <Tab label="Inzicht (klas)" icon={<EqualizerIcon />} />
-          <Tab label="Lessen" icon={<MenuBookIcon />} />
-          <Tab label="Leerlingen" icon={<PeopleIcon />} />
+        <Tabs value={params.classTab} onChange={onClickTab}>
+          <Tab
+            label="Inzicht (klas)"
+            value="class_insights"
+            icon={<EqualizerIcon />}
+          />
+          <Tab label="Lessen" value="class_lessons" icon={<MenuBookIcon />} />
+          <Tab
+            label="Leerlingen"
+            value="class_students"
+            icon={<PeopleIcon />}
+          />
         </Tabs>
       </AppBar>
       <PageContainer>
@@ -90,14 +117,21 @@ const Lesson = (props) => {
             {theClass.name}
           </Typography>
         </Grid>
-        <TabContent index={0} value={value}>
-          <Insight />
+        <TabContent index="class_insights" value={params.classTab}>
+          <Insights
+            topResults={studentStore.topResults}
+            bottomResults={studentStore.bottomResults}
+            categories={categories}
+          />
         </TabContent>
-        <TabContent index={1} value={value}>
+        <TabContent index="class_lessons" value={params.classTab}>
           <Courses courses={courses} />
         </TabContent>
-        <TabContent index={2} value={value}>
-          <Students students={students} />
+        <TabContent index="class_students" value={params.classTab}>
+          <Students
+            students={studentStore.students}
+            bottomResults={studentStore.bottomResults}
+          />
         </TabContent>
       </PageContainer>
     </>

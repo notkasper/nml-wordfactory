@@ -48,8 +48,8 @@ const loadLessonAttempts = async (lessonId) => {
   return response;
 };
 
-const loadQuestionAttempts = async () => {
-  const req = request.get(`/api/v1/questionAttempts`).query({ pageSize: 10 });
+const loadQuestionAttemptsID = async (questionId) => {
+  const req = request.get(`/api/v1/questionAttempts/${questionId}`);
   const response = await handleResponse(req);
   return response;
 };
@@ -75,16 +75,39 @@ const loadStudent = async (id) => {
   return response;
 };
 
-const loadQuestionGroupAttempts = async (id) => {
+const loadQuestionAttempts = async ({ studentId, lessonId }) => {
   const req = request
-    .get(`/api/v1/questionGroupAttempts`)
-    .query({ questionGroupId: id });
+    .get('/api/v1/questionAttempts')
+    .query({ studentId, lessonId });
   const response = await handleResponse(req);
   return response;
 };
 
-const loadQuestionGroup = async (id) => {
-  const req = request.get(`/api/v1/questionGroup/${id}`);
+const loadQuestionGroupAttempts = async ({ questionGroupId, pageSize }) => {
+  const req = request
+    .get('/api/v1/questionGroupAttempts')
+    .query({ questionGroupId, pageSize });
+  const response = await handleResponse(req);
+  return response;
+};
+
+const loadQuestionGroups = async (ids) => {
+  const req = request
+    .get(`/api/v1/questionGroup/`)
+    .query({ ids: JSON.stringify(ids) });
+  const response = await handleResponse(req);
+
+  return response;
+};
+
+const loadLessonCategories = async (id) => {
+  const req = request.get(`/api/v1/classes/${id}/categories`);
+  const response = await handleResponse(req);
+  return response;
+};
+
+const loadStudentCategories = async (id) => {
+  const req = request.get(`/api/v1/students/${id}/categories`);
   const response = await handleResponse(req);
   return response;
 };
@@ -103,10 +126,13 @@ const service = {
   loadClasses,
   loadLessonAttempts,
   loadQuestionAttempts,
+  loadQuestionAttemptsID,
   loadLesson,
   login,
   loadQuestionGroupAttempts,
-  loadQuestionGroup,
+  loadQuestionGroups,
+  loadLessonCategories,
+  loadStudentCategories,
   updateQuestion,
 };
 

@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme) => ({
 const Histogram = (props) => {
   const { lessonAttempts, title } = props;
   const classes = useStyles();
-  let gradeDistribution = lessonAttempts.reduce(
+  const gradeDistribution = lessonAttempts.reduce(
     (acc, curr) => {
-      const index = Math.floor(curr.performance);
-      acc[index] += 1;
+      const index = curr.performance;
+      acc[index - 1] += 1;
       return acc;
     },
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -36,18 +36,7 @@ const Histogram = (props) => {
         data: gradeDistribution,
       },
     ],
-    labels: [
-      '0-1',
-      '1-2',
-      '2-3',
-      '3-4',
-      '4-5',
-      '5-6',
-      '6-7',
-      '7-8',
-      '8-9',
-      '9-10',
-    ],
+    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);

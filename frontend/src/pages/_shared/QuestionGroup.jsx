@@ -5,6 +5,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import MultipleChoice from '../_shared/questionTypes/MultipleChoice';
+import MultipleChoiceGroup from '../_shared/questionTypes/MultipleChoiceGroup';
 import Open from '../_shared/questionTypes/Open';
 import DivideTheWord from '../_shared/questionTypes/DivideTheWord';
 import ClickTheRightWords from '../_shared/questionTypes/clickTheRightWords';
@@ -14,6 +15,8 @@ const Question = (props) => {
   switch (type) {
     case 'multipleChoice':
       return <MultipleChoice {...props} />;
+    case 'multipleChoiceGroup':
+      return <MultipleChoiceGroup {...props} />;
     case 'open':
       return <Open {...props} />;
     case 'divideTheWord':
@@ -60,7 +63,7 @@ const QuestionGroup = (props) => {
           }
         >
           {questions.map((question, index) => (
-            <ListItem key={question.id}>
+            <ListItem component="div" key={question.id}>
               <Question
                 {...question}
                 setIsBlocking={setIsBlocking}

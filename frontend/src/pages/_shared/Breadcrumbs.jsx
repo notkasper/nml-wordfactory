@@ -8,16 +8,17 @@ const CustomBreadcrumbs = (props) => {
   const { crumbs } = props;
   const history = useHistory();
 
-  function handleClick(event, crumb) {
+  const handleClick = (event, crumb) => {
     event.preventDefault();
     history.push(crumb.path);
-  }
+  };
 
   return (
     <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
       <Typography variant="body2">Locatie:</Typography>
       {crumbs.map((crumb) => (
         <Link
+          key={crumb.path}
           component="button"
           color="inherit"
           onClick={(event) => handleClick(event, crumb)}

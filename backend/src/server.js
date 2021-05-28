@@ -6,7 +6,6 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
 const expressRateLimit = require('express-rate-limit');
@@ -14,6 +13,7 @@ const hpp = require('hpp');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
+const socketManager = require('./socketManager');
 require('express-async-errors'); // catching async errors, that arent caught anywhere else, only needs to be required here
 
 // routers
@@ -27,21 +27,24 @@ const questionAttemptRouter = require('./routes/questionAttempt');
 const questionGroupAttemptRouter = require('./routes/questionGroupAttempt');
 const questionGroupRouter = require('./routes/questionGroup');
 const questionRouter = require('./routes/question');
+const experimentRouter = require('./routes/experiment');
 
 const db = require('./db');
 const logger = require('./logger');
+const hooks = require('./hooks/hooks');
 
 const start = async () => {
   await db.initialize();
+  await hooks.initialize();
 
   const app = express();
-  if (process.env.NODE_ENV == 'development') {
+  if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   }
 
   // Body parser
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   // Cookie parser
   app.use(cookieParser());
@@ -62,10 +65,10 @@ const start = async () => {
   // Xss prevention
   app.use(xssClean());
 
-  // Rate limiting
+  // Rate limiting (100 requests per minute)
   app.use(
     expressRateLimit({
-      windowMs: 1000 * 60 * 5,
+      windowMs: 1000 * 60,
       max: 100,
     })
   );
@@ -102,6 +105,7 @@ const start = async () => {
   app.use('/api/v1/questionGroupAttempts', questionGroupAttemptRouter);
   app.use('/api/v1/questionGroup', questionGroupRouter);
   app.use('/api/v1/question', questionRouter);
+  app.use('/api/v1/experiment', experimentRouter);
 
   const port = process.env.SERVER_PORT || 5000;
 
@@ -123,6 +127,8 @@ const start = async () => {
       `Server running in ${process.env.NODE_ENV} mode on port ${port}`
     )
   );
+
+  socketManager.init(server);
 
   process.on('unhandledRejection', (error, promise) => {
     logger.error(error);

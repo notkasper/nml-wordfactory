@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PageContainer = (props) => {
-  const { children, crumbs } = props;
+  const { children } = props;
   const classes = useStyles();
 
   return (
