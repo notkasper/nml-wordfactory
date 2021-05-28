@@ -21,15 +21,16 @@ const useStyles = makeStyles((theme) => ({
 const CustomDoughnut = (props) => {
   const { questionGroupAttempts, title } = props;
   const classes = useStyles();
-  const { correct, incorrect, missed } = questionGroupAttempts.reduce(
-    (acc, curr) => {
-      acc.correct += curr.correct;
-      acc.incorrect += curr.incorrect;
-      acc.missed += curr.missed;
-      return acc;
-    },
-    { correct: 0, incorrect: 0, missed: 0 }
-  );
+  let correct = 0;
+  let incorrect = 0;
+  let missed = 0;
+  questionGroupAttempts.forEach((qga) => {
+    qga.questionAttempts.forEach((qa) => {
+      correct += qa.correct;
+      incorrect += qa.incorrect;
+      missed += qa.missed;
+    });
+  });
 
   const data = {
     datasets: [

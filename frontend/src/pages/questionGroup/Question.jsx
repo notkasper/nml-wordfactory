@@ -13,13 +13,11 @@ const Question = (props) => {
 
   const loadQuestionGroup = useCallback(async () => {
     setLoading(true);
-    const response = await service.loadQuestionGroups({
-      ids: [params.questionGroupId],
-    });
+    const response = await service.loadQuestionGroups([params.questionGroupId]);
     if (!response) {
       return;
     }
-    setQuestionGroup(response.body.data);
+    setQuestionGroup(response.body.data[0]);
     setLoading(false);
   }, [params.questionGroupId]);
 

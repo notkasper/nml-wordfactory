@@ -14,14 +14,14 @@ const Insights = (props) => {
   const params = useParams();
 
   const loadAll = useCallback(async () => {
-    await questionStore.loadQuestionGroupWithAttempts(params.questionGroupId);
+    await questionStore.loadQuestionGroupsWithAttempts(params.questionGroupId);
   }, [questionStore, params.questionGroupId]);
 
   useEffect(() => {
     loadAll();
   }, [loadAll]);
 
-  if (questionStore.isLoading || !questionStore.questionGroup) {
+  if (questionStore.isLoading || !questionStore.questionGroups) {
     return <CircularProgress />;
   }
 
@@ -30,20 +30,20 @@ const Insights = (props) => {
       <Grid item xs={12} md={6}>
         <Doughnut
           questionGroupAttempts={
-            questionStore.questionGroup.questionGroupAttempts
+            questionStore.questionGroups[0].questionGroupAttempts
           }
           title="Correctheid verdeling van de vragen"
         />
       </Grid>
       <Grid item xs={12} md={6} style={{ padding: '1rem' }}>
         <Tile
-          questionGroup={questionStore.questionGroup}
+          questionGroup={questionStore.questionGroups[0]}
           title="Totaal aantal vragen: "
           number={1}
           color={theme.widget.tertiary.main}
         />
         <Tile
-          questionGroup={questionStore.questionGroup}
+          questionGroup={questionStore.questionGroups[0]}
           title="Gemiddelde tijdsduur vragengroep: "
           number={2}
           color={theme.widget.secondary.main}
@@ -51,7 +51,7 @@ const Insights = (props) => {
       </Grid>
       <Grid item xs={12} md={12}>
         <BarGraph
-          questionGroup={questionStore.questionGroup}
+          questionGroup={questionStore.questionGroups[0]}
           title="Correctheid verdeling per vraag"
         />
       </Grid>

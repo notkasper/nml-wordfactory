@@ -99,6 +99,7 @@ const addQuestionAttemptInformation = (questionGroup) => {
     answers.push(q.data.options);
   });
 
+  console.log(answers);
   let acc = 0;
   questionGroup.questionGroupAttempts.forEach((qga) => {
     if (qga.isCompleted) {
@@ -131,8 +132,6 @@ const addQuestionAttemptInformation = (questionGroup) => {
               missed += 1;
             }
           }
-        } else {
-          missed += 1;
         }
 
         qa.studentName = studentName;

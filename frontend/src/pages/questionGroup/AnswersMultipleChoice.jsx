@@ -62,14 +62,14 @@ const Answers = (props) => {
     combineAndFillInTheBlanks: 'Combineer en vul in',
   };
 
-  if (questionStore.isLoading || !questionStore.questionGroup) {
+  if (questionStore.isLoading || !questionStore.questionGroups) {
     return <CircularProgress />;
   }
 
   const calculateDistribution = (questionId, index) => {
     let acc = 0;
     let total = 0;
-    questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
+    questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       if (qga.isCompleted) {
         qga.questionAttempts.forEach((qa) => {
           if (qa.questionId === questionId) {
@@ -89,7 +89,7 @@ const Answers = (props) => {
 
   const getRows = (questionId) => {
     const rows = [];
-    questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
+    questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId) {
           rows.push({
@@ -106,7 +106,7 @@ const Answers = (props) => {
 
   const getRowsFilter = (questionId, filterValue) => {
     const rows = [];
-    questionStore.questionGroup.questionGroupAttempts.forEach((qga) => {
+    questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId && qa.answer === filterValue.answer) {
           rows.push({
@@ -123,7 +123,7 @@ const Answers = (props) => {
 
   const getOptions = (questionId) => {
     const options = [];
-    questionStore.questionGroup.questions.forEach((q) => {
+    questionStore.questionGroups[0].questions.forEach((q) => {
       if (q.id === questionId) {
         q.data.options.forEach((option) => {
           options.push({ answer: option.value });
@@ -144,8 +144,8 @@ const Answers = (props) => {
     setFilterValue(newValue);
   };
 
-  const categoryQuestions = questionStore.questionGroup.questions[0].type;
-  const nameQuestionGroup = questionStore.questionGroup.name;
+  const categoryQuestions = questionStore.questionGroups[0].questions[0].type;
+  const nameQuestionGroup = questionStore.questionGroups[0].name;
   const label = typeLabels[categoryQuestions] || categoryQuestions;
 
   const columns = [
@@ -171,7 +171,7 @@ const Answers = (props) => {
       </Grid>
 
       <Grid item xs={12} md={12}>
-        {questionStore.questionGroup.questions.map((item, index) => {
+        {questionStore.questionGroups[0].questions.map((item, index) => {
           return (
             <Accordion defaultExpanded key={item.id}>
               <AccordionSummary
