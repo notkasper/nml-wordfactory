@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import PercentageDoughnut from '../_shared/PercentageDoughnut';
 import service from '../../service';
-import { math } from 'mathjs';
+import { create, all } from 'mathjs';
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 
@@ -44,6 +44,7 @@ const convertCategoryToString = (category) => {
 };
 
 const InsightsDuring = (props) => {
+  const math = create(all);
   const { questionGroupIds, lessonId, classId, questionStore, studentStore } =
     props;
   const theme = useTheme();
@@ -51,9 +52,9 @@ const InsightsDuring = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [ratioCorrect, setRatioCorrect] = useState(0);
-  const [ratioProgress, setRatioProgess] = useState(0);
-  const [averageTime, setAverageTime] = useState(0);
+  let ratioCorrect = 0;
+  let ratioProgress = 0;
+  let averageTime = 0;
 
   const getAverageValues = () => {
     let totalCorrect = 0;
@@ -80,9 +81,9 @@ const InsightsDuring = (props) => {
         });
       });
 
-      setRatioCorrect(Math.round((totalCorrect / totalScores) * 100));
-      setRatioProgess(
-        Math.round((totalComplete / (totalComplete + totalNotComplete)) * 100)
+      ratioCorrect = Math.round((totalCorrect / totalScores) * 100);
+      ratioProgress = Math.round(
+        (totalComplete / (totalComplete + totalNotComplete)) * 100
       );
 
       const sortedTimes = elapsedTimes.sort((a, b) => a - b);
@@ -96,7 +97,7 @@ const InsightsDuring = (props) => {
           acc += 1;
         }
       }
-      setAverageTime(totalTime / acc);
+      averageTime = totalTime / acc;
     }
   };
 
@@ -122,7 +123,6 @@ const InsightsDuring = (props) => {
       loadLessonCategories(),
     ];
     await Promise.all(promises);
-    getAverageValues();
     setLoading(false);
   }, [loadStudents, loadQuestionGroups, loadLessonCategories]);
 
@@ -133,6 +133,8 @@ const InsightsDuring = (props) => {
   if (questionStore.isLoading || loading) {
     return <CircularProgress />;
   }
+
+  getAverageValues();
 
   const convertToMinutes = (totalSeconds) => {
     const minutes = Math.floor(totalSeconds / 60);
