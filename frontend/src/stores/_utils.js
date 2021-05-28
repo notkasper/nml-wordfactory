@@ -132,6 +132,8 @@ const addQuestionAttemptInformation = (questionGroup) => {
               missed += 1;
             }
           }
+        } else {
+          missed += 1;
         }
 
         qa.studentName = studentName;
