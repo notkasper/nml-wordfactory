@@ -44,4 +44,10 @@ const emitEvent = (teacherId, eventName, data = {}) => {
   socket.emit(eventName, data);
 };
 
-module.exports = { init, emitEvent, isConnected };
+const broadcast = (eventName, data = {}) => {
+  Object.values(pool).forEach((socket) => {
+    socket.emit(eventName, data);
+  });
+};
+
+module.exports = { init, emitEvent, isConnected, broadcast };

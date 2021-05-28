@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
@@ -67,33 +66,6 @@ const Notifications = (props) => {
   useEffect(() => {
     loadClasses();
   }, [loadClasses]);
-
-  const isNotification = (acc) => {
-    return acc === 1;
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isNotification(notificationStore.accumulator)) {
-        notificationStore.pushNotification({
-          id: uuidv4(),
-          classId: classes[0].id,
-          category: 'classes',
-          value: 'Klas 1 heeft nieuwe probleem categorieën',
-          index: notificationStore.notifications.length,
-        });
-        notificationStore.pushNotification({
-          id: uuidv4(),
-          classId: classes[0].id,
-          category: 'classes',
-          value: 'Klas 1 heeft les 1 volledig afgerond',
-          index: notificationStore.notifications.length,
-        });
-      }
-      notificationStore.pushAccumulator();
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [notificationStore, classes]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
