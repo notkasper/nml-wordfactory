@@ -101,9 +101,15 @@ for (const student of class1.students) {
 
       // very bad made question
       if (situation4[0] === questionGroup.questionGroupId) {
-        questionGroup.correct = faker.datatype.number({ min: 0, max: 1 });
+        questionGroup.correct = faker.datatype.number({
+          min: 0,
+          max: Math.min(total, 1),
+        });
       } else {
-        questionGroup.correct = faker.datatype.number({ min: 1, max: 3 });
+        questionGroup.correct = faker.datatype.number({
+          min: Math.min(total, 1),
+          max: Math.min(total, 3),
+        });
       }
 
       questionGroup.incorrect =
