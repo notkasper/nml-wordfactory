@@ -1,5 +1,6 @@
 const db = require('../db');
 const logger = require('../logger');
+const socketManager = require('../socketManager');
 const wordfactoryExperiment = require('../../wordfactory-experiment.json');
 
 const [class1] = wordfactoryExperiment.classes;
@@ -89,6 +90,12 @@ const main = async (req, res) => {
       await db.QuestionGroupAttempt.bulkCreate(allQuestionGroupAttempts);
       await db.QuestionAttempt.bulkCreate(allQuestionAttempts);
 
+      setTimeout(() => {
+        socketManager.broadcast('notification', {
+          message: 'De probleemcategoriën van leerlingen zijn veranderd.',
+        });
+      }, 5000);
+
       logger.info('Done entering new data.');
       break;
     }
@@ -98,6 +105,13 @@ const main = async (req, res) => {
       await db.QuestionGroupAttempt.bulkCreate(allQuestionGroupAttempts);
       await db.QuestionAttempt.bulkCreate(allQuestionAttempts);
 
+      setTimeout(() => {
+        socketManager.broadcast('notification', {
+          message:
+            'Leerlingen doen lang over opdrachten over "morfemen herkennen".',
+        });
+      }, 5000);
+
       logger.info('Done entering new data.');
       break;
     }
@@ -106,6 +120,13 @@ const main = async (req, res) => {
       const { allQuestionGroupAttempts, allQuestionAttempts } = bulkItems;
       await db.QuestionGroupAttempt.bulkCreate(allQuestionGroupAttempts);
       await db.QuestionAttempt.bulkCreate(allQuestionAttempts);
+
+      setTimeout(() => {
+        socketManager.broadcast('notification', {
+          message:
+            'Leerlingen in klas 1 vereisen aandacht, een opdracht is gemiddeld zeer slecht uitgevoerd.',
+        });
+      }, 5000);
 
       logger.info('Done entering new data.');
       break;

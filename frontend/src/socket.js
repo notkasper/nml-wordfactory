@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
 import jscookie from 'js-cookie';
 import lessonStore from '../src/stores/lessonStore';
+import notificationStore from '../src/stores/notificationStore';
 
 const socket = io({
   auth: {
@@ -37,6 +38,15 @@ subscribe('connect', onConnect);
 subscribe('reconnect', onReconnect);
 subscribe('disconnect', onDisconnect);
 subscribe('newQuestionAttempts', lessonStore.refreshLessonAttempts);
+subscribe('notification', (data) => {
+  notificationStore.pushNotification({
+    id: data.message,
+    classId: 'none',
+    category: 'classes',
+    value: data.message,
+    index: notificationStore.notifications.length,
+  });
+});
 
 const obj = { subscribe, unsubscribe, disconnect, connect, isConnected };
 
