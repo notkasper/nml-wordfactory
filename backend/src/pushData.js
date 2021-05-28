@@ -31,7 +31,7 @@ const makeRequest = async (stage) => {
         process.exit();
       }
       console.log('Data pushed successfully');
-      if (counter >= 3) {
+      if (counter > 3) {
         process.exit();
       }
     }
