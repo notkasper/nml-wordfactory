@@ -47,10 +47,9 @@ const routes = [
   },
   {
     exact: true,
-    path:
-      '/dashboard/classes/:classId/:classTab/lessons/:lessonId/:lessonTab/questionGroups/:questionGroupId/:questionGroupTab',
+    path: '/dashboard/classes/:classId/:classTab/lessons/:lessonId/:lessonTab/questionGroups/:questionGroupId/:questionGroupTab',
     Component: QuestionGroup,
-    name: 'Vraag Groep',
+    name: 'Opdracht',
   },
   {
     exact: true,

@@ -20,13 +20,13 @@ const columns = [
   },
   {
     field: 'questionGroup',
-    headerName: 'Vraag groep',
+    headerName: 'Opdracht',
     flex: 0.4,
     valueGetter: (params) => params.row.question.questions.name,
   },
   {
     field: 'questionGroupIndex',
-    headerName: 'Vraag groep index',
+    headerName: 'Opdracht index',
     flex: 0.2,
     valueGetter: (params) => params.row.question.questions.index + 1,
   },
