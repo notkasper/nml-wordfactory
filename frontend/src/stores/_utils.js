@@ -61,7 +61,6 @@ const addInformation = (questionAttempts) => {
     let missed = 0;
     const correctAnswers = [];
     if (qa.question.type === 'multipleChoice') {
-      console.log(qa);
       qa.question.data.options.forEach((q, index) => {
         answers.push(q.value);
         if (q.isCorrect) {
@@ -105,7 +104,6 @@ const addQuestionAttemptInformation = (questionGroup) => {
     answers.push(q.data.options);
   });
 
-  console.log(answers);
   let acc = 0;
   questionGroup.questionGroupAttempts.forEach((qga) => {
     if (qga.isCompleted) {
