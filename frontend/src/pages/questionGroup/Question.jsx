@@ -17,7 +17,7 @@ const Question = (props) => {
     if (!response) {
       return;
     }
-    setQuestionGroup(response.body.data);
+    setQuestionGroup(response.body.data[0]);
     setLoading(false);
   }, [params.questionGroupId]);
 

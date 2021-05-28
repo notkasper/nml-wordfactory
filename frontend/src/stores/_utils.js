@@ -105,6 +105,7 @@ const addQuestionAttemptInformation = (questionGroup) => {
     answers.push(q.data.options);
   });
 
+  console.log(answers);
   let acc = 0;
   questionGroup.questionGroupAttempts.forEach((qga) => {
     if (qga.isCompleted) {
