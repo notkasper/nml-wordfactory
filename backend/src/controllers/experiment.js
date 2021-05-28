@@ -124,7 +124,7 @@ const main = async (req, res) => {
       setTimeout(() => {
         socketManager.broadcast('notification', {
           message:
-            'Leerlingen in klas 1 vereisen aandacht, een opdracht is zeer gemiddeld slecht uitgevoerd.',
+            'Leerlingen in klas 1 vereisen aandacht, een opdracht is gemiddeld zeer slecht uitgevoerd.',
         });
       }, 5000);
 
