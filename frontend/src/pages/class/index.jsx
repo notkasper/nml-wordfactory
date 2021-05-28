@@ -18,6 +18,7 @@ import Students from './Students';
 import PageContainer from '../_shared/PageContainer';
 import TabContent from '../_shared/TabContent';
 import Breadcrumbs from '../_shared/Breadcrumbs';
+import socket from '../../socket';
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -83,6 +84,9 @@ const Lesson = (props) => {
 
   useEffect(() => {
     loadAll();
+    socket.subscribe('newQuestionAttempts_temp', () => {
+      loadAll();
+    });
   }, [loadAll]);
 
   if (loading || studentStore.isLoading) {

@@ -1,23 +1,16 @@
 import { io } from 'socket.io-client';
 import jscookie from 'js-cookie';
+import lessonStore from '../src/stores/lessonStore';
 
-let socket;
+const socket = io({
+  auth: {
+    token: jscookie.get('token'),
+  },
+});
 
 const onDisconnect = () => console.info('Socket disconnected');
 const onConnect = () => console.info('Socket connected');
 const onReconnect = () => console.info('Socket reconnected');
-
-const init = () => {
-  socket = io({
-    auth: {
-      token: jscookie.get('token'),
-    },
-  });
-  subscribe('connect', onConnect);
-  subscribe('reconnect', onReconnect);
-  subscribe('disconnect', onDisconnect);
-};
-
 const subscribe = (eventName, callback) => {
   socket.on(eventName, callback);
   console.info(`Socket started listening to ${eventName}`);
@@ -28,10 +21,23 @@ const unsubscribe = (eventName) => {
   console.info(`Socket stopped listening to ${eventName}`);
 };
 
-const disconnect = () => {
-  socket.disconnect();
+const isConnected = () => socket.connected;
+
+const connect = () => {
+  socket.connect();
+  console.log('Socket connected');
 };
 
-const obj = { init, subscribe, unsubscribe, disconnect };
+const disconnect = () => {
+  socket.disconnect();
+  console.log('Socket disconnected');
+};
+
+subscribe('connect', onConnect);
+subscribe('reconnect', onReconnect);
+subscribe('disconnect', onDisconnect);
+subscribe('newQuestionAttempts', lessonStore.refreshLessonAttempts);
+
+const obj = { subscribe, unsubscribe, disconnect, connect, isConnected };
 
 export default obj;

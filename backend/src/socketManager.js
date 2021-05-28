@@ -9,6 +9,9 @@ const setSocket = (teacherId, socket) => (pool[teacherId] = socket);
 
 const authenticateSocket = (socket, next) => {
   const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error('No token provided'));
+  }
   verifyToken(token)
     .catch((err) => next(err))
     .then(({ teacherId }) => {

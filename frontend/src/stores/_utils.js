@@ -24,9 +24,14 @@ const addPerformance = (lessonAttempts) => {
     lessonAttempt.incorrect = incorrect;
 
     // unroundedGrade could be NaN if both correct and incorrect are 0
-    lessonAttempt.performance = Math.round(
-      (correct / (correct + incorrect) || 0) * 9 + 1
-    );
+    const total = correct + incorrect;
+    let performance;
+    if (total === 0) {
+      performance = 10;
+    } else {
+      performance = Math.min(Math.round((correct / total) * 9 + 1), 10);
+    }
+    lessonAttempt.performance = performance;
 
     return lessonAttempt;
   });
@@ -56,6 +61,7 @@ const addInformation = (questionAttempts) => {
     let missed = 0;
     const correctAnswers = [];
     if (qa.question.type === 'multipleChoice') {
+      console.log(qa);
       qa.question.data.options.forEach((q, index) => {
         answers.push(q.value);
         if (q.isCorrect) {
