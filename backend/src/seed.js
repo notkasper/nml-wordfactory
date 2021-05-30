@@ -25,6 +25,12 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
   await db.QuestionGroup.destroy({ where: {} });
   await db.QuestionGroupAttempt.destroy({ where: {} });
 
+  const allQuestionGroups = [];
+  const allQuestions = [];
+  const allLessonAttempts = [];
+  const allQuestionGroupAttempts = [];
+  const allQuestionAttempts = [];
+
   try {
     const { classes } = wordfactoryPreprocessed;
 
@@ -71,15 +77,17 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
           createdCourse.addLesson(createdLesson);
 
           for (const questionGroup of lesson.questionGroups) {
-            const createdQuestionGroup = await db.QuestionGroup.create({
+            const createdQuestionGroup = {
               id: questionGroup.questionGroupId,
               lessonId: createdLesson.id,
               index: questionGroup.questionGroupIndex,
               name: questionGroup.questionGroupTitle,
-            });
+            };
+
+            allQuestionGroups.push(createdQuestionGroup);
 
             for (const question of questionGroup.questions) {
-              await db.Question.create({
+              allQuestions.push({
                 id: question.questionId,
                 questionGroupId: createdQuestionGroup.id,
                 data: question.data,
@@ -96,7 +104,7 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
       for (const studentData of theClass.students) {
         const lessonAttempts = studentData.lessonAttempts;
         for (const lessonAttempt of lessonAttempts) {
-          const createdLessonAttempt = await db.LessonAttempt.create({
+          const createdLessonAttempt = {
             id: lessonAttempt.id,
             studentId: studentData.id,
             lessonId: lessonAttempt.lessonId,
@@ -105,30 +113,33 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
             isStopped: lessonAttempt.isStopped,
             isStarted: lessonAttempt.isStarted,
             isCompleted: lessonAttempt.isCompleted,
-          });
+          };
+
+          allLessonAttempts.push(createdLessonAttempt);
 
           for (const questionGroupAttempt of lessonAttempt.questionGroups) {
-            const createdQuestionGroupAttempt =
-              await db.QuestionGroupAttempt.create({
-                id: questionGroupAttempt.id,
-                classId: theClass.id,
-                lessonId: lessonAttempt.lessonId,
-                studentId: studentData.id,
-                lessonAttemptId: createdLessonAttempt.id,
-                questionGroupId: questionGroupAttempt.questionGroupId,
-                timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
-                  ? Math.round(questionGroupAttempt.timeElapsedSeconds)
-                  : 0,
-                correct: questionGroupAttempt.correct,
-                incorrect: questionGroupAttempt.incorrect,
-                missed: questionGroupAttempt.missed,
-                score: questionGroupAttempt.score,
-                isCompleted: questionGroupAttempt.isCompleted || false,
-                showFeedback: questionGroupAttempt.showFeedback || false,
-              });
+            const createdQuestionGroupAttempt = {
+              id: questionGroupAttempt.id,
+              classId: theClass.id,
+              lessonId: lessonAttempt.lessonId,
+              studentId: studentData.id,
+              lessonAttemptId: createdLessonAttempt.id,
+              questionGroupId: questionGroupAttempt.questionGroupId,
+              timeElapsedSeconds: questionGroupAttempt.timeElapsedSeconds
+                ? Math.round(questionGroupAttempt.timeElapsedSeconds)
+                : 0,
+              correct: questionGroupAttempt.correct,
+              incorrect: questionGroupAttempt.incorrect,
+              missed: questionGroupAttempt.missed,
+              score: questionGroupAttempt.score,
+              isCompleted: questionGroupAttempt.isCompleted || false,
+              showFeedback: questionGroupAttempt.showFeedback || false,
+            };
+
+            allQuestionGroupAttempts.push(createdQuestionGroupAttempt);
 
             for (const questionAttempt of questionGroupAttempt.answers) {
-              await db.QuestionAttempt.create({
+              allQuestionAttempts.push({
                 id: questionAttempt.id,
                 classId: theClass.id,
                 lessonId: lessonAttempt.lessonId,
@@ -146,6 +157,12 @@ const wordfactoryPreprocessed = require('../wordfactory-preprocessed.json');
         }
       }
     }
+
+    await db.QuestionGroup.bulkCreate(allQuestionGroups);
+    await db.Question.bulkCreate(allQuestions);
+    await db.LessonAttempt.bulkCreate(allLessonAttempts);
+    await db.QuestionGroupAttempt.bulkCreate(allQuestionGroupAttempts);
+    await db.QuestionAttempt.bulkCreate(allQuestionAttempts);
   } catch (error) {
     logger.error(error);
   } finally {
