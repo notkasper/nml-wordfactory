@@ -43,7 +43,7 @@ const columns = [
   },
   { field: 'correct', headerName: 'Correct', flex: 0.1, type: 'number' },
   { field: 'incorrect', headerName: 'Incorrect', flex: 0.1, type: 'number' },
-  { field: 'performance', headerName: 'Prestatie', flex: 0.1, type: 'number' },
+  { field: 'performance', headerName: 'Cijfer', flex: 0.1, type: 'number' },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +84,7 @@ const InsightsAfter = (props) => {
       <Grid item xs={12} md={6}>
         <Histogram
           lessonAttempts={lessonStore.lessonAttempts}
-          title="Cijfer verdeling"
+          title="Cijferverdeling"
         />
       </Grid>
       <Grid item xs={12}>
