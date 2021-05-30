@@ -25,12 +25,10 @@ const addPerformance = (lessonAttempts) => {
 
     // unroundedGrade could be NaN if both correct and incorrect are 0
     const total = correct + incorrect;
-    let performance;
-    if (total === 0) {
-      performance = 10;
-    } else {
-      performance = Math.min(Math.round((correct / total) * 9 + 1), 10);
-    }
+    const performance = Math.min(
+      Math.round((correct / total || 0) * 9 + 1),
+      10
+    );
     lessonAttempt.performance = performance;
 
     return lessonAttempt;
