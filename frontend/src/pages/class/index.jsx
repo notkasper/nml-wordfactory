@@ -66,12 +66,14 @@ const Lesson = (props) => {
 
   const loadAll = useCallback(async () => {
     setLoading(true);
+
     const promises = [
       loadStudents(),
       loadCourses(),
       loadClass(),
       loadLessonCategories(),
     ];
+
     await Promise.all(promises);
     setLoading(false);
   }, [loadClass, loadStudents, loadCourses, loadLessonCategories]);

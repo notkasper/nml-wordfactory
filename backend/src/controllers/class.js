@@ -31,16 +31,33 @@ const getClass = async (req, res) => {
 
 const getCategories = async (req, res) => {
   const allCategories = new Map();
-
   const theClass = await db.Class.findByPk(req.params.id);
-  const questionGroupAttempts = await theClass.getQuestionGroupAttempts();
+
+  if (!theClass) {
+    return res.status(404).send({ message: 'Class not found' });
+  }
+
+  const teachers = await theClass.getTeachers();
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
+    return res.status(404).send({ message: 'Class not found' });
+  }
+
+  const questionGroupAttempts = await theClass.getQuestionGroupAttempts({
+    attributes: ['correct', 'incorrect', 'missed'],
+    include: [
+      {
+        model: db.QuestionGroup,
+        as: 'questionGroup',
+        attributes: ['id'],
+        include: [
+          { model: db.Question, as: 'questions', attributes: ['contentTags'] },
+        ],
+      },
+    ],
+  });
+
   for (const questionGroupAttempt of questionGroupAttempts) {
-    const questionGroup = await questionGroupAttempt.getQuestionGroup();
-    const questions = await questionGroup.getQuestions({ raw: true });
-
-    // TODO: it now only deals with the first content tag of the first subquestion!
-    const [question] = questions;
-
+    const [question] = questionGroupAttempt.questionGroup.questions;
     const tag = question.contentTags[0];
 
     if (!allCategories.has(tag)) {
@@ -48,17 +65,11 @@ const getCategories = async (req, res) => {
     }
 
     const total = allCategories.get(tag);
-    if (questionGroupAttempt.correct) {
-      total.correct += questionGroupAttempt.correct;
-    }
 
-    if (questionGroupAttempt.incorrect) {
-      total.incorrect += questionGroupAttempt.incorrect;
-    }
-
-    if (questionGroupAttempt.missed) {
-      total.incorrect += questionGroupAttempt.missed;
-    }
+    const { correct, incorrect, missed } = questionGroupAttempt;
+    total.correct += correct || 0;
+    total.incorrect += incorrect || 0;
+    total.incorrect += missed || 0;
 
     allCategories.set(tag, total);
   }

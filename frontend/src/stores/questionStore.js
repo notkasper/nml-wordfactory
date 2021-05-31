@@ -29,10 +29,24 @@ class QuestionStore {
       let questionGroups = response.body.data;
       questionGroups.forEach((qg) => {
         utils.addQuestionGroupAttemptStats(qg);
-        utils.addQuestionAttemptInformation(qg);
         this.questionGroups = questionGroups;
       });
     }
+    this.popLoad();
+  };
+
+  loadQuestionGroupsByLessonId = async (lessonId) => {
+    this.pushLoad();
+
+    const response = await service.loadQuestionGroupsByLessonId(lessonId);
+    if (response) {
+      let questionGroups = response.body.data;
+      questionGroups.forEach((qg) => {
+        utils.addQuestionGroupAttemptStats(qg);
+        this.questionGroups = questionGroups;
+      });
+    }
+
     this.popLoad();
   };
 

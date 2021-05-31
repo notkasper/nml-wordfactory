@@ -45,8 +45,7 @@ const convertCategoryToString = (category) => {
 
 const InsightsDuring = (props) => {
   const math = create(all);
-  const { questionGroupIds, lessonId, classId, questionStore, studentStore } =
-    props;
+  const { lessonId, classId, questionStore, studentStore } = props;
   const theme = useTheme();
   const classes = useStyles();
 
@@ -112,8 +111,8 @@ const InsightsDuring = (props) => {
   }, [studentStore, classId]);
 
   const loadQuestionGroups = useCallback(async () => {
-    await questionStore.loadQuestionGroupsWithAttempts(questionGroupIds);
-  }, [questionStore, questionGroupIds]);
+    await questionStore.loadQuestionGroupsByLessonId(lessonId);
+  }, [questionStore, lessonId]);
 
   const loadAll = useCallback(async () => {
     setLoading(true);

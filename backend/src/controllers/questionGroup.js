@@ -36,4 +36,32 @@ const getQuestionGroups = async (req, res) => {
   res.status(200).send({ data: questionGroups });
 };
 
-module.exports = { getQuestionGroups };
+const getQuestionGroupsByLessonId = async (req, res) => {
+  const { lessonId } = req.params;
+  const lesson = await db.Lesson.findByPk(lessonId);
+
+  const questionGroups = await lesson.getQuestionGroups({
+    include: [
+      {
+        model: db.QuestionGroupAttempt,
+        as: 'questionGroupAttempts',
+        include: [
+          {
+            model: db.LessonAttempt,
+            as: 'lessonAttempts',
+            include: [
+              {
+                model: db.Student,
+                as: 'student',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+  res.status(200).send({ data: questionGroups });
+};
+
+module.exports = { getQuestionGroups, getQuestionGroupsByLessonId };

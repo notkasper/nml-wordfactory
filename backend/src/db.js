@@ -184,6 +184,12 @@ db.setupModels = async () => {
 
     db.QuestionGroupAttempt.belongsTo(db.QuestionGroup, {
       foreignKey: 'questionGroupId',
+      as: 'questionGroup',
+    });
+
+    db.QuestionGroupAttempt.belongsTo(db.Lesson, {
+      foreignKey: 'lessonId',
+      as: 'lesson',
     });
 
     db.QuestionGroupAttempt.belongsTo(db.Class, {
@@ -210,6 +216,11 @@ db.setupModels = async () => {
     db.QuestionAttempt.belongsTo(db.Class, {
       foreignKey: 'classId',
       as: 'classes',
+    });
+
+    db.QuestionAttempt.belongsTo(db.Lesson, {
+      foreignKey: 'lessonId',
+      as: 'lesson',
     });
 
     logger.info('All models created successfully');

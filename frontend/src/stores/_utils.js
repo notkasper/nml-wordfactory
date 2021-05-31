@@ -48,6 +48,7 @@ const addQuestionGroupAttemptStats = (questionGroup) => {
     },
     { elapsedTime: 0, total: 0 }
   );
+
   questionGroup.averageElapsedTime = Math.round(elapsedTime / total);
   return questionGroup;
 };
@@ -61,7 +62,6 @@ const addInformation = (questionAttempts) => {
     let missed = 0;
     const correctAnswers = [];
     if (qa.question.type === 'multipleChoice') {
-      console.log(qa);
       qa.question.data.options.forEach((q, index) => {
         answers.push(q.value);
         if (q.isCorrect) {
@@ -92,68 +92,6 @@ const addInformation = (questionAttempts) => {
     qa.answer = answerAttempt;
   });
   return questionAttempts;
-};
-
-const addQuestionAttemptInformation = (questionGroup) => {
-  const questionType = questionGroup.questions[0].type;
-  if (!questionType || questionType !== 'multipleChoice') {
-    return questionGroup;
-  }
-
-  const answers = [];
-  questionGroup.questions.forEach((q) => {
-    answers.push(q.data.options);
-  });
-
-  console.log(answers);
-  let acc = 0;
-  questionGroup.questionGroupAttempts.forEach((qga) => {
-    if (qga.isCompleted) {
-      const studentName = qga.lessonAttempts.student.name;
-      const studentId = qga.lessonAttempts.student.id;
-
-      qga.questionAttempts.forEach((qa) => {
-        let correct = 0;
-        let incorrect = 0;
-        let missed = 0;
-        let answer = '';
-        const answerAttempt = qa.content;
-        if (answerAttempt.length !== 0) {
-          for (
-            let j = 0;
-            j < answers[acc % qga.questionAttempts.length].length;
-            j++
-          ) {
-            const isCorrect =
-              answers[acc % qga.questionAttempts.length][j].isCorrect;
-            const value = answers[acc % qga.questionAttempts.length][j].value;
-            if (answerAttempt.includes(j)) {
-              answer += value + ', ';
-              if (isCorrect) {
-                correct += 1;
-              } else {
-                incorrect += 1;
-              }
-            } else if (!answerAttempt.includes(j) && isCorrect) {
-              missed += 1;
-            }
-          }
-        } else {
-          missed += 1;
-        }
-
-        qa.studentName = studentName;
-        qa.studentId = studentId;
-        qa.answer = answer.slice(0, -2); //Remove last comma and whitespace
-        qa.correct = correct;
-        qa.incorrect = incorrect;
-        qa.missed = missed;
-      });
-      acc += 1;
-    }
-  });
-
-  return questionGroup;
 };
 
 const addQuestionGroupAverages = (lesson, questionGroup) => {
@@ -191,43 +129,12 @@ const addQuestionGroupAverages = (lesson, questionGroup) => {
   return lesson;
 };
 
-const convertCategoryToString = (category) => {
-  switch (category) {
-    case 'learning_process':
-      return 'Leerproces';
-    case 'recognizing_morphemes_sentence':
-      return 'Herkennen morfemen in een zin';
-    case 'meaning_morphemes':
-      return 'Betekenis morfemen';
-    case 'splitsing_morphemes':
-      return 'Splits morfemen';
-    case 'create_morphemes_prefix':
-      return 'Creëren morfemen (voorvoegsel)';
-    case 'background_morphemes':
-      return 'Alternatieve betekenis morfemen';
-    case 'recognizing_morphemes_text':
-      return 'Herkennen morfemen in een tekst';
-    case 'intuition':
-      return 'Intuïtie';
-    case 'create_alternative_morphemes':
-      return 'Creëren alternatieve morfemen';
-    case 'create_morphemes_suffix':
-      return 'Creëren morfemen (achtervoegsel)';
-    case 'create_new_morphemes':
-      return 'Creëren nieuwe morfemen';
-    default:
-      return null;
-  }
-};
-
 const utils = {
   addDuration,
   addPerformance,
   addInformation,
   addQuestionGroupAverages,
   addQuestionGroupAttemptStats,
-  addQuestionAttemptInformation,
-  convertCategoryToString,
 };
 
 export default utils;
