@@ -12,4 +12,15 @@ export default createMuiTheme({
       main: '#67bf5c',
     },
   },
+  statistics: {
+    red: {
+      main: '#d64238',
+    },
+    green: {
+      main: '#36d41e',
+    },
+    orange: {
+      main: '#f58220',
+    },
+  },
 });

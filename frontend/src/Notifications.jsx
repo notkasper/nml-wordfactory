@@ -76,12 +76,8 @@ const Notifications = (props) => {
   };
 
   const onClickNotification = (notification) => {
-    if (notification.category === 'classes') {
-      notificationStore.deleteNotification(notification.index);
-      history.push(
-        `/dashboard/${notification.category}/${notification.classId}/class_insights`
-      );
-    }
+    notificationStore.deleteNotification(notification.index);
+    history.push(notification.path);
   };
 
   if (loading || !classes) {

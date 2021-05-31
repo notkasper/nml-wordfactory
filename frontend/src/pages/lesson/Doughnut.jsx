@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import Title from '../_shared/Title';
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomDoughnut = (props) => {
+  const theme = useTheme();
   const { lessonAttempts, title } = props;
   const classes = useStyles();
   const { started, completed, notStarted } = lessonAttempts.reduce(
@@ -40,6 +41,11 @@ const CustomDoughnut = (props) => {
     datasets: [
       {
         data: [notStarted, started, completed],
+        backgroundColor: [
+          theme.statistics.red.main,
+          theme.statistics.orange.main,
+          theme.statistics.green.main,
+        ],
       },
     ],
     labels: ['Niet begonnen', 'Begonnen', 'Voltooid'],
