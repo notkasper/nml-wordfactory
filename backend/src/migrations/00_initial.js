@@ -236,7 +236,7 @@ const up = async (query) => {
     },
   });
 
-  // lessonAttempt table
+  // LessonAttempts table
   await query.createTable('LessonAttempts', {
     id: {
       primaryKey: true,
