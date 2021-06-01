@@ -41,8 +41,8 @@ subscribe('newQuestionAttempts', lessonStore.refreshLessonAttempts);
 subscribe('notification', (data) => {
   notificationStore.pushNotification({
     id: data.message,
-    classId: '638ff1eb-f3cf-4934-a292-02df28dee3d9',
     category: 'classes',
+    path: data.path,
     value: data.message,
     index: notificationStore.notifications.length,
   });

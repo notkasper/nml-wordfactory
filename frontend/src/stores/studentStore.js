@@ -86,9 +86,12 @@ class StudentStore {
   };
 
   updateBottomStudents = (bottomResults) => {
-    this.students.forEach((student) => {
-      student.bottom = bottomResults.some((info) => student.id === info.id);
-    });
+    this.students = this.students
+      .map((student) => ({
+        ...student,
+        bottom: bottomResults.some((info) => student.id === info.id),
+      }))
+      .sort((a, b) => b.bottom - a.bottom);
   };
 
   get isLoading() {

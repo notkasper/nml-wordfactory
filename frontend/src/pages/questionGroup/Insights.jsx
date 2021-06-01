@@ -44,7 +44,7 @@ const Insights = (props) => {
         />
         <Tile
           questionGroup={questionStore.questionGroups[0]}
-          title="Gemiddelde tijdsduur vragengroep: "
+          title="Gemiddelde tijdsduur opdracht: "
           number={2}
           color={theme.widget.secondary.main}
         />

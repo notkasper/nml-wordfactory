@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { Bar } from 'react-chartjs-2';
 import Title from '../_shared/Title';
@@ -42,6 +43,7 @@ const getLabels = (amountQuestions) => {
 };
 
 const BarGraph = (props) => {
+  const theme = useTheme();
   const { questionGroup, title } = props;
   const amountQuestions = questionGroup.questions.length;
   const questionIds = [];
@@ -59,14 +61,21 @@ const BarGraph = (props) => {
       {
         label: 'Aantal juiste antwoorden',
         data: distributions[0],
+        backgroundColor: distributions[0].map(
+          () => theme.statistics.green.main
+        ),
       },
       {
         label: 'Aantal incorrect antwoorden',
         data: distributions[1],
+        backgroundColor: distributions[1].map(() => theme.statistics.red.main),
       },
       {
         label: 'Aantal gemiste antwoorden',
         data: distributions[2],
+        backgroundColor: distributions[2].map(
+          () => theme.statistics.orange.main
+        ),
       },
     ],
     labels: getLabels(amountQuestions),

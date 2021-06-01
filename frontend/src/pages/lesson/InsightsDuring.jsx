@@ -221,7 +221,7 @@ const InsightsDuring = (props) => {
       <Grid container spacing={3} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.secondary.main}
-          headertitle="Top categorieën"
+          headertitle="Topcategorieën"
         >
           <Paper className={classes.paper}>
             {categories.slice(0, 3).map((category, index) => (
@@ -235,7 +235,7 @@ const InsightsDuring = (props) => {
         </PaperWithHeader>
         <PaperWithHeader
           headercolor={theme.widget.secondary.main}
-          headertitle="Probleem categorieën"
+          headertitle="Probleemcategorieën"
         >
           <Paper className={classes.paper}>
             {categories.slice(-3).map((category, index) => (

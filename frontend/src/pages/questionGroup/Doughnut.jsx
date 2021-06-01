@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import Title from '../_shared/Title';
@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomDoughnut = (props) => {
+  const theme = useTheme();
   const { questionGroupAttempts, title } = props;
   const classes = useStyles();
   let correct = 0;
@@ -36,6 +37,11 @@ const CustomDoughnut = (props) => {
     datasets: [
       {
         data: [correct, incorrect, missed],
+        backgroundColor: [
+          theme.statistics.green.main,
+          theme.statistics.red.main,
+          theme.statistics.orange.main,
+        ],
       },
     ],
     labels: ['Correct', 'Incorrect', 'Gemist'],
