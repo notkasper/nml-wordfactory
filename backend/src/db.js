@@ -194,7 +194,7 @@ db.setupModels = async () => {
 
     db.QuestionGroupAttempt.belongsTo(db.Class, {
       foreignKey: 'classId',
-      as: 'classes',
+      as: 'class',
     });
 
     db.QuestionGroupAttempt.hasMany(db.QuestionAttempt, {
@@ -215,7 +215,7 @@ db.setupModels = async () => {
 
     db.QuestionAttempt.belongsTo(db.Class, {
       foreignKey: 'classId',
-      as: 'classes',
+      as: 'class',
     });
 
     db.QuestionAttempt.belongsTo(db.Lesson, {

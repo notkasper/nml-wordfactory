@@ -43,6 +43,7 @@ class QuestionStore {
       let questionGroups = response.body.data;
       questionGroups.forEach((qg) => {
         utils.addQuestionGroupAttemptStats(qg);
+        utils.addQuestionAttemptInformation(qg);
         this.questionGroups = questionGroups;
       });
     }

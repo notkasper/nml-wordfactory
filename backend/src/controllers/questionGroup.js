@@ -47,6 +47,10 @@ const getQuestionGroupsByLessonId = async (req, res) => {
         as: 'questionGroupAttempts',
         include: [
           {
+            model: db.QuestionAttempt,
+            as: 'questionAttempts',
+          },
+          {
             model: db.LessonAttempt,
             as: 'lessonAttempts',
             include: [
@@ -57,6 +61,10 @@ const getQuestionGroupsByLessonId = async (req, res) => {
             ],
           },
         ],
+      },
+      {
+        model: db.Question,
+        as: 'questions',
       },
     ],
   });

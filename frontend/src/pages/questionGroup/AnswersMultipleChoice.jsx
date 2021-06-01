@@ -89,6 +89,7 @@ const Answers = (props) => {
 
   const getRows = (questionId) => {
     const rows = [];
+
     questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId) {
@@ -101,11 +102,13 @@ const Answers = (props) => {
         }
       });
     });
+
     return rows;
   };
 
   const getRowsFilter = (questionId, filterValue) => {
     const rows = [];
+
     questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId && qa.answer === filterValue.answer) {
@@ -118,6 +121,7 @@ const Answers = (props) => {
         }
       });
     });
+
     return rows;
   };
 
@@ -218,7 +222,7 @@ const Answers = (props) => {
                   <Grid item xs={12} md={12}>
                     <Grid item xs={12} md={12}>
                       <Typography className={classes.title}>
-                        Filter op antoord :
+                        Filter op antwoord :
                       </Typography>
                       <Autocomplete
                         value={filterValue}
