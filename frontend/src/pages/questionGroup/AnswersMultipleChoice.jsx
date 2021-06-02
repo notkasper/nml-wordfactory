@@ -68,13 +68,11 @@ const Answers = (props) => {
 
   const calculateDistribution = (questionId, index) => {
     let acc = 0;
-    let total = 0;
     questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       if (qga.isCompleted) {
         qga.questionAttempts.forEach((qa) => {
           if (qa.questionId === questionId) {
             qa.content.forEach((attempt) => {
-              total += 1;
               if (attempt === index) {
                 acc += 1;
               }
@@ -84,7 +82,7 @@ const Answers = (props) => {
       }
     });
 
-    return Math.round((acc / total) * 100);
+    return acc;
   };
 
   const getRows = (questionId) => {
@@ -206,7 +204,7 @@ const Answers = (props) => {
                             />
                             <ListItemSecondaryAction>
                               <Typography style={{ color: 'grey' }}>
-                                {calculateDistribution(item.id, index2)}%
+                                {calculateDistribution(item.id, index2)}
                               </Typography>
                             </ListItemSecondaryAction>
                           </ListItem>

@@ -10,6 +10,7 @@ import service from '../../service';
 import { create, all } from 'mathjs';
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
+import utils from '../../stores/_utils';
 
 const useStyles = makeStyles((theme) => ({
   widget: {
@@ -136,12 +137,6 @@ const InsightsDuring = (props) => {
 
   getAverageValues();
 
-  const convertToMinutes = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes} min. ${seconds} sec.`;
-  };
-
   const calculateRGB = (percentage) => {
     const shade = 0.8;
     const color = Math.floor(
@@ -214,7 +209,7 @@ const InsightsDuring = (props) => {
         })}
         options={options({
           color: 'black',
-          text: convertToMinutes(averageTime),
+          text: utils.convertToMinutes(averageTime),
         })}
         titleColor={theme.widget.tertiary.main}
       />

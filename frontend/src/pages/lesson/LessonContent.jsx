@@ -46,16 +46,11 @@ const columns = [
   },
   {
     field: 'averageScore',
-    headerName: 'Gem. score (%)',
+    headerName: 'Gem. correctheid (%)',
     flex: 0.1,
     type: 'number',
   },
-  {
-    field: 'averageElapsedTime',
-    headerName: 'Gem. tijdsduur (sec)',
-    flex: 0.1,
-    type: 'number',
-  },
+
   {
     field: 'completions',
     headerName: 'Klaar',

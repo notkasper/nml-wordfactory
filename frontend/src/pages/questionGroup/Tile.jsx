@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import utils from '../../stores/_utils';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,8 +37,10 @@ const Tile = (props) => {
   const { questionGroup, title, number, color } = props;
   const classes = useStyles();
   const amountLessons = questionGroup.questions.length;
-  const averageElapsedTime = questionGroup.averageElapsedTime;
-  const value = number === 1 ? amountLessons : averageElapsedTime + ' sec.';
+  const averageElapsedTime = utils.convertToMinutes(
+    questionGroup.averageElapsedTime
+  );
+  const value = number === 1 ? amountLessons : averageElapsedTime;
 
   return (
     <Card style={{ backgroundColor: color }} className={classes.card}>

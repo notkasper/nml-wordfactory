@@ -216,6 +216,24 @@ const convertCategoryToString = (category) => {
   }
 };
 
+const convertToMinutes = (totalSeconds) => {
+  let [hh, mm, ss] = new Date(totalSeconds * 1000)
+    .toISOString()
+    .substr(11, 8)
+    .split(':');
+
+  [hh, mm, ss] = [parseInt(hh), parseInt(mm), parseInt(ss)];
+  if (hh === 0 && mm === 0) {
+    return `${ss} sec.`;
+  } else if (hh === 0 && mm !== 0 && ss !== 0) {
+    return `${mm} min. ${ss} sec.`;
+  } else if ((hh !== 0) & (mm === 0) & (ss === 0)) {
+    return `${hh} hours`;
+  } else if ((hh !== 0) & (mm !== 0) & (ss !== 0)) {
+    return `${hh} hours ${mm} min. ${ss} sec.`;
+  }
+};
+
 const utils = {
   addDuration,
   addPerformance,
@@ -224,6 +242,7 @@ const utils = {
   addQuestionGroupAttemptStats,
   addQuestionAttemptInformation,
   convertCategoryToString,
+  convertToMinutes,
 };
 
 export default utils;
