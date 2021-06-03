@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     height: 230,
     padding: theme.spacing(3),
     marginBottom: theme.spacing(12),
+    justifyContent: 'center',
   },
   paper: {
     borderBottomLeftRadius: 4,
@@ -114,10 +115,10 @@ const Student = (props) => {
 
           <PaperWithHeader
             headercolor={theme.widget.secondary.main}
-            headertitle="Topcategorieën"
+            headertitle="Correctheid categorieën"
           >
             <Paper className={classes.paper}>
-              {categories.slice(0, 3).map((category, index) => (
+              {categories.map((category, index) => (
                 <ProgressBar
                   key={category.key}
                   title={`${index + 1}. ${convertCategoryToString(
@@ -128,22 +129,7 @@ const Student = (props) => {
               ))}
             </Paper>
           </PaperWithHeader>
-          <PaperWithHeader
-            headercolor={theme.widget.secondary.main}
-            headertitle="Probleemcategorieën"
-          >
-            <Paper className={classes.paper}>
-              {categories.slice(-3).map((category, index) => (
-                <ProgressBar
-                  key={category.key}
-                  title={`${index + 1}. ${convertCategoryToString(
-                    category.key
-                  )}`}
-                  value={category.correctness}
-                />
-              ))}
-            </Paper>
-          </PaperWithHeader>
+
           <Grid item xs={12}>
             <Courses courses={courses} />
           </Grid>
