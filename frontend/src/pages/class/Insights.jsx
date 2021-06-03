@@ -6,6 +6,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 import PageContainer from '../_shared/PageContainer';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   widget: {
@@ -59,6 +60,10 @@ const Insights = (props) => {
   const { topResults, bottomResults, categories } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
+
+  const onClickStudent = (event) =>
+    history.push(`/dashboard/students/${event.row.id}`);
 
   return (
     <PageContainer>
@@ -78,6 +83,7 @@ const Insights = (props) => {
                 sort: 'asc',
               },
             ]}
+            onRowClick={onClickStudent}
           />
         </PaperWithHeader>
         <PaperWithHeader
@@ -94,6 +100,7 @@ const Insights = (props) => {
                 sort: 'desc',
               },
             ]}
+            onRowClick={onClickStudent}
             columns={columns}
           />
         </PaperWithHeader>
