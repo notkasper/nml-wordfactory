@@ -26,7 +26,7 @@ const columns = [
     field: 'student',
     headerName: 'Leerling',
     flex: 0.2,
-    valueGetter: (params) => params.row.lessonAttempts.student.name,
+    valueGetter: (params) => params.row.lessonAttempt.student.name,
   },
   {
     field: 'lesson',

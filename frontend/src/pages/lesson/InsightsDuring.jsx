@@ -67,7 +67,7 @@ const InsightsDuring = (props) => {
     if (questionStore.questionGroups) {
       questionStore.questionGroups.forEach((qg) => {
         qg.questionGroupAttempts.forEach((qga) => {
-          if (qga.lessonAttempts.lessonId === lessonId) {
+          if (qga.lessonAttempt.lessonId === lessonId) {
             if (qga.isCompleted) {
               totalComplete += 1;
               totalCorrect += qga.correct;

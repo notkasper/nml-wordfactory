@@ -55,10 +55,10 @@ const getRows = (questionGroups) => {
       rows.push({
         id: qga.id,
         updatedAt: convertDateToReadableString(qga.updatedAt),
-        student: qga.lessonAttempts.student.name,
+        student: qga.lessonAttempt.student.name,
         question: index,
         isCompleted: qga.isCompleted,
-        lessonAttempts: qga.lessonAttempts,
+        lessonAttempt: qga.lessonAttempt,
       });
     });
   });
@@ -71,7 +71,7 @@ const Activity = (props) => {
   const { questionGroups } = props;
 
   const onClickStudent = (event) =>
-    history.push(`/dashboard/students/${event.row.lessonAttempts.student.id}`);
+    history.push(`/dashboard/students/${event.row.lessonAttempt.student.id}`);
 
   return (
     <PageContainer>

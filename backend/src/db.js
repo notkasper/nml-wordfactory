@@ -39,25 +39,25 @@ db.setupModels = async () => {
 
     // Teacher relationships
     db.Teacher.belongsToMany(db.Class, {
-      as: 'classes',
-      through: db.TeacherClass,
       foreignKey: 'teacherId',
       otherKey: 'classId',
+      through: db.TeacherClass,
+      as: 'classes',
     });
 
     // Class relationships
     db.Class.belongsToMany(db.Teacher, {
-      as: 'teachers',
-      through: db.TeacherClass,
       foreignKey: 'classId',
       otherKey: 'teacherId',
+      through: db.TeacherClass,
+      as: 'teachers',
     });
 
     db.Class.belongsToMany(db.Student, {
-      as: 'students',
-      through: db.StudentClass,
       foreignKey: 'classId',
       otherKey: 'studentId',
+      through: db.StudentClass,
+      as: 'students',
     });
 
     db.Class.hasMany(db.Course, {
@@ -77,15 +77,15 @@ db.setupModels = async () => {
 
     // Student relationships
     db.Student.belongsToMany(db.Class, {
-      as: 'classes',
-      through: db.StudentClass,
       foreignKey: 'studentId',
       otherKey: 'classId',
+      through: db.StudentClass,
+      as: 'classes',
     });
 
     db.Student.hasMany(db.LessonAttempt, {
-      as: 'lessonAttempts',
       foreignKey: 'studentId',
+      as: 'lessonAttempts',
     });
 
     db.Student.hasMany(db.QuestionGroupAttempt, {
@@ -131,33 +131,34 @@ db.setupModels = async () => {
 
     db.Lesson.belongsTo(db.Course, {
       foreignKey: 'courseId',
+      as: 'course',
     });
 
     // QuestionGroup relationships
     db.QuestionGroup.belongsTo(db.Lesson, {
-      as: 'lesson',
       foreignKey: 'lessonId',
+      as: 'lesson',
     });
 
     db.QuestionGroup.hasMany(db.Question, {
-      as: 'questions',
       foreignKey: 'questionGroupId',
+      as: 'questions',
     });
 
     db.QuestionGroup.hasMany(db.QuestionGroupAttempt, {
-      as: 'questionGroupAttempts',
       foreignKey: 'questionGroupId',
+      as: 'questionGroupAttempts',
     });
 
     // Question relationships
     db.Question.belongsTo(db.QuestionGroup, {
-      as: 'questionGroup',
       foreignKey: 'questionGroupId',
+      as: 'questionGroup',
     });
 
     db.Question.hasMany(db.QuestionAttempt, {
-      as: 'questionAttempts',
       foreignKey: 'questionId',
+      as: 'questionAttempts',
     });
 
     // LessonAttempt relationships
@@ -167,8 +168,8 @@ db.setupModels = async () => {
     });
 
     db.LessonAttempt.belongsTo(db.Lesson, {
-      as: 'lesson',
       foreignKey: 'lessonId',
+      as: 'lesson',
     });
 
     db.LessonAttempt.hasMany(db.QuestionGroupAttempt, {
@@ -179,7 +180,7 @@ db.setupModels = async () => {
     // QuestionGroupAttempt relationships
     db.QuestionGroupAttempt.belongsTo(db.LessonAttempt, {
       foreignKey: 'lessonAttemptId',
-      as: 'lessonAttempts',
+      as: 'lessonAttempt',
     });
 
     db.QuestionGroupAttempt.belongsTo(db.QuestionGroup, {
@@ -205,7 +206,7 @@ db.setupModels = async () => {
     // QuestionAttempt relationships
     db.QuestionAttempt.belongsTo(db.QuestionGroupAttempt, {
       foreignKey: 'questionGroupAttemptId',
-      as: 'questionGroupAttempts',
+      as: 'questionGroupAttempt',
     });
 
     db.QuestionAttempt.belongsTo(db.Question, {

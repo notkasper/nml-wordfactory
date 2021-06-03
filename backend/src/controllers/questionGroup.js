@@ -1,8 +1,13 @@
 const db = require('../db');
 
 const getQuestionGroups = async (req, res) => {
-  const { ids } = req.query;
+  const {
+    query: { ids },
+  } = req;
+
   const idsParsed = JSON.parse(ids);
+
+  // TODO: do not retrieve entire db at once, this needs fixing!
   const questionGroups = await db.QuestionGroup.findAll({
     where: { id: idsParsed },
     include: [
@@ -16,7 +21,7 @@ const getQuestionGroups = async (req, res) => {
           },
           {
             model: db.LessonAttempt,
-            as: 'lessonAttempts',
+            as: 'lessonAttempt',
             include: [
               {
                 model: db.Student,
@@ -37,9 +42,17 @@ const getQuestionGroups = async (req, res) => {
 };
 
 const getQuestionGroupsByLessonId = async (req, res) => {
-  const { lessonId } = req.params;
-  const lesson = await db.Lesson.findByPk(lessonId);
+  const {
+    params: { lessonId },
+  } = req;
 
+  const lesson = await db.Lesson.findByPk(lessonId);
+  const teachers = lesson.getCourse().getClass().getTeachers();
+  if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
+    return res.status(404).send({ message: 'Lesson not found' });
+  }
+
+  // TODO: do not retrieve entire db at once, this needs fixing!
   const questionGroups = await lesson.getQuestionGroups({
     include: [
       {
@@ -52,7 +65,7 @@ const getQuestionGroupsByLessonId = async (req, res) => {
           },
           {
             model: db.LessonAttempt,
-            as: 'lessonAttempts',
+            as: 'lessonAttempt',
             include: [
               {
                 model: db.Student,

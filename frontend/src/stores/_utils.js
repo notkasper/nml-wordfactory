@@ -93,7 +93,6 @@ const addInformation = (questionAttempts) => {
 };
 
 const addQuestionAttemptInformation = (questionGroup) => {
-  console.log('QuestionGroup:', questionGroup);
   const questionType = questionGroup.questions[0].type;
   if (!questionType || questionType !== 'multipleChoice') {
     return questionGroup;
@@ -106,11 +105,7 @@ const addQuestionAttemptInformation = (questionGroup) => {
 
   let acc = 0;
   questionGroup.questionGroupAttempts.forEach((qga) => {
-    console.log(qga);
     if (qga.isCompleted) {
-      const studentName = qga.lessonAttempts.student.name;
-      const studentId = qga.lessonAttempts.student.id;
-
       qga.questionAttempts.forEach((qa) => {
         let correct = 0;
         let incorrect = 0;
@@ -141,8 +136,6 @@ const addQuestionAttemptInformation = (questionGroup) => {
           missed += 1;
         }
 
-        qa.studentName = studentName;
-        qa.studentId = studentId;
         qa.answer = answer.slice(0, -2); //Remove last comma and whitespace
         qa.correct = correct;
         qa.incorrect = incorrect;
