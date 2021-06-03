@@ -21,9 +21,6 @@ const Insights = (props) => {
   const { questionStore } = props;
   const theme = useTheme();
   const params = useParams();
-  const categoryQuestions = questionStore.questionGroups[0].questions[0].type;
-
-  const label = typeLabels[categoryQuestions] || categoryQuestions;
 
   const loadAll = useCallback(async () => {
     await questionStore.loadQuestionGroupsWithAttempts(params.questionGroupId);
@@ -36,6 +33,9 @@ const Insights = (props) => {
   if (questionStore.isLoading || !questionStore.questionGroups) {
     return <CircularProgress />;
   }
+
+  const categoryQuestions = questionStore.questionGroups[0].questions[0].type;
+  const label = typeLabels[categoryQuestions] || categoryQuestions;
 
   return (
     <Grid container spacing={2}>
