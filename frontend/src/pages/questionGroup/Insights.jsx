@@ -7,11 +7,23 @@ import Grid from '@material-ui/core/Grid';
 import Doughnut from './Doughnut';
 import Tile from './Tile';
 import { observer } from 'mobx-react-lite';
+import CustomTitle from './CustomTitle';
+
+const typeLabels = {
+  open: 'Open',
+  clickTheRightWords: 'Selecteer het correcte antwoord',
+  multipleChoice: 'Meerkeuze',
+  divideTheWord: 'Verdeel het woord',
+  combineAndFillInTheBlanks: 'Combineer en vul in',
+};
 
 const Insights = (props) => {
   const { questionStore } = props;
   const theme = useTheme();
   const params = useParams();
+  const categoryQuestions = questionStore.questionGroups[0].questions[0].type;
+
+  const label = typeLabels[categoryQuestions] || categoryQuestions;
 
   const loadAll = useCallback(async () => {
     await questionStore.loadQuestionGroupsWithAttempts(params.questionGroupId);
@@ -27,6 +39,13 @@ const Insights = (props) => {
 
   return (
     <Grid container spacing={2}>
+      <Grid item xs={12} md={12}>
+        <CustomTitle
+          name={questionStore.questionGroups[0].name}
+          label={label}
+        />
+      </Grid>
+
       <Grid item xs={12} md={6}>
         <Doughnut
           questionGroupAttempts={
