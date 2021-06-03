@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import CustomTitle from './CustomTitle';
 import AnswerHighlight from './AnswerHighlight';
 import Accordion from '@material-ui/core/Accordion';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
@@ -14,15 +12,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import TextField from '@material-ui/core/TextField';
 import ListItemText from '@material-ui/core/ListItemText';
 import FiberManualRecordOutlinedIcon from '@material-ui/icons/FiberManualRecordOutlined';
 import { ListItemSecondaryAction } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
-
-import { useHistory } from 'react-router-dom';
-
-import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   questionName: {
@@ -44,15 +38,17 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     fontWeight: 'fontWeightBold',
   },
+
+  absolute: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
+  },
 }));
 
 const Answers = (props) => {
-  const history = useHistory();
   const classes = useStyles();
   const { questionStore } = props;
-
-  const [filterValue, setFilterValue] = useState(null);
-  const [filterInputValue, setFilterInputValue] = useState('');
 
   const typeLabels = {
     open: 'Open',
@@ -68,13 +64,11 @@ const Answers = (props) => {
 
   const calculateDistribution = (questionId, index) => {
     let acc = 0;
-    let total = 0;
     questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       if (qga.isCompleted) {
         qga.questionAttempts.forEach((qa) => {
           if (qa.questionId === questionId) {
             qa.content.forEach((attempt) => {
-              total += 1;
               if (attempt === index) {
                 acc += 1;
               }
@@ -84,85 +78,31 @@ const Answers = (props) => {
       }
     });
 
-    return Math.round((acc / total) * 100);
+    return acc;
   };
 
-  const getRows = (questionId) => {
-    const rows = [];
+  const getRowsAnswer = (questionId, answer) => {
+    const studentNames = [];
     questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
       qga.questionAttempts.forEach((qa) => {
-        if (qa.questionId === questionId) {
-          rows.push({
-            id: qa.id,
-            studentName: qa.studentName,
-            answer: qa.answer,
-            studentId: qa.studentId,
-          });
+        if (qa.questionId === questionId && qa.answer === answer) {
+          studentNames.push(qa.studentName);
         }
       });
     });
-    return rows;
-  };
 
-  const getRowsFilter = (questionId, filterValue) => {
-    const rows = [];
-    questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
-      qga.questionAttempts.forEach((qa) => {
-        if (qa.questionId === questionId && qa.answer === filterValue.answer) {
-          rows.push({
-            id: qa.id,
-            studentName: qa.studentName,
-            answer: qa.answer,
-            studentId: qa.studentId,
-          });
-        }
-      });
-    });
-    return rows;
-  };
-
-  const getOptions = (questionId) => {
-    const options = [];
-    questionStore.questionGroups[0].questions.forEach((q) => {
-      if (q.id === questionId) {
-        q.data.options.forEach((option) => {
-          options.push({ answer: option.value });
-        });
-      }
-    });
-    return options;
-  };
-
-  const onClickStudent = (event) =>
-    history.push(`/dashboard/students/${event.row.studentId}`);
-
-  const onFilterInputChange = (event, newInputValue) => {
-    setFilterInputValue(newInputValue);
-  };
-
-  const onFilterChange = (event, newValue) => {
-    setFilterValue(newValue);
+    return (
+      <React.Fragment>
+        {studentNames.map((name) => {
+          return <Typography>{name}</Typography>;
+        })}
+      </React.Fragment>
+    );
   };
 
   const categoryQuestions = questionStore.questionGroups[0].questions[0].type;
   const nameQuestionGroup = questionStore.questionGroups[0].name;
   const label = typeLabels[categoryQuestions] || categoryQuestions;
-
-  const columns = [
-    {
-      field: 'studentName',
-      headerName: 'Naam',
-      flex: 1.0,
-      valueGetter: (params) => params.row.studentName,
-    },
-
-    {
-      field: 'answer',
-      headerName: 'Antwoord',
-      flex: 1.0,
-      valueGetter: (params) => params.row.answer,
-    },
-  ];
 
   return (
     <Grid container spacing={2}>
@@ -195,57 +135,30 @@ const Answers = (props) => {
                             <ListItemIcon>
                               <FiberManualRecordOutlinedIcon />
                             </ListItemIcon>
-                            <ListItemText
-                              key={index}
-                              primary={
-                                <AnswerHighlight
-                                  answer={item2.value}
-                                  correct={item2.isCorrect}
-                                />
-                              }
-                            />
+
+                            <Tooltip
+                              title={getRowsAnswer(item.id, item2.value)}
+                              aria-label="add"
+                            >
+                              <ListItemText
+                                key={index}
+                                primary={
+                                  <AnswerHighlight
+                                    answer={item2.value}
+                                    correct={item2.isCorrect}
+                                  />
+                                }
+                              />
+                            </Tooltip>
                             <ListItemSecondaryAction>
                               <Typography style={{ color: 'grey' }}>
-                                {calculateDistribution(item.id, index2)}%
+                                {calculateDistribution(item.id, index2)}
                               </Typography>
                             </ListItemSecondaryAction>
                           </ListItem>
                         );
                       })}
                     </List>
-                  </Grid>
-                  <Divider style={{ margin: '1rem 0', width: '100%' }} />
-                  <Grid item xs={12} md={12}>
-                    <Grid item xs={12} md={12}>
-                      <Typography className={classes.title}>
-                        Filter op antoord :
-                      </Typography>
-                      <Autocomplete
-                        value={filterValue}
-                        onChange={onFilterChange}
-                        inputValue={filterInputValue}
-                        onInputChange={onFilterInputChange}
-                        options={getOptions(item.id)}
-                        getOptionLabel={(option) => option.answer}
-                        renderInput={(params) => (
-                          <TextField {...params} variant="outlined" />
-                        )}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} md={12}>
-                    <DataGrid
-                      autoHeight
-                      rows={
-                        filterValue
-                          ? getRowsFilter(item.id, filterValue)
-                          : getRows(item.id)
-                      }
-                      columns={columns}
-                      pageSize={12}
-                      onRowClick={onClickStudent}
-                    />
                   </Grid>
                 </Grid>
               </AccordionDetails>
