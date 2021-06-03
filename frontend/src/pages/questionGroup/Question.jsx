@@ -44,7 +44,7 @@ const Question = (props) => {
     <Grid container spacing={2}>
       <Grid item xs={12}></Grid>
       <Grid item xs={12}>
-        <QuestionGroup {...questionGroups[0]} save={save} />
+        <QuestionGroup {...questionGroups} save={save} />
       </Grid>
     </Grid>
   );
