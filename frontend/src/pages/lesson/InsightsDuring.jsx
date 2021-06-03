@@ -238,13 +238,18 @@ const InsightsDuring = (props) => {
           headertitle="Probleemcategorieën"
         >
           <Paper className={classes.paper}>
-            {categories.slice(-3).map((category, index) => (
-              <ProgressBar
-                key={category.key}
-                title={`${index + 1}. ${convertCategoryToString(category.key)}`}
-                value={category.correctness}
-              />
-            ))}
+            {categories
+              .slice(-3)
+              .reverse()
+              .map((category, index) => (
+                <ProgressBar
+                  key={category.key}
+                  title={`${index + 1}. ${convertCategoryToString(
+                    category.key
+                  )}`}
+                  value={category.correctness}
+                />
+              ))}
           </Paper>
         </PaperWithHeader>
       </Grid>

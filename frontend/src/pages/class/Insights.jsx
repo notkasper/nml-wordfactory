@@ -101,7 +101,7 @@ const Insights = (props) => {
       <Grid container spacing={3} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.secondary.main}
-          headertitle="Probleemcategorieën"
+          headertitle="Topcategorieën"
         >
           <Paper className={classes.paper}>
             {categories.slice(0, 3).map((category, index) => (
@@ -115,16 +115,21 @@ const Insights = (props) => {
         </PaperWithHeader>
         <PaperWithHeader
           headercolor={theme.widget.secondary.main}
-          headertitle="Topcategorieën"
+          headertitle="Probleemcategorieën"
         >
           <Paper className={classes.paper}>
-            {categories.slice(-3).map((category, index) => (
-              <ProgressBar
-                key={category.key}
-                title={`${index + 1}. ${convertCategoryToString(category.key)}`}
-                value={category.correctness}
-              />
-            ))}
+            {categories
+              .slice(-3)
+              .reverse()
+              .map((category, index) => (
+                <ProgressBar
+                  key={category.key}
+                  title={`${index + 1}. ${convertCategoryToString(
+                    category.key
+                  )}`}
+                  value={category.correctness}
+                />
+              ))}
           </Paper>
         </PaperWithHeader>
       </Grid>
