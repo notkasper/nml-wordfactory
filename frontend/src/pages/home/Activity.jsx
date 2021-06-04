@@ -26,19 +26,19 @@ const columns = [
     field: 'student',
     headerName: 'Leerling',
     flex: 0.2,
-    valueGetter: (params) => params.row.lessonAttempts.student.name,
+    valueGetter: (params) => params.row.lessonAttempt.student.name,
   },
   {
     field: 'lesson',
     headerName: 'Les',
     flex: 0.2,
-    valueGetter: (params) => params.row.QuestionGroup.lesson.prefix,
+    valueGetter: (params) => params.row.lesson.prefix,
   },
   {
     field: 'question',
     headerName: 'Vraag',
     flex: 0.2,
-    valueGetter: (params) => params.row.QuestionGroup.index + 1,
+    valueGetter: (params) => params.row.questionGroup.index + 1,
   },
   {
     field: 'isCompleted',

@@ -84,17 +84,18 @@ const Answers = (props) => {
   const getRowsAnswer = (questionId, answer) => {
     const studentNames = [];
     questionStore.questionGroups[0].questionGroupAttempts.forEach((qga) => {
+      const studentName = qga.lessonAttempt.student.name;
       qga.questionAttempts.forEach((qa) => {
         if (qa.questionId === questionId && qa.answer === answer) {
-          studentNames.push(qa.studentName);
+          studentNames.push(studentName);
         }
       });
     });
 
     return (
       <React.Fragment>
-        {studentNames.map((name) => {
-          return <Typography>{name}</Typography>;
+        {studentNames.map((name, index) => {
+          return <Typography key={index}>{name}</Typography>;
         })}
       </React.Fragment>
     );

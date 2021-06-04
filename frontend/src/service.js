@@ -93,10 +93,15 @@ const loadQuestionGroupAttempts = async ({ questionGroupId, pageSize }) => {
 
 const loadQuestionGroups = async (ids) => {
   const req = request
-    .get(`/api/v1/questionGroup/`)
+    .get(`/api/v1/questionGroup`)
     .query({ ids: JSON.stringify(ids) });
   const response = await handleResponse(req);
+  return response;
+};
 
+const loadQuestionGroupsByLessonId = async (lessonId) => {
+  const req = request.get(`/api/v1/questionGroup/lesson/${lessonId}`);
+  const response = await handleResponse(req);
   return response;
 };
 
@@ -131,6 +136,7 @@ const service = {
   login,
   loadQuestionGroupAttempts,
   loadQuestionGroups,
+  loadQuestionGroupsByLessonId,
   loadLessonCategories,
   loadStudentCategories,
   updateQuestion,

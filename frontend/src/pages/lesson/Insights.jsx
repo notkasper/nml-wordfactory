@@ -25,19 +25,11 @@ const Lesson = (props) => {
     setShowCategory(showCategory === 'during' ? 'after' : 'during');
   };
 
-  const getQuestionGroupIds = () => {
-    if (lessonStore.lesson) {
-      const ids = lessonStore.lesson.questionGroups.map((e) => e.id);
-      return ids;
-    }
-  };
-
   const getContent = () => {
     return showCategory === 'after' ? (
       <InsightsAfter {...props} />
     ) : (
       <InsightsDuring
-        questionGroupIds={getQuestionGroupIds()}
         lessonId={params.lessonId}
         classId={params.classId}
         {...props}

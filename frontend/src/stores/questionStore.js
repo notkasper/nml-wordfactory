@@ -24,9 +24,10 @@ class QuestionStore {
 
   loadQuestionGroupsWithAttempts = async (questionGroupIds) => {
     this.pushLoad();
+
     const response = await service.loadQuestionGroups(questionGroupIds);
     if (response) {
-      let questionGroups = response.body.data;
+      const questionGroups = response.body.data;
       questionGroups.forEach((qg) => {
         utils.addQuestionGroupAttemptStats(qg);
         utils.addQuestionAttemptInformation(qg);
@@ -36,18 +37,34 @@ class QuestionStore {
     this.popLoad();
   };
 
+  loadQuestionGroupsByLessonId = async (lessonId) => {
+    this.pushLoad();
+
+    const response = await service.loadQuestionGroupsByLessonId(lessonId);
+    if (response) {
+      const questionGroups = response.body.data;
+      questionGroups.forEach((qg) => {
+        utils.addQuestionGroupAttemptStats(qg);
+        utils.addQuestionAttemptInformation(qg);
+        this.questionGroups = questionGroups;
+      });
+    }
+
+    this.popLoad();
+  };
+
   loadQuestionAttemptsWithInfo = async (studentId, lessonId) => {
     this.pushLoad();
+
     const response = await service.loadQuestionAttempts({
       studentId: studentId,
       lessonId: lessonId,
     });
 
     if (response) {
-      let questionAttempts = response.body.data;
-      questionAttempts = utils.addInformation(questionAttempts);
-      this.questionAttempts = questionAttempts;
+      this.questionAttempts = utils.addInformation(response.body.data);
     }
+
     this.popLoad();
   };
 
