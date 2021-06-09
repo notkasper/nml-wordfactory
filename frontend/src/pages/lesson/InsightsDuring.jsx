@@ -7,7 +7,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import PercentageDoughnut from '../_shared/PercentageDoughnut';
 import service from '../../service';
-import { create, all } from 'mathjs';
 import PaperWithHeader from '../_shared/PaperWithHeader';
 import ProgressBar from '../_shared/ProgressBar';
 
@@ -44,7 +43,6 @@ const convertCategoryToString = (category) => {
 };
 
 const InsightsDuring = (props) => {
-  const math = create(all);
   const { lessonId, classId, questionStore, studentStore } = props;
   const theme = useTheme();
   const classes = useStyles();
@@ -53,15 +51,12 @@ const InsightsDuring = (props) => {
   const [categories, setCategories] = useState([]);
   let ratioCorrect = 0;
   let ratioProgress = 0;
-  let averageTime = 0;
 
   const getAverageValues = () => {
     let totalCorrect = 0;
     let totalNotComplete = 0;
     let totalComplete = 0;
     let totalScores = 0;
-    let totalTime = 0;
-    let acc = 0;
     let elapsedTimes = [];
 
     if (questionStore.questionGroups) {
@@ -84,19 +79,6 @@ const InsightsDuring = (props) => {
       ratioProgress = Math.round(
         (totalComplete / (totalComplete + totalNotComplete)) * 100
       );
-
-      const sortedTimes = elapsedTimes.sort((a, b) => a - b);
-      const median = math.median(sortedTimes);
-      const std = math.std(sortedTimes);
-      const rangeMin = median - std;
-      const rangeMax = median + std;
-      for (const time in sortedTimes) {
-        if (time >= rangeMin && time <= rangeMax) {
-          totalTime += parseInt(time);
-          acc += 1;
-        }
-      }
-      averageTime = totalTime / acc;
     }
   };
 
@@ -134,12 +116,6 @@ const InsightsDuring = (props) => {
   }
 
   getAverageValues();
-
-  const convertToMinutes = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes} min. ${seconds} sec.`;
-  };
 
   const calculateRGB = (percentage) => {
     const shade = 0.8;
@@ -205,17 +181,6 @@ const InsightsDuring = (props) => {
           text: String(ratioProgress) + '%',
         })}
         titleColor={theme.widget.secondary.main}
-      />
-      <PercentageDoughnut
-        title="Gemiddelde tijdsduur"
-        data={getDoughnutData({
-          averageTime,
-        })}
-        options={options({
-          color: 'black',
-          text: convertToMinutes(averageTime),
-        })}
-        titleColor={theme.widget.tertiary.main}
       />
       <Grid container spacing={3} className={classes.widget}>
         <PaperWithHeader

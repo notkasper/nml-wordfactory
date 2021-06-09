@@ -47,7 +47,13 @@ const getQuestionGroupsByLessonId = async (req, res) => {
   } = req;
 
   const lesson = await db.Lesson.findByPk(lessonId);
-  const teachers = lesson.getCourse().getClass().getTeachers();
+  if (!lesson) {
+    return res.status(404).send({ message: 'Lesson not found' });
+  }
+
+  const course = await lesson.getCourse();
+  const theClass = await course.getClass();
+  const teachers = await theClass.getTeachers();
   if (!teachers.find((teacher) => teacher.id === req.teacher.id)) {
     return res.status(404).send({ message: 'Lesson not found' });
   }

@@ -7,20 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { observer } from 'mobx-react-lite';
 import Doughnut from './Doughnut';
-import Histogram from './Histogram';
-
-const calculateProgress = (questionGroupAttempts = []) => {
-  const total = questionGroupAttempts.length;
-  const completed = questionGroupAttempts.reduce((acc, curr) => {
-    if (curr.isCompleted) {
-      acc += 1;
-    }
-
-    return acc;
-  }, 0);
-
-  return total !== 0 ? Math.floor((completed / total) * 100) : 100;
-};
 
 const columns = [
   {
@@ -28,13 +14,6 @@ const columns = [
     headerName: 'Naam',
     flex: 0.2,
     valueGetter: (params) => params.row.student.name,
-  },
-  {
-    field: 'progress',
-    headerName: 'Voortgang (%)',
-    flex: 0.1,
-    valueGetter: (params) =>
-      calculateProgress(params.row.questionGroupAttempts),
   },
   {
     field: 'duration',
@@ -75,16 +54,10 @@ const InsightsAfter = (props) => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={6}>
         <Doughnut
           lessonAttempts={lessonStore.lessonAttempts}
           title="Algemene voortgang"
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Histogram
-          lessonAttempts={lessonStore.lessonAttempts}
-          title="Cijferverdeling"
         />
       </Grid>
       <Grid item xs={12}>
