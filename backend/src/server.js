@@ -27,7 +27,6 @@ const questionAttemptRouter = require('./routes/questionAttempt');
 const questionGroupAttemptRouter = require('./routes/questionGroupAttempt');
 const questionGroupRouter = require('./routes/questionGroup');
 const questionRouter = require('./routes/question');
-const experimentRouter = require('./routes/experiment');
 
 const db = require('./db');
 const logger = require('./logger');
@@ -105,7 +104,6 @@ const start = async () => {
   app.use('/api/v1/questionGroupAttempts', questionGroupAttemptRouter);
   app.use('/api/v1/questionGroup', questionGroupRouter);
   app.use('/api/v1/question', questionRouter);
-  app.use('/api/v1/experiment', experimentRouter);
 
   const port = process.env.SERVER_PORT || 5000;
 
