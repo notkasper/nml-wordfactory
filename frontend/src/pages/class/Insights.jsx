@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   widget: {
     padding: theme.spacing(3),
+    justifyContent: 'center',
   },
   paper: {
     borderBottomLeftRadius: 4,
@@ -108,24 +109,10 @@ const Insights = (props) => {
       <Grid container spacing={3} className={classes.widget}>
         <PaperWithHeader
           headercolor={theme.widget.secondary.main}
-          headertitle="Probleemcategorieën"
+          headertitle="Correctheid categorieën"
         >
           <Paper className={classes.paper}>
-            {categories.slice(0, 3).map((category, index) => (
-              <ProgressBar
-                key={category.key}
-                title={`${index + 1}. ${convertCategoryToString(category.key)}`}
-                value={category.correctness}
-              />
-            ))}
-          </Paper>
-        </PaperWithHeader>
-        <PaperWithHeader
-          headercolor={theme.widget.secondary.main}
-          headertitle="Topcategorieën"
-        >
-          <Paper className={classes.paper}>
-            {categories.slice(-3).map((category, index) => (
+            {categories.map((category, index) => (
               <ProgressBar
                 key={category.key}
                 title={`${index + 1}. ${convertCategoryToString(category.key)}`}
