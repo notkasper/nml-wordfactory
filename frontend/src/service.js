@@ -1,4 +1,5 @@
 import request from 'superagent';
+
 import authStore from './stores/auth';
 
 const handleResponse = async (req) => {
@@ -6,14 +7,19 @@ const handleResponse = async (req) => {
     const response = await req;
     return response;
   } catch (error) {
-    authStore.setError(
-      `Er is iets mis gegaan: ${
-        error.response.body?.message ||
-        error.response.body?.error ||
-        error.response.error ||
-        'server error'
-      }`
-    );
+    if (error.response.statusCode === 403) {
+      window.location.replace('/');
+    } else {
+      authStore.setError(
+        `Er is iets mis gegaan: ${
+          error.response.body?.message ||
+          error.response.body?.error ||
+          error.response.error ||
+          'server error'
+        }`
+      );
+    }
+
     return null;
   }
 };
